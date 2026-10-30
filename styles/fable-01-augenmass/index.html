@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dreiland Finanzen – Kredit mit Augenmass</title>
+<meta name="description" content="Kreditberatung im Dreiländereck: faire Bedingungen, persönliche Begleitung – und ein ehrliches Nein, wenn die Belastung zu hoch wäre.">
+<link rel="icon" href="../_assets/logo/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#rechner">Zum Kreditrechner</a>
+
+<header class="top">
+  <a class="brand" href="#" aria-label="Dreiland Finanzen – Startseite">
+    <img src="../_assets/logo/dreiland-finanzen_horizontal_farbig.svg" alt="Dreiland Finanzen" width="196" height="50">
+  </a>
+  <nav aria-label="Hauptnavigation">
+    <a href="#leistungen">Leistungen</a>
+    <a href="#ablauf">Ablauf</a>
+    <a href="#fragen">Fragen</a>
+    <a class="btn btn-small" href="#kontakt">Kontakt</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero" aria-labelledby="claim">
+  <div class="hero-text">
+    <svg class="eck" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+      <path d="M100 100 V0" stroke="#4F86C6"/>
+      <path d="M100 100 L186.6 150" stroke="#D9B566"/>
+      <path d="M100 100 L13.4 150" stroke="#E5484D"/>
+    </svg>
+    <p class="eyebrow">Kreditberatung · Basel · CH / DE / FR</p>
+    <h1 id="claim">Fair finanziert.<br>Persönlich begleitet.</h1>
+    <p class="lead">Wir rechnen ehrlich – und sagen es auch, wenn weniger Kredit besser für Sie wäre.</p>
+    <ul class="marks" aria-label="Was Sie erwarten dürfen">
+      <li>Faire Bedingungen</li>
+      <li>Persönliche Begleitung</li>
+      <li>Regional verwurzelt</li>
+    </ul>
+  </div>
+
+  <div class="hero-calc">
+    <form class="calc" id="rechner" aria-labelledby="calc-title">
+      <h2 id="calc-title" class="calc-title">Ihr Kreditbeispiel</h2>
+
+      <div class="field">
+        <div class="row">
+          <label for="betrag">Kreditbetrag</label>
+          <output class="big" id="betrag-out" for="betrag">CHF 15'000.–</output>
+        </div>
+        <input class="slider" type="range" id="betrag" min="1000" max="80000" step="500" value="15000"
+               aria-valuetext="CHF 15'000.–">
+        <div class="minmax" aria-hidden="true"><span>CHF 1'000.–</span><span>CHF 80'000.–</span></div>
+      </div>
+
+      <fieldset class="field chips">
+        <legend>Laufzeit</legend>
+        <div class="chip-row" id="laufzeit">
+          <label><input type="radio" name="laufzeit" value="12"><span>12<small>Mt.</small></span></label>
+          <label><input type="radio" name="laufzeit" value="24"><span>24<small>Mt.</small></span></label>
+          <label><input type="radio" name="laufzeit" value="36" checked><span>36<small>Mt.</small></span></label>
+          <label><input type="radio" name="laufzeit" value="48"><span>48<small>Mt.</small></span></label>
+          <label><input type="radio" name="laufzeit" value="60"><span>60<small>Mt.</small></span></label>
+        </div>
+      </fieldset>
+
+      <div class="result" aria-live="polite">
+        <div class="result-main">
+          <span class="label">Monatsrate</span>
+          <strong class="rate" id="rate">CHF 476.35</strong>
+        </div>
+        <p class="result-side"><span class="label">Davon Zinsen gesamt</span> <span class="interest" id="zinsen">CHF 2'148.60</span></p>
+      </div>
+
+      <figure class="months">
+        <svg id="strip" viewBox="0 0 360 44" preserveAspectRatio="none" role="img" aria-labelledby="strip-desc">
+          <title id="strip-desc">Jede Säule ist ein Monat: Rückzahlung unten, Zinsanteil oben.</title>
+        </svg>
+        <figcaption><span class="sw navy"></span>Rückzahlung <span class="sw gold"></span>Zinsanteil pro Monat</figcaption>
+      </figure>
+
+      <a class="btn btn-primary" href="#kontakt">Beratung vereinbaren</a>
+
+      <details class="trag" id="trag">
+        <summary>Tragbarkeit prüfen</summary>
+        <div class="trag-body">
+          <div class="inputs">
+            <label>Nettoeinkommen / Mt.<input type="number" id="einkommen" inputmode="numeric" min="0" step="100" placeholder="5500"></label>
+            <label>Fixkosten / Mt.<input type="number" id="fixkosten" inputmode="numeric" min="0" step="100" placeholder="3200"></label>
+          </div>
+          <p class="ampel" id="ampel" data-state="leer">Tragen Sie Einkommen und Fixkosten ein – wir rechnen offen.</p>
+          <button type="button" class="link-btn" id="vorschlag" hidden></button>
+        </div>
+      </details>
+
+      <p class="fine"><strong>Beispiel:</strong> 8.9 % eff. Jahreszins, unverbindlich.<br>
+      Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+    </form>
+  </div>
+</section>
+
+<section class="block" id="leistungen" aria-labelledby="h-leist">
+  <h2 id="h-leist">Leistungen</h2>
+  <ul class="tiles">
+    <li><h3>Privatkredit</h3><p>Zu Bedingungen, die zu Ihrem Budget passen.</p></li>
+    <li><h3>Kreditablösung</h3><p>Bestehende Kredite bündeln, oft günstiger.</p></li>
+    <li><h3>Budgetcheck</h3><p>Tragbarkeit vor dem Abschluss, nicht danach.</p></li>
+    <li><h3>Beratung</h3><p>Persönlich vor Ort oder online.</p></li>
+  </ul>
+</section>
+
+<section class="promise" aria-labelledby="h-nein">
+  <div class="promise-inner">
+    <h2 id="h-nein">Auch ein ehrliches Nein.</h2>
+    <p>Wäre die Rate zu hoch, raten wir zu weniger – oder zu keinem Kredit. Das kostet uns Umsatz. Ihnen erspart es Sorgen.</p>
+  </div>
+</section>
+
+<section class="block" id="ablauf" aria-labelledby="h-ablauf">
+  <h2 id="h-ablauf">So läuft es ab</h2>
+  <ol class="steps">
+    <li><span>1</span><h3>Gespräch</h3><p>Ihre Situation, Ihr Ziel.</p></li>
+    <li><span>2</span><h3>Budgetcheck</h3><p>Was ist tragbar?</p></li>
+    <li><span>3</span><h3>Angebot</h3><p>Fair, verständlich, ohne Druck.</p></li>
+  </ol>
+</section>
+
+<section class="block region" aria-labelledby="h-region">
+  <svg viewBox="0 0 120 120" aria-hidden="true" focusable="false">
+    <path d="M60 60 V8" stroke="#0A4682"/>
+    <path d="M60 60 L105 86" stroke="#C69D49"/>
+    <path d="M60 60 L15 86" stroke="#CE2530"/>
+    <circle cx="60" cy="60" r="4" fill="#062B63"/>
+  </svg>
+  <div>
+    <h2 id="h-region">Im Dreiländereck zuhause</h2>
+    <p>Basel, Schweiz, Deutschland, Frankreich: Wir kennen die Region und ihre Lohn- und Lebenskosten.</p>
+  </div>
+</section>
+
+<section class="block" id="fragen" aria-labelledby="h-faq">
+  <h2 id="h-faq">Fragen</h2>
+  <div class="faq">
+    <details><summary>Was kostet die Beratung?</summary><p>Nichts. Sie zahlen nur, wenn ein Kredit zustande kommt – über den Zins.</p></details>
+    <details><summary>Wie schnell gibt es eine Antwort?</summary><p>Nach dem Gespräch in der Regel innert weniger Tage. Wir drängen nicht.</p></details>
+    <details><summary>Was, wenn Sie mir abraten?</summary><p>Dann sagen wir es offen und zeigen Alternativen – kleinerer Betrag, längere Laufzeit oder kein Kredit.</p></details>
+    <details><summary>Wer darf einen Kredit beantragen?</summary><p>Volljährige mit Wohnsitz in der Schweiz und regelmässigem Einkommen. Grenzgängerinnen und Grenzgänger beraten wir gern.</p></details>
+  </div>
+</section>
+
+<section class="block contact" id="kontakt" aria-labelledby="h-kontakt">
+  <div>
+    <h2 id="h-kontakt">Reden wir.</h2>
+    <p>Ein Gespräch verpflichtet zu nichts.</p>
+    <a class="btn btn-primary" href="mailto:beratung@dreilandfinanzen.ch?subject=Beratung">Termin anfragen</a>
+  </div>
+  <address>
+    <strong>Dreiland Finanzen</strong><br>
+    Musterstrasse 1 · 4000 Basel <span class="ph">(Platzhalter)</span><br>
+    <a href="tel:+41610000000">+41 61 000 00 00</a> <span class="ph">(Platzhalter)</span><br>
+    <a href="mailto:beratung@dreilandfinanzen.ch">beratung@dreilandfinanzen.ch</a>
+  </address>
+</section>
+</main>
+
+<footer class="foot">
+  <img src="../_assets/logo/dreiland-finanzen_horizontal_invertiert.svg" alt="Dreiland Finanzen" width="157" height="40">
+  <p class="legal">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+  <p class="small">© 2026 Dreiland Finanzen · <a href="#">Impressum</a> · <a href="#">Datenschutz</a></p>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

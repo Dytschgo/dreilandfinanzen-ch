@@ -1,0 +1,33 @@
+{
+  "console": [],
+  "errors": [],
+  "url": "http://127.0.0.1:5180/fable-01-augenmass/index.html",
+  "desktop": {
+    "sliderBottom": 298.796875,
+    "rateBottom": 503.53125,
+    "btnBottom": 687.0625,
+    "vh": 900,
+    "rate": "CHF 473.90",
+    "sliderInView": true,
+    "rateAfter": "CHF 1'263.75",
+    "rateChanges": true
+  },
+  "words": 250,
+  "mobile": {
+    "sliderBottom": 380.390625,
+    "rateBottom": 557.125,
+    "btnBottom": 721.46875,
+    "vh": 844,
+    "rate": "CHF 473.90",
+    "sliderInView": true,
+    "rateAfter": "CHF 1'263.75",
+    "rateChanges": true
+  },
+  "scrollW360": [
+    360,
+    360
+  ],
+  "noHScroll360": true,
+  "ampel": "nein | Ehrlich gesagt: lieber weniger. Diese Rate würde Sie zu stark belasten. | Tragbar wären etwa CHF 14'000.– – übernehmen",
+  "gallery": "C:\\Users\\DylanFerraro\\.t3\\projects\\dreilandfinanzen-ch\\styles\\_gallery\\fable-01-augenmass.jpg"
+}

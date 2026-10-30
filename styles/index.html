@@ -262,8 +262,9 @@ const STYLES = [
   ["astra-02-ultrakreativ", "Der Dreiland-Atlas", "astra", "Ultra-kreativ", "Relief-Landschaft aus drei Ländern, verbunden durch den Rhein."],
   ["astra-03-ultrakreativ", "Am selben Tisch", "astra", "Ultra-kreativ", "Die Seite als Beratungsgespräch – auch ein Nein ist ein Abschluss."],
   ["astra-04-vorlage-bf", "Ihr Vorhaben. Unser Rückhalt.", "astra", "Nach Vorlage", "Aufbau nach bf.imnota.xyz: geteilter Hero, überlappender Rechner."],
+  ["fable-01-augenmass", "Augenmass (Fable)", "fable", "Freie Wahl", "Rechner zeigt Rückzahlung und Zins pro Monat – und schlägt bei Überlastung weniger vor."],
 ];
-const MODELS = { claude: ["Claude Opus 5.5", "#D97757"], sol: ["GPT-6.1 Sol", "#10A37F"], astra: ["GPT-6 Astra", "#7C5CFF"] };
+const MODELS = { claude: ["Claude Opus 5.5", "#D97757"], fable: ["Claude Fable 5.1", "#C69D49"], sol: ["GPT-6.1 Sol", "#10A37F"], astra: ["GPT-6 Astra", "#7C5CFF"] };
 const $ = id => document.getElementById(id);
 const frame = $("frame"), panel = $("panel"), preview = $("preview");
 let current = -1, focusMode = "page";
