@@ -1,0 +1,188 @@
+{
+  "console": [],
+  "errors": [],
+  "checks": {
+    "annuity": [
+      {
+        "P": 15000,
+        "n": 36,
+        "js": {
+          "rate": 473.9,
+          "total": 17060.4,
+          "zins": 2060.4
+        },
+        "py": [
+          473.9,
+          17060.4,
+          2060.4
+        ],
+        "ok": true
+      },
+      {
+        "P": 40000,
+        "n": 60,
+        "js": {
+          "rate": 821.75,
+          "total": 49305,
+          "zins": 9305
+        },
+        "py": [
+          821.75,
+          49305.0,
+          9305.0
+        ],
+        "ok": true
+      },
+      {
+        "P": 1000,
+        "n": 12,
+        "js": {
+          "rate": 87.25,
+          "total": 1047,
+          "zins": 47
+        },
+        "py": [
+          87.25,
+          1047.0,
+          47.0
+        ],
+        "ok": true
+      },
+      {
+        "P": 80000,
+        "n": 48,
+        "js": {
+          "rate": 1973.99,
+          "total": 94751.52,
+          "zins": 14751.52
+        },
+        "py": [
+          1973.99,
+          94751.52,
+          14751.52
+        ],
+        "ok": true
+      }
+    ],
+    "heroDisplay": {
+      "shown": [
+        "CHF 473.90",
+        "CHF 2'060.40",
+        "CHF 17'060.40"
+      ],
+      "expected": [
+        473.9,
+        2060.4,
+        17060.4
+      ],
+      "ok": [
+        true,
+        true,
+        true
+      ]
+    },
+    "longerTermCostsMore": {
+      "rate36": 473.9,
+      "rate60": 308.16,
+      "zins36": 2060.4,
+      "zins60": 3489.6,
+      "ok": true
+    },
+    "bcStep0Visible": true,
+    "syncHeroToBc": true,
+    "syncBcToHero": true,
+    "bcStep1Focus": true,
+    "budget1": {
+      "expectedFrei": 1290.37,
+      "got": {
+        "frei": "CHF 1'290.–",
+        "state": "ok"
+      },
+      "expectedState": "ok",
+      "ok": true
+    },
+    "bcStep2Focus": true,
+    "bcResultWording": true,
+    "budget2": {
+      "expectedFrei": -709.63,
+      "got": {
+        "frei": "− CHF 710.–",
+        "state": "bad"
+      },
+      "ok": true
+    },
+    "bcValidation": true,
+    "navTargets": {
+      "rechner": "#rechner",
+      "budget": "#budgetcheck",
+      "rechnerExists": true,
+      "budgetExists": true
+    },
+    "goldOutsideLogo": [],
+    "pflichthinweisCount": 3,
+    "ehrlichesNeinCount": 1,
+    "beispielTag": "Beispiel",
+    "faqQuestions": [
+      "Kann eine tiefere Monatsrate insgesamt mehr kosten?",
+      "Bedeutet ein positives Budgetcheck-Ergebnis eine Kreditzusage?",
+      "Entsteht durch den Rechner eine Verpflichtung?",
+      "Was kostet die Beratung?",
+      "Kann ich online beraten werden?"
+    ],
+    "sectionOrder": [
+      "leistungen",
+      "konditionen",
+      "ablauf",
+      "budgetcheck",
+      "ueber-uns",
+      "partner",
+      "region",
+      "faq",
+      "kontakt"
+    ],
+    "contourPaths": [
+      11,
+      9,
+      true
+    ],
+    "firstTabIsSkip": true,
+    "sliderKeyboard": true,
+    "chipsKeyboard": true,
+    "focusRingVisible": true,
+    "focusableCount": 45,
+    "reducedMotion": {
+      "allRevealed": true,
+      "rateImmediate": true,
+      "anim": "1e-05s"
+    }
+  },
+  "url": "http://127.0.0.1:5180/styles/fable-02-feedback/index.html",
+  "desktop": {
+    "sliderBottom": 267.78125,
+    "rateBottom": 516.625,
+    "btnBottom": 670.65625,
+    "lzBottom": 395.03125,
+    "vh": 900,
+    "rate": "CHF 473.90",
+    "calcInFirstScreen": true,
+    "rateAfter": "CHF 1'263.75",
+    "rateChanges": true,
+    "noHScroll": true
+  },
+  "words": 622,
+  "mobile": {
+    "sliderBottom": 459.5,
+    "rateBottom": 679.34375,
+    "btnBottom": 839.484375,
+    "lzBottom": 582.75,
+    "vh": 844,
+    "rate": "CHF 473.90",
+    "calcInFirstScreen": true,
+    "rateAfter": "CHF 1'263.75",
+    "rateChanges": true,
+    "noHScroll": true
+  },
+  "noHScroll360": true,
+  "gallery": "C:\\Users\\DylanFerraro\\.t3\\projects\\dreilandfinanzen-ch\\styles\\_gallery\\fable-02-feedback.jpg",
+  "ok": true
+}

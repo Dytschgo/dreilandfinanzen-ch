@@ -12,8 +12,8 @@ PANTONE = {"navy": "2758 C", "blue": "2945 C", "gold": "7562 C", "red": "1797 C"
 
 ROLES = {
     "navy": "Primärfarbe · Wortmarke, Headlines, Text",
-    "blue": "Bildmarke · Akzent, Links, Diagramme",
-    "gold": "Bildmarke · Akzent, Premium-Elemente (nicht für Text auf Weiss)",
+    "blue": "Bildmarke · Akzent, Links, Diagramme, Hervorhebungen",
+    "gold": "Nur in der Bildmarke · kein Akzent für Flächen, Rahmen, Linien oder Text",
     "red": "Bildmarke · Signal, sparsam einsetzen",
     "slate": "Sekundärtext, Trennlinie, Rahmen",
     "mist": "Helle Flächen, Hintergründe",

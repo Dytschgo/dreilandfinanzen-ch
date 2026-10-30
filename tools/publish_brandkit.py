@@ -106,9 +106,11 @@ Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG)
 def main() -> None:
     if not KIT.exists():
         raise SystemExit("dist/ fehlt – zuerst: python tools/build.py")
-    if OUT.exists():
-        shutil.rmtree(OUT)
-    shutil.copytree(KIT, OUT)
+    # Inhalt leeren statt Ordner löschen (Windows sperrt Ordner, in denen eine Shell steht)
+    OUT.mkdir(exist_ok=True)
+    for child in OUT.iterdir():
+        shutil.rmtree(child) if child.is_dir() else child.unlink()
+    shutil.copytree(KIT, OUT, dirs_exist_ok=True)
     shutil.copy(ZIP, OUT / ZIP.name)
     (OUT / "index.html").write_text(page(), encoding="utf-8")
     print(f"brand-kit/ aktualisiert: {len(files_of(OUT))} Dateien")

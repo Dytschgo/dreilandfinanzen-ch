@@ -23,7 +23,7 @@ p, li { font: 400 9.5pt/1.55 var(--text); color: #34405e; margin: 0 0 2.5mm; }
 .grid { display: grid; gap: 6mm; flex: 1; min-height: 0; }
 .tile { border-radius: 1.5mm; display: grid; place-items: center; position: relative; padding: 8mm; }
 .cap { font: 500 8pt var(--text); color: var(--slate); margin-top: 2mm; }
-.note { background: #FFF7E6; border-left: 1.2mm solid var(--gold); padding: 4mm 5mm; border-radius: 1mm; }
+.note { background: var(--mist); border-left: 1.2mm solid var(--blue); padding: 4mm 5mm; border-radius: 1mm; }
 .note p { color: #4d3d14; }
 table { border-collapse: collapse; width: 100%; font: 400 8.5pt var(--text); color: #34405e; }
 td, th { text-align: left; padding: 2.2mm 3mm 2.2mm 0; border-bottom: .25mm solid #E3E8F0; vertical-align: top; }
@@ -52,13 +52,13 @@ def cover():
   <div style="position:relative;flex:1;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:0 22mm">
     <div>{logo('horizontal', 'darkmode', width='120mm')}</div>
     <div style="border-left:.3mm solid rgba(255,255,255,.25);padding-left:14mm">
-      <div style="font:600 8pt var(--text);letter-spacing:.2em;color:#D9B566">MARKENHANDBUCH</div>
+      <div style="font:600 8pt var(--text);letter-spacing:.2em;color:#8FB4E3">MARKENHANDBUCH</div>
       <div style="font:700 40pt/1 var(--display);margin:5mm 0">Brand<br>Guidelines</div>
       <div style="font:400 11pt var(--text);color:#C9D5EA">Logo · Farben · Typografie · Tonalität · Anwendungen</div>
       <div style="font:400 9pt var(--text);color:#8FA0C2;margin-top:10mm">Version 1.0 · Oktober 2026</div>
     </div>
   </div>
-  <div style="position:relative;display:grid;grid-template-columns:3fr 1fr 1fr;height:3mm"><span style="background:#4F86C6"></span><span style="background:#D9B566"></span><span style="background:#E5484D"></span></div>
+  <div style="position:relative;display:grid;grid-template-columns:3fr 1fr 1fr;height:3mm"><span style="background:#4F86C6"></span><span style="background:#8FA0C2"></span><span style="background:#E5484D"></span></div>
 </section>"""
 
 
@@ -89,7 +89,7 @@ def p_kern():
 <div class="grid" style="grid-template-columns:1.25fr 1fr;margin-top:4mm">
   <div style="display:grid;gap:6mm;align-content:start">
     <div style="background:var(--navy);color:#fff;border-radius:1.5mm;padding:9mm">
-      <h3 style="color:#D9B566">Unser Versprechen (USP)</h3>
+      <h3 style="color:#8FB4E3">Unser Versprechen (USP)</h3>
       <div style="font:700 17pt/1.25 var(--display)">Wir setzen uns für faire Kreditbedingungen ein, die zur finanziellen Situation unserer Kundinnen und Kunden passen.</div>
       <p style="color:#C9D5EA;margin:5mm 0 0;font-size:10.5pt">Wir begleiten sie persönlich und raten auch zu einem kleineren oder keinem Kredit, wenn die Belastung zu hoch wäre.</p>
     </div>
@@ -123,7 +123,7 @@ def p_ton():
       <li><b>Schweizer Rechtschreibung:</b> ss statt ß, «Guillemets», CHF 15'000.–.</li>
     </ul>
     <div style="background:var(--navy);color:#fff;border-radius:1.5mm;padding:6mm">
-      <h3 style="color:#D9B566">Pflichthinweis in jeder Kreditwerbung</h3>
+      <h3 style="color:#8FB4E3">Pflichthinweis in jeder Kreditwerbung</h3>
       <div style="font:600 11pt/1.4 var(--text)">«{LEGAL}»</div>
       <p style="color:#AFC0DD;margin:3mm 0 0;font-size:8pt">Zudem ist aggressive Werbung für Konsumkredite verboten (Art. 36a KKG). Werbemittel vor Veröffentlichung rechtlich prüfen lassen.</p>
     </div>
@@ -283,7 +283,7 @@ def p_palette():
   {''.join(sw(p, False) for p in sec)}
   <div style="display:grid;align-content:center;gap:2mm"><h3>Verhältnis</h3>
     <div style="display:flex;height:9mm;border-radius:1mm;overflow:hidden;box-shadow:0 0 0 .25mm #E3E8F0"><span style="flex:55;background:#fff"></span><span style="flex:25;background:var(--navy)"></span><span style="flex:12;background:var(--mist)"></span><span style="flex:4;background:var(--blue)"></span><span style="flex:2;background:var(--gold)"></span><span style="flex:2;background:var(--red)"></span></div>
-    <p style="font-size:7.5pt;margin:0">Weiss 55 · Navy 25 · Nebel 12 · Akzente 8 %</p></div>
+    <p style="font-size:7.5pt;margin:0">Weiss 55 · Navy 25 · Nebel 12 · Akzente 8 %</p><p style="font-size:7.5pt;margin:0;color:var(--navy)"><b>Gold erscheint nur im Logo.</b> Akzente, Rahmen, Linien und Hervorhebungen in Rhein Blau oder Schiefer; Gold nicht in Flächen oder Text. Der Goldanteil oben stammt allein aus der Bildmarke.</p></div>
 </div>
 <p style="font-size:7.5pt;color:var(--slate);margin:3mm 0 0">Alle Werte aus der Rastervorlage gemessen – Annäherung. * CMYK rechnerisch ohne Farbprofil; für Offsetdruck mit ISO Coated v2 / PSO Coated v3 separieren und proofen. ** Pantone-Zuordnung unverbindlich, mit Farbfächer prüfen.</p>""")
 
@@ -309,7 +309,7 @@ def p_contrast():
     half = len(rows) // 2
     head = "<tr><th>Muster</th><th>Kombination</th><th>Kontrast</th><th>WCAG 2.2</th></tr>"
     return frame(12, "Kontrast & Barrierefreiheit", f"""<h1>Kontrast & Barrierefreiheit</h1>
-<p class="lead">Texte müssen mindestens WCAG 2.2 AA erfüllen. Gold ist ein Akzent – nie für Fliesstext auf Weiss.</p>
+<p class="lead">Texte müssen mindestens WCAG 2.2 AA erfüllen. Gold kommt nur im Logo vor – nie als Text, Akzent oder Rahmen.</p>
 <div class="grid" style="grid-template-columns:1fr 1fr;margin-top:2mm;align-items:start">
   <table>{head}{''.join(rows[:half])}</table><table>{head}{''.join(rows[half:])}</table>
 </div>
@@ -350,7 +350,7 @@ def p_motion():
   </div>
   <div style="display:grid;gap:5mm;align-content:start">
     <div class="tile" style="background:var(--mist);height:60mm">{logo('horizontal', 'farbig', width='100mm')}</div>
-    <div style="background:var(--navy);color:#fff;border-radius:1.5mm;padding:6mm"><h3 style="color:#D9B566">Barrierefreiheit</h3><p style="color:#C9D5EA;margin:0">Alle animierten SVG-Dateien enthalten <b>@media (prefers-reduced-motion: reduce)</b>: Bei aktivierter Systemeinstellung «Bewegung reduzieren» erscheint das Logo sofort statisch im Endzustand.</p></div>
+    <div style="background:var(--navy);color:#fff;border-radius:1.5mm;padding:6mm"><h3 style="color:#8FB4E3">Barrierefreiheit</h3><p style="color:#C9D5EA;margin:0">Alle animierten SVG-Dateien enthalten <b>@media (prefers-reduced-motion: reduce)</b>: Bei aktivierter Systemeinstellung «Bewegung reduzieren» erscheint das Logo sofort statisch im Endzustand.</p></div>
     <p style="font-size:8pt;color:var(--slate)">Dateien: 02_Logo-Animation/ – Vorschau mit «vorschau.html».</p>
   </div>
 </div>""")
@@ -366,7 +366,7 @@ def p_apps(mock_dir):
 
 def p_dirs(dir_dir):
     d = [("richtung_01_swiss-corporate.png", "01 Swiss Corporate", "Sachlich, transparent, Raster und Weissraum. Für Offerten, Unterlagen und Website."),
-         ("richtung_02_premium-finance.png", "02 Premium Finance", "Ruhig und wertig: Nachtblau, Gold-Haarlinien, Serifen-Headlines. Für Beratungsmappe und Termine."),
+         ("richtung_02_premium-finance.png", "02 Premium Finance", "Ruhig und wertig: Nachtblau, silberblaue Haarlinien, Serifen-Headlines. Für Beratungsmappe und Termine."),
          ("richtung_03_digital-finance.png", "03 Digital Finance", "Nahbar und interaktiv: Budgetcheck, Kreditrechner, Kundenportal, Social Media.")]
     tiles = "".join(f'<div style="display:grid;grid-template-rows:auto auto;align-content:start;gap:3mm"><img class="shot" style="height:auto" src="{(dir_dir / f).as_uri()}"><div><h2>{t}</h2><p>{x}</p></div></div>' for f, t, x in d)
     return frame(16, "Anwendungsrichtungen", f"""<h1>Drei Anwendungsrichtungen</h1>

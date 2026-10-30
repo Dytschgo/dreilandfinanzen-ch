@@ -51,7 +51,7 @@ CARD_CSS = """
 .cb-person strong { font-family: var(--display); font-weight: 700; font-size: 3.9mm; letter-spacing: .01em; }
 .cb-person span { font-size: 2.5mm; color: #AFC0DD; letter-spacing: .04em; }
 .cb-contact { position: relative; display: grid; gap: .9mm; font-size: 2.35mm; color: #E6ECF5; padding-top: 3mm; border-top: .25mm solid rgba(255,255,255,.18); }
-.cb-contact .web { color: #D9B566; font-weight: 600; }
+.cb-contact .web { color: #8FB4E3; font-weight: 600; }
 """
 
 
@@ -129,7 +129,7 @@ def letter():
     <div>UID CHE-000.000.000<br>IBAN CH00 0000 0000 0000 0000 0</div>
     <div>{icon_inline(style='width:8mm')}</div>
   </div>
-  <div class="bar"><span style="background:var(--navy)"></span><span style="background:var(--gold)"></span><span style="background:var(--red)"></span></div>
+  <div class="bar"><span style="background:var(--navy)"></span><span style="background:var(--blue)"></span><span style="background:var(--red)"></span></div>
 </div>"""
 
 
@@ -204,7 +204,7 @@ def website_desktop():
   </div>
   <div class="services">
     <div class="svc"><i style="background:var(--blue)"></i><h3>Privatkredit</h3><p>Faire Konditionen, abgestimmt auf Ihr Budget – transparent bis zum letzten Franken.</p></div>
-    <div class="svc"><i style="background:var(--gold)"></i><h3>Kreditablösung</h3><p>Bestehende Kredite zusammenfassen und Zinskosten spürbar senken.</p></div>
+    <div class="svc"><i style="background:var(--slate)"></i><h3>Kreditablösung</h3><p>Bestehende Kredite zusammenfassen und Zinskosten spürbar senken.</p></div>
     <div class="svc"><i style="background:var(--red)"></i><h3>Ehrliche Beratung</h3><p>Wäre die Belastung zu hoch, raten wir zu einem kleineren oder zu keinem Kredit.</p></div>
   </div>
 </div>"""
@@ -271,14 +271,14 @@ def social_assets():
     <h2 style="align-self:center">Fair finanziert.<br>Persönlich begleitet.</h2>
     <div style="display:grid;gap:22px">
       <div style="display:flex;justify-content:space-between;align-items:end">
-      <span class="tag" style="color:#D9B566">Kredit · Umschuldung · Budgetcheck</span>
+      <span class="tag" style="color:#8FB4E3">Kredit · Umschuldung · Budgetcheck</span>
       <span style="font:500 26px var(--text);color:#AFC0DD">{P['web']}</span></div>
       <span style="font:400 19px var(--text);color:#8FA0C2">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</span></div>
   </div></div>"""
     post2 = f"""<div class="sm" style="width:1080px;height:1080px;background:#fff;color:var(--navy);padding:90px;display:grid;grid-template-rows:auto 1fr auto">
   <span class="tag" style="color:var(--red)">Unser Versprechen</span>
   <div style="align-self:center">
-    <div style="font:800 190px/1 var(--display);color:var(--gold);letter-spacing:-.04em">Nein.</div>
+    <div style="font:800 190px/1 var(--display);color:var(--blue);letter-spacing:-.04em">Nein.</div>
     <h2 style="font-size:72px;margin-top:24px">Auch das kann eine ehrliche Beratung sein.</h2>
     <p style="font:400 30px/1.5 var(--text);color:#4a5778;margin:28px 0 0;max-width:26em">Wäre die Belastung zu hoch, raten wir Ihnen zu einem kleineren oder zu keinem Kredit.</p>
   </div>
@@ -288,7 +288,7 @@ def social_assets():
   {iso_pattern('#FFFFFF', .05, 70, 'iso2')}
   <div style="position:relative">{logo('horizontal', 'invertiert', height='96px')}</div>
   <div style="position:relative;align-self:center">
-    <span class="tag" style="color:#D9B566">Kreditberatung in der Region Basel</span>
+    <span class="tag" style="color:#8FB4E3">Kreditberatung in der Region Basel</span>
     <h2 style="font-size:112px;margin-top:36px">Ein Kredit, der zu Ihnen passt.</h2>
     <p style="font:400 40px/1.5 var(--text);color:#C9D5EA;margin:44px 0 0">Persönliche Beratung – vor Ort oder online.</p></div>
   <div style="position:relative;display:grid;gap:36px"><div style="background:#fff;color:var(--navy);border-radius:999px;padding:40px;text-align:center;font:700 40px var(--display)">Beratung vereinbaren</div>

@@ -33,7 +33,7 @@
         49
       ],
       "pantone": "2945 C",
-      "rolle": "Bildmarke · Akzent, Links, Diagramme"
+      "rolle": "Bildmarke · Akzent, Links, Diagramme, Hervorhebungen"
     },
     "gold": {
       "name": "Basler Gold",
@@ -50,7 +50,7 @@
         22
       ],
       "pantone": "7562 C",
-      "rolle": "Bildmarke · Akzent, Premium-Elemente (nicht für Text auf Weiss)"
+      "rolle": "Nur in der Bildmarke · kein Akzent für Flächen, Rahmen, Linien oder Text"
     },
     "red": {
       "name": "Grenz Rot",
