@@ -41,5 +41,9 @@ python tools/build.py
 
 Erzeugt `dist/Dreiland-Finanzen_Brand-Kit/` und die ZIP-Datei.
 
+## Mitmachen & Lizenz
+
+Siehe [CONTRIBUTING.md](CONTRIBUTING.md). Code unter [MIT](LICENSE); Name und Logo von Dreiland Finanzen sind davon ausgenommen, Schriften unter SIL OFL.
+
 Alle Inhalte enthalten Platzhalter (Kontaktdaten, Zinssätze). Logo-Vektoren, Farben und Schrift sind aus einer
 Rastervorlage rekonstruiert (Annäherung).
