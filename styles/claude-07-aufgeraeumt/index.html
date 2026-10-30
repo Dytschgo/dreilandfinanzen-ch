@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Dreiland Finanzen – Fair finanziert. Persönlich begleitet.</title>
+<meta name="description" content="Kreditberatung in Basel: faire Konditionen, persönliche Begleitung und ein Kreditrechner mit allen Kosten auf einen Blick.">
+<link rel="icon" href="../_assets/logo/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="../_assets/fonts/Montserrat-VF.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="preload" href="../_assets/fonts/Inter-VF.ttf" as="font" type="font/ttf" crossorigin>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#rechner">Zum Kreditrechner springen</a>
+
+<header class="header">
+  <div class="wrap header__in">
+    <a class="header__logo" href="#top"><img src="../_assets/logo/dreiland-finanzen_horizontal_farbig.svg" alt="Dreiland Finanzen" width="170" height="44"></a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menü öffnen"><span></span><span></span></button>
+    <nav class="nav" id="nav" aria-label="Hauptnavigation">
+      <a href="#rechner">Kreditrechner</a>
+      <a href="#budgetcheck">Budgetcheck</a>
+      <a href="#ueber-uns">Über uns</a>
+      <a href="#fragen">Fragen</a>
+      <a class="btn btn--primary btn--sm" href="#kontakt">Termin vereinbaren</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- Hero: Headline + Kreditrechner -->
+  <section class="hero" aria-labelledby="hero-title">
+    <svg class="hero__lines" viewBox="0 0 800 600" preserveAspectRatio="xMinYMid slice" aria-hidden="true">
+      <g stroke="currentColor" fill="none">
+        <path d="M-40 520 L360 289 L760 520 M360 289 V-20 M-40 289 L360 58 L760 289"/>
+        <path d="M160 404 V173 M560 404 V173" stroke-dasharray="2 6"/>
+      </g>
+    </svg>
+    <div class="wrap hero__in">
+      <div class="hero__text">
+        <p class="eyebrow">Kreditberatung · Basel</p>
+        <h1 id="hero-title">Fair finanziert.<br>Persönlich begleitet.</h1>
+        <p class="lead">Konditionen, die zu Ihrer Situation passen – und eine Ansprechperson, die Sie von Anfang bis Ende begleitet.</p>
+      </div>
+
+      <form class="calc" id="rechner" aria-labelledby="calc-title" onsubmit="return false">
+        <h2 class="calc__title" id="calc-title">Kreditrechner</h2>
+        <div class="range">
+          <div class="range__head"><label for="betrag">Kreditbetrag</label><output id="betrag-out" for="betrag">CHF 15'000.–</output></div>
+          <input id="betrag" type="range" min="1000" max="80000" step="500" value="15000">
+          <div class="range__scale" aria-hidden="true"><span>1'000</span><span>80'000</span></div>
+        </div>
+        <fieldset class="chips">
+          <legend>Laufzeit in Monaten</legend>
+          <div class="chips__row">
+            <label><input type="radio" name="laufzeit" value="12"><span>12</span></label>
+            <label><input type="radio" name="laufzeit" value="24"><span>24</span></label>
+            <label><input type="radio" name="laufzeit" value="36" checked><span>36</span></label>
+            <label><input type="radio" name="laufzeit" value="48"><span>48</span></label>
+            <label><input type="radio" name="laufzeit" value="60"><span>60</span></label>
+          </div>
+        </fieldset>
+        <div class="result" aria-live="polite">
+          <p class="result__label">Monatliche Rate</p>
+          <p class="result__rate" id="rate">CHF 473.90</p>
+          <dl class="result__costs">
+            <div><dt>Zinskosten total</dt><dd id="zins">CHF 2'060.40</dd></div>
+            <div><dt>Gesamtrückzahlung</dt><dd id="total">CHF 17'060.40</dd></div>
+          </dl>
+        </div>
+        <a class="btn btn--primary btn--block" href="#kontakt">Beratung vereinbaren</a>
+        <p class="fine"><b>Beispiel:</b> 8.9 % eff. Jahreszins, gleichbleibende Raten.<br>Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+        <a class="calc__link" href="#budgetcheck">Passt die Rate in Ihr Budget? Zum Budgetcheck</a>
+      </form>
+    </div>
+  </section>
+
+  <!-- Markenversprechen -->
+  <section class="strip" aria-label="Unser Versprechen">
+    <ul class="wrap strip__list">
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12.5 9 17.5 20 6.5"/></svg>Faire Konditionen</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-7 8-7s8 3 8 7"/></svg>Persönliche Begleitung</li>
+      <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4 6.5V12c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6.5Z"/></svg>Verantwortungsvolle Beratung</li>
+    </ul>
+  </section>
+
+  <!-- Faire Konditionen -->
+  <section class="section section--dark" aria-labelledby="konditionen-title">
+    <svg class="contours" data-terrain="bg" viewBox="0 0 1200 600" preserveAspectRatio="xMaxYMid slice" aria-hidden="true"></svg>
+    <div class="wrap promise">
+      <p class="eyebrow eyebrow--light">Unser Versprechen</p>
+      <h2 id="konditionen-title">Konditionen, die zu Ihnen passen.</h2>
+      <p class="promise__text">Wir setzen uns für faire Kreditbedingungen ein, die zu Ihrer finanziellen Situation passen – und begleiten Sie persönlich, vom ersten Gespräch bis zur letzten Rate.</p>
+      <p class="promise__proof">Wäre die Belastung zu hoch, raten wir zu einem kleineren oder keinem Kredit.</p>
+    </div>
+  </section>
+
+  <!-- Leistungen und Ablauf -->
+  <section class="section" aria-labelledby="leistungen-title">
+    <div class="wrap duo">
+      <div>
+        <h2 id="leistungen-title">Was wir für Sie tun.</h2>
+        <ul class="list">
+          <li><h3>Privatkredit</h3><p>Für Ihr Vorhaben – mit einer Rate, die in Ihr Budget passt.</p></li>
+          <li><h3>Kreditablösung</h3><p>Bestehende Kredite bündeln und Kosten senken.</p></li>
+        </ul>
+      </div>
+      <div>
+        <h2>So läuft es ab.</h2>
+        <ol class="steps">
+          <li><h3>Gespräch</h3><p>Sie erzählen, was Sie vorhaben.</p></li>
+          <li><h3>Budgetcheck</h3><p>Wir rechnen gemeinsam, was tragbar ist.</p></li>
+          <li><h3>Entscheidung</h3><p>Sie entscheiden in Ruhe.</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Budgetcheck -->
+  <section class="section section--mist" id="budgetcheck" aria-labelledby="bc-title">
+    <div class="wrap bc-wrap">
+      <header class="head">
+        <p class="eyebrow">Budgetcheck</p>
+        <h2 id="bc-title">Passt die Rate in Ihren Alltag?</h2>
+        <p>Drei Schritte. Das Ergebnis ist eine erste Einschätzung – keine Kreditzusage.</p>
+      </header>
+
+      <form class="bc" id="bc" novalidate data-step="0">
+        <ol class="bc__tabs" aria-label="Fortschritt">
+          <li data-tab="0"><span>1</span>Ihr Wunsch</li>
+          <li data-tab="1"><span>2</span>Ihr Alltag</li>
+          <li data-tab="2"><span>3</span>Ihr Spielraum</li>
+        </ol>
+
+        <section class="bc__step" data-step="0" aria-labelledby="bc-h1">
+          <h3 id="bc-h1" tabindex="-1">Worum geht es?</h3>
+          <fieldset class="toggle">
+            <legend class="sr">Anliegen</legend>
+            <label><input type="radio" name="anliegen" value="wunsch" checked><span>Wunsch finanzieren</span></label>
+            <label><input type="radio" name="anliegen" value="abloesung"><span>Kredite neu ordnen</span></label>
+          </fieldset>
+          <div class="range">
+            <div class="range__head"><label for="bc-betrag">Kreditbetrag</label><output id="bc-betrag-out" for="bc-betrag">CHF 15'000.–</output></div>
+            <input id="bc-betrag" type="range" min="1000" max="80000" step="500" value="15000">
+          </div>
+          <div class="field">
+            <label for="bc-lz">Laufzeit</label>
+            <select id="bc-lz"><option value="12">12 Monate</option><option value="24">24 Monate</option><option value="36" selected>36 Monate</option><option value="48">48 Monate</option><option value="60">60 Monate</option></select>
+          </div>
+          <p class="bc__rate">Monatliche Rate (Beispiel) <b id="bc-rate">CHF 473.90</b></p>
+          <div class="bc__nav"><button class="btn btn--primary" type="button" data-go="1">Weiter zu Ihrem Alltag</button></div>
+        </section>
+
+        <section class="bc__step" data-step="1" aria-labelledby="bc-h2" hidden>
+          <h3 id="bc-h2" tabindex="-1">Was braucht Ihr Alltag?</h3>
+          <div class="field">
+            <label for="bc-ink">Nettoeinkommen pro Monat <span>CHF</span></label>
+            <input id="bc-ink" inputmode="numeric" value="5200" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="bc-aus">Ausgaben pro Monat <span>CHF</span></label>
+            <input id="bc-aus" inputmode="numeric" value="3800" autocomplete="off" aria-describedby="bc-aus-hint">
+            <small id="bc-aus-hint">Inklusive jährlicher Rechnungen auf den Monat verteilt (z. B. Steuern, Versicherungen) und bestehender Kreditraten.</small>
+          </div>
+          <div class="field">
+            <label for="bc-res">Monatliche Reserve <span>CHF</span></label>
+            <input id="bc-res" inputmode="numeric" value="500" autocomplete="off" aria-describedby="bc-res-hint">
+            <small id="bc-res-hint">Was Sie für Unvorhergesehenes zurücklegen möchten.</small>
+          </div>
+          <p class="bc__err" id="bc-err" role="alert"></p>
+          <div class="bc__nav"><button class="btn btn--primary" type="button" data-go="2">Meinen Spielraum ansehen</button><button class="btn btn--ghost" type="button" data-go="0">Zurück</button></div>
+        </section>
+
+        <section class="bc__step" data-step="2" aria-labelledby="bc-h3" hidden>
+          <h3 id="bc-h3" tabindex="-1">Ihre erste Einschätzung</h3>
+          <div class="estimate" id="estimate" data-state="ok" aria-live="polite">
+            <p class="estimate__status" id="est-status">Rechnerischer Spielraum</p>
+            <p class="estimate__amount"><b id="est-frei">CHF 426.–</b> <span id="est-unit">bleiben pro Monat</span></p>
+            <div class="bar" aria-hidden="true"><i class="bar__aus"></i><i class="bar__res"></i><i class="bar__rate"></i><i class="bar__frei"></i></div>
+            <ul class="legend"><li class="l-aus">Ausgaben</li><li class="l-res">Reserve</li><li class="l-rate">Kreditrate</li><li class="l-frei">Spielraum</li></ul>
+            <p class="estimate__text" id="est-text"></p>
+          </div>
+          <p class="bc__next"><b>Wie geht es weiter?</b> Im persönlichen Gespräch prüfen wir Ihre Situation genau.</p>
+          <div class="bc__nav"><a class="btn btn--primary" href="#kontakt">Persönliche Einschätzung anfragen</a><button class="btn btn--ghost" type="button" data-go="1">Zurück</button></div>
+        </section>
+
+        <p class="fine"><b>Beispiel:</b> 8.9 % eff. Jahreszins. Spielraum = Einkommen − Ausgaben − Reserve − Rate; unter 10 % des Einkommens gilt als knapp. Ihre Eingaben bleiben im Browser.<br>Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+      </form>
+    </div>
+  </section>
+
+  <!-- Über uns -->
+  <section class="section" id="ueber-uns" aria-labelledby="ueber-title">
+    <div class="wrap">
+      <h2 id="ueber-title">Menschen, die Ihre Situation kennen.</h2>
+      <div class="photos">
+        <a class="photo photo--big" href="#kontakt">
+          <span class="photo__img photo__img--a" role="img" aria-label="Symbolbild: Beratungsgespräch am Küchentisch"></span>
+          <span class="photo__tag">Symbolbild · KI-generiert</span>
+          <span class="photo__text"><strong>Über uns</strong>Kreditberatung in Basel. Wir hören zuerst zu – und rechnen dann.</span>
+        </a>
+        <a class="photo" href="#partner">
+          <span class="photo__img photo__img--b" role="img" aria-label="Symbolbild: Blick aus dem Fenster auf die Stadt"></span>
+          <span class="photo__tag">Symbolbild · KI-generiert</span>
+          <span class="photo__text"><strong>Unser Netzwerk</strong>Partnerbanken und Fachstellen in der Region.</span>
+        </a>
+        <a class="photo" href="#kontakt">
+          <span class="photo__img photo__img--c" role="img" aria-label="Symbolbild: Tisch mit Notizbuch und Tassen"></span>
+          <span class="photo__tag">Symbolbild · KI-generiert</span>
+          <span class="photo__text"><strong>Karriere</strong>Beratung mit Haltung – wir freuen uns auf Verstärkung.</span>
+        </a>
+      </div>
+
+      <div class="partners" id="partner">
+        <div>
+          <h3>Partnerbanken</h3>
+          <ul class="logos" aria-label="Partnerbanken (Platzhalter)"><li>Bank A</li><li>Bank B</li><li>Bank C</li><li>Bank D</li></ul>
+        </div>
+        <div>
+          <h3>Kooperationspartner</h3>
+          <ul class="logos" aria-label="Kooperationspartner (Platzhalter)"><li>Treuhand</li><li>Versicherung</li><li>Budgetberatung</li></ul>
+        </div>
+        <p class="ph">Logos: Platzhalter</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Fragen -->
+  <section class="section section--mist" id="fragen" aria-labelledby="faq-title">
+    <div class="wrap duo duo--faq">
+      <h2 id="faq-title">Gut zu wissen.</h2>
+      <div class="faq">
+        <details><summary>Kann eine tiefere Monatsrate insgesamt mehr kosten?</summary><p>Ja. Eine längere Laufzeit senkt die Rate, erhöht aber die Zinskosten. Der Rechner zeigt beides.</p></details>
+        <details><summary>Bedeutet ein positives Budgetcheck-Ergebnis eine Kreditzusage?</summary><p>Nein. Es ist eine erste Einschätzung mit Beispielwerten. Die Kreditfähigkeit wird im persönlichen Gespräch und von der Bank geprüft.</p></details>
+        <details><summary>Entsteht durch den Rechner eine Verpflichtung?</summary><p>Nein. Ihre Eingaben bleiben im Browser und werden nicht gesendet.</p></details>
+        <details><summary>Was kostet die Beratung?</summary><p>Das Erstgespräch ist unverbindlich. <span class="ph">(Konditionen: Platzhalter)</span></p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kontakt mit Region -->
+  <section class="section" id="kontakt" aria-labelledby="kontakt-title">
+    <div class="wrap duo">
+      <div>
+        <h2 id="kontakt-title">Sprechen wir in Ruhe darüber.</h2>
+        <p class="muted">Vor Ort in Basel oder per Video – ohne Verkaufsdruck.</p>
+        <dl class="contact">
+          <div><dt>Adresse</dt><dd>Musterstrasse 1, 4051 Basel <span class="ph">(Platzhalter)</span></dd></div>
+          <div><dt>Telefon</dt><dd><a href="tel:+41610000000">+41 61 000 00 00</a> <span class="ph">(Platzhalter)</span></dd></div>
+          <div><dt>E-Mail</dt><dd><a href="mailto:beratung@dreilandfinanzen.ch">beratung@dreilandfinanzen.ch</a> <span class="ph">(Platzhalter)</span></dd></div>
+        </dl>
+        <figure class="region">
+          <svg class="contours contours--map" data-terrain="map" viewBox="0 0 560 300" aria-labelledby="region-cap" role="img">
+            <title>Schematische Darstellung des Dreiländerecks mit Rhein und Basel</title>
+          </svg>
+          <figcaption id="region-cap">Basel, wo Schweiz, Deutschland und Frankreich zusammentreffen. Künstlerische Darstellung.</figcaption>
+        </figure>
+      </div>
+
+      <form class="form" id="contact-form" novalidate>
+        <div class="field"><label for="f-name">Name</label><input id="f-name" name="name" autocomplete="name" required></div>
+        <div class="field"><label for="f-mail">E-Mail</label><input id="f-mail" name="email" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="f-tel">Telefon <span>optional</span></label><input id="f-tel" name="tel" type="tel" autocomplete="tel"></div>
+        <div class="field"><label for="f-msg">Worum geht es? <span>optional</span></label><textarea id="f-msg" name="message" rows="3"></textarea></div>
+        <label class="check"><input type="checkbox" id="f-ok" required><span>Ich bin einverstanden, dass Dreiland Finanzen mich kontaktiert.</span></label>
+        <button class="btn btn--primary btn--block" type="submit">Anfrage senden</button>
+        <p class="form__msg" id="form-msg" role="status"></p>
+        <p class="fine">Demo-Formular: Es werden keine Daten übermittelt.</p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer__in">
+    <img src="../_assets/logo/dreiland-finanzen_horizontal_darkmode.svg" alt="Dreiland Finanzen" width="150" height="39">
+    <p class="footer__legal">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+    <p class="footer__meta">© 2026 Dreiland Finanzen · Basel <span class="ph">(Firmenangaben: Platzhalter)</span> · <a href="#">Impressum</a> · <a href="#">Datenschutz</a></p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
