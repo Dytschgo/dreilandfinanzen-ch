@@ -24,8 +24,7 @@ SOFTWARE.
 Ausgenommen von dieser Lizenz / Excluded from this license:
 
 * Name, Logo, Bildmarke und Wortmarke «Dreiland Finanzen» (alle Dateien unter
-  styles/_assets/logo/, tools/original-logo-raster.png sowie die Logos in den
-  Designordnern) sind Marken von Dreiland Finanzen. Alle Rechte vorbehalten.
+  assets/logo/, brand-kit/01_Logo/, tools/original-logo-raster.png) sind Marken von Dreiland Finanzen. Alle Rechte vorbehalten.
   Sie dürfen nur zur Weiterentwicklung dieses Projekts verwendet werden.
-* Schriften (Montserrat, Inter, Source Serif 4, Geist, Geist Mono) stehen unter
+* Schriften (Montserrat, Inter, Source Serif 4) stehen unter
   der SIL Open Font License 1.1 – siehe die jeweiligen OFL-*.txt.

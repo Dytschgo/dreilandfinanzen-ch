@@ -57,10 +57,10 @@ def page() -> str:
 <html lang="de-CH"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Dreiland Finanzen – Brand Kit</title><link rel="icon" href="03_Favicons/favicon.svg" type="image/svg+xml">
 <style>
-@font-face {{ font-family: Geist; src: url(/styles/_assets/fonts/Geist-VF.ttf) format("truetype"); font-weight: 100 900; }}
+@font-face {{ font-family: Inter; src: url(/assets/fonts/Inter-VF.ttf) format("truetype"); font-weight: 100 900; }}
 :root {{ --bg: #fff; --fg: #0a0a0a; --muted: #f5f5f5; --mfg: #737373; --border: #e5e5e5; --r: .625rem; }}
 * {{ box-sizing: border-box; }}
-body {{ margin: 0; font: 14px/1.5 Geist, ui-sans-serif, system-ui, sans-serif; color: var(--fg); background: var(--bg); -webkit-font-smoothing: antialiased; }}
+body {{ margin: 0; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: var(--fg); background: var(--bg); -webkit-font-smoothing: antialiased; }}
 a {{ color: inherit; }}
 header {{ position: sticky; top: 0; z-index: 2; height: 3.5rem; border-bottom: 1px solid var(--border); background: rgb(255 255 255 / .95); backdrop-filter: blur(8px); }}
 .c {{ max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }}
@@ -88,7 +88,7 @@ footer {{ margin: 3rem 0; color: var(--mfg); font-size: .75rem; }}
 @media (max-width: 640px) {{ summary {{ grid-template-columns: 1fr auto; }} summary span {{ display: none; }} }}
 </style></head><body>
 <header><div class="c"><img src="01_Logo/SVG/horizontal/dreiland-finanzen_horizontal_farbig.svg" alt="Dreiland Finanzen">
-<nav><a href="/styles/">Designs</a><a href="/brand-kit/" aria-current="page">Brand Kit</a><a href="https://github.com/Dytschgo/dreilandfinanzen-ch">GitHub</a></nav></div></header>
+<nav><a href="/">Website</a><a href="/brand-kit/" aria-current="page">Brand Kit</a><a href="https://github.com/Dytschgo/dreilandfinanzen-ch">GitHub</a></nav></div></header>
 <main class="c">
 <h1>Brand Kit</h1>
 <p class="lead">Logo, Farben, Typografie, Guidelines und Mockups von Dreiland Finanzen. Vektoren, Schrift und Farben aus der Rastervorlage rekonstruiert (Annäherung).</p>

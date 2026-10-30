@@ -1,14 +1,16 @@
-<img src="styles/_assets/logo/dreiland-finanzen_icon_farbig.svg" width="64" height="64" alt="">
+<img src="assets/logo/favicon.svg" width="64" height="64" alt="">
 
 # dreilandfinanzen.ch
 
-Brand Kit und Website-Designvarianten für **Dreiland Finanzen** – Kreditberatung im Dreiländereck.
+Website und Brand Kit für **Dreiland Finanzen** – Kreditberatung in Basel.
 
-| Ordner | Inhalt |
+| Pfad | Inhalt |
 |---|---|
-| `styles/` | 13 Landingpage-Varianten (Claude, GPT-6.1 Sol, GPT-6 Astra) und der Design-Viewer (`styles/index.html`) |
-| `brand-kit/` | Fertiges Brand Kit (Logos, Guidelines-PDF, Mockups, ZIP) – aktualisieren mit `python tools/build.py && python tools/publish_brandkit.py` |
-| `tools/` | Generatoren: Brand Kit (`build.py`), veröffentlichbare Website (`build_site.py`) |
+| `index.html`, `style.css`, `app.js` | Die Website (statisch, ohne Build-Schritt) |
+| `assets/` | Schriften (Montserrat, Inter – SIL OFL) und Logo-Dateien der Website |
+| `img/` | Bilder der Website (derzeit ein gekennzeichnetes KI-Symbolbild) |
+| `brand-kit/` | Fertiges Brand Kit (Logos, Guidelines-PDF, Mockups, ZIP), online unter `/brand-kit/` |
+| `tools/` | Generatoren für das Brand Kit |
 
 ## Lokal ansehen
 
@@ -16,35 +18,30 @@ Brand Kit und Website-Designvarianten für **Dreiland Finanzen** – Kreditberat
 python -m http.server 5180 --bind 127.0.0.1
 ```
 
-Dann http://127.0.0.1:5180/ öffnen (leitet auf `/styles/` weiter, Brand Kit unter `/brand-kit/`). Wechseln mit ← / →, Suche mit ⌘K / Strg+K.
+Dann http://127.0.0.1:5180/ öffnen.
+
+## Kredit & Budgetcheck
+
+Ein Werkzeug in drei Schritten (Ihr Kredit → Ihr Budget → Ihr Spielraum). Kreditregeln und Schätzformel entsprechen
+`credit-core` v0.2 (`shared/credit-rules.json`, `estimateCredit`): Beispielzins 7.9 % eff., ab CHF 5'000, Start CHF 20'000 /
+48 Monate, Laufzeiten 12–120 Monate, über CHF 80'000 höchstens 84 Monate. Rate ohne Einkommensangabe; Budget optional.
+Antragsformular und Zustellung aus credit-core sind noch nicht angebunden (siehe offene Punkte im Projekt).
 
 ## Veröffentlichen
 
-```
-python tools/build_site.py
-```
-
-Erzeugt `site/` (ohne Screenshots und Prüfskripte, mit `robots.txt` und `.htaccess` gegen Indexierung).
-
-```
-python tools/publish_site.py
-```
-
-Baut `site/` und legt es als Branch **`site`** auf GitHub ab. Hostinger kann `main` direkt ausliefern: `index.html` leitet auf `/styles/` weiter, `.htaccess` sperrt
-`tools/`, `.github/` u. a. und setzt noindex. Der Branch `site` enthält dieselbe Struktur ohne Repo-Interna.
+Hostinger liefert den Branch `main` direkt aus (Git-Deployment). Jeder Push auf `main` ist sofort live.
+`.htaccess` sperrt Repo-Interna (`tools/`, `.github/`, Markdown/Python-Dateien) und setzt `noindex`, solange Platzhalter
+(Kontaktdaten, Firmenangaben, Fotos) enthalten sind.
 
 ## Brand Kit
 
 ```
 pip install pillow playwright uharfbuzz fonttools
 python tools/build.py
+python tools/publish_brandkit.py
 ```
-
-Erzeugt `dist/Dreiland-Finanzen_Brand-Kit/` und die ZIP-Datei.
 
 ## Mitmachen & Lizenz
 
-Siehe [CONTRIBUTING.md](CONTRIBUTING.md). Code unter [MIT](LICENSE); Name und Logo von Dreiland Finanzen sind davon ausgenommen, Schriften unter SIL OFL.
-
-Alle Inhalte enthalten Platzhalter (Kontaktdaten, Zinssätze). Logo-Vektoren, Farben und Schrift sind aus einer
-Rastervorlage rekonstruiert (Annäherung).
+Siehe [CONTRIBUTING.md](CONTRIBUTING.md). Code unter [MIT](LICENSE); Name und Logo von Dreiland Finanzen sind davon
+ausgenommen, Schriften unter SIL OFL.

@@ -13,9 +13,12 @@ AddType application/manifest+json .webmanifest
   # Repo-Interna nicht ausliefern
   RewriteRule ^(\.git|\.github|tools|dist|site|_backup-hostinger)(/|$) - [F,L]
   RewriteRule (^|/)\.(gitignore|gitattributes)$ - [F,L]
+  # Quell- und Dokumentationsdateien (ausser im Brand Kit) nicht ausliefern
+  RewriteCond %{REQUEST_URI} !^/brand-kit/
+  RewriteRule \.(py|md)$ - [F,L]
 </IfModule>
 
 <IfModule mod_headers.c>
-  # Entwürfe mit Platzhaltern: nicht indexieren
+  # Solange Platzhalter (Kontakt, Firmenangaben, Fotos) enthalten sind: nicht indexieren
   Header set X-Robots-Tag "noindex, nofollow"
 </IfModule>
