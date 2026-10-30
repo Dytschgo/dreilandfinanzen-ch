@@ -1,0 +1,32 @@
+{
+  "checks": [
+    "Local fonts loaded",
+    "Hero amount slider is visible in the desktop viewport",
+    "Amount slider updates the monthly example live",
+    "Term chips recalculate the monthly example",
+    "Affordability details open and budget status is shown",
+    "One calculator action is present",
+    "Legal disclosure is next to the hero calculator",
+    "No horizontal overflow at 390px",
+    "Hero amount slider is visible in the mobile viewport",
+    "Hero action is visible in the mobile viewport",
+    "Required disclosure is visible in the mobile viewport",
+    "Mobile menu opens",
+    "Mobile menu closes with Escape",
+    "No horizontal overflow at 360px",
+    "No horizontal overflow at 768px",
+    "No horizontal overflow at 1024px",
+    "No horizontal overflow at 1920px",
+    "Calculator action transfers the example to contact",
+    "Reduced motion leaves the page usable",
+    "No browser console errors",
+    "No failed requests",
+    "Direct file opening keeps the calculator usable"
+  ],
+  "console_errors": [],
+  "failed_requests": [],
+  "word_count": {
+    "desktop": 290,
+    "mobile": 296
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "body_inner_text_words": 301,
+  "slider_visible_1440x900": true,
+  "slider_bottom_desktop_px": 282.0,
+  "slider_visible_390x844": true,
+  "slider_bottom_mobile_px": 423.9,
+  "rate_before": "473.90",
+  "rate_after_slider": "489.70",
+  "rate_changes": true,
+  "overflow_360px": false,
+  "tragbarkeit_opens": true,
+  "footer_logo": {
+    "width": 300,
+    "complete": true
+  },
+  "console_errors": []
+}

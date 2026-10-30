@@ -1,0 +1,38 @@
+{
+  "console_errors": [],
+  "page_errors": [],
+  "external_requests": [],
+  "checks": [
+    {
+      "desktop_hero_slider_bottom": 416.8,
+      "viewport_height": 900
+    },
+    {
+      "default_monthly_payment": 473.9,
+      "after_slider_keypress": 489.7,
+      "slider_amount_display": "updates and formats as CHF"
+    },
+    "Term changes, three affordability states and invalid-input handling",
+    "Atlas keyboard controls, FAQ and local conversation note",
+    {
+      "mobile_hero_controls_bottoms": {
+        "#amount-range": 398.0,
+        "#months": 484.3,
+        "#monthly": 624.3,
+        ".hero-calculator .button": 725.4,
+        ".hero-assumption": 772.5
+      },
+      "viewport_height": 844
+    },
+    "No horizontal scroll at 360, 390, 768, 1024, 1440 or 1920 px; 200% text at 390 px",
+    "Reduced motion leaves map state changes immediate",
+    "No JavaScript: labelled example, disabled controls and static map",
+    "Local HTTP path loads logo, local fonts, calculator and first-screen slider"
+  ],
+  "text_contrast": {
+    "checked": 75,
+    "minimum": 5.4605448837582,
+    "failures": []
+  },
+  "body_word_count_1440x900": 336
+}

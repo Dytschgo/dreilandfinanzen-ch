@@ -1,0 +1,10 @@
+# Generiert
+dist/
+site/
+__pycache__/
+*.pyc
+# Zwischenbilder der WebGPU-Prüfung
+styles/claude-05-webgpu/screenshots/fallback-*.png
+styles/claude-05-webgpu/screenshots/reduced-*.png
+styles/claude-05-webgpu/screenshots/webgpu-*.png
+styles/claude-04-ultramodern/screenshots/frames/

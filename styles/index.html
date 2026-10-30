@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Dreiland Finanzen – Design-Review</title>
+<link rel="icon" href="_assets/logo/favicon.svg" type="image/svg+xml">
+<style>
+  @font-face { font-family: Inter; src: url(_assets/fonts/Inter-VF.ttf) format("truetype"); font-weight: 100 900; font-display: swap; }
+
+  /* shadcn/ui – Neutral (zinc) Tokens */
+  :root {
+    --background: #ffffff; --foreground: #09090b;
+    --muted: #f4f4f5; --muted-foreground: #71717a;
+    --accent: #f4f4f5; --accent-foreground: #18181b;
+    --primary: #18181b; --primary-foreground: #fafafa;
+    --border: #e4e4e7; --input: #e4e4e7; --ring: #a1a1aa;
+    --popover: #ffffff; --brand: #062B63;
+    --radius: .5rem;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
+    --shadow-md: 0 4px 6px -1px rgba(0,0,0,.1), 0 2px 4px -2px rgba(0,0,0,.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0,0,0,.1), 0 4px 6px -4px rgba(0,0,0,.1);
+    color-scheme: light;
+  }
+  .dark {
+    --background: #09090b; --foreground: #fafafa;
+    --muted: #18181b; --muted-foreground: #a1a1aa;
+    --accent: #27272a; --accent-foreground: #fafafa;
+    --primary: #fafafa; --primary-foreground: #18181b;
+    --border: #27272a; --input: #27272a; --ring: #52525b;
+    --popover: #09090b; --brand: #D9B566;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { display: grid; grid-template-rows: auto 1fr auto; font: 14px/1.5 Inter, ui-sans-serif, system-ui, sans-serif; color: var(--foreground); background: var(--background); -webkit-font-smoothing: antialiased; }
+  svg.i { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+
+  /* Button */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; height: 2.25rem; padding: 0 .875rem; border-radius: calc(var(--radius) - 2px);
+         font: 500 14px Inter, sans-serif; color: var(--foreground); background: transparent; border: 1px solid transparent; cursor: pointer; white-space: nowrap; text-decoration: none;
+         transition: background-color .15s, color .15s, border-color .15s; }
+  .btn:focus-visible, .tab:focus-visible, .cmd-item:focus-visible, input:focus-visible { outline: 2px solid var(--ring); outline-offset: 2px; }
+  .btn-outline { border-color: var(--input); background: var(--background); box-shadow: var(--shadow-sm); }
+  .btn-outline:hover, .btn-ghost:hover { background: var(--accent); color: var(--accent-foreground); }
+  .btn-primary { background: var(--primary); color: var(--primary-foreground); }
+  .btn-primary:hover { opacity: .9; }
+  .btn-icon { width: 2.25rem; padding: 0; }
+  .btn-sm { height: 2rem; padding: 0 .75rem; font-size: 13px; }
+
+  /* Header */
+  header { display: flex; align-items: center; gap: .75rem; height: 3.5rem; padding: 0 1rem; border-bottom: 1px solid var(--border); background: var(--background); }
+  .brand { display: flex; align-items: center; gap: .625rem; min-width: 0; text-decoration: none; color: inherit; }
+  .brand img { height: 26px; width: auto; }
+  .brand b { font-weight: 600; letter-spacing: -.01em; }
+  .badge { display: inline-flex; align-items: center; height: 1.375rem; padding: 0 .5rem; border-radius: 999px; border: 1px solid var(--border); font: 500 12px Inter; color: var(--muted-foreground); }
+  .sep { width: 1px; height: 1.25rem; background: var(--border); }
+  .grow { flex: 1; }
+
+  /* Combobox trigger */
+  .combo { min-width: 17rem; justify-content: space-between; }
+  .combo .lbl { display: flex; align-items: center; gap: .5rem; overflow: hidden; }
+  .combo .lbl span:last-child { color: var(--muted-foreground); }
+  .dot { width: .5rem; height: .5rem; border-radius: 999px; flex: none; }
+  .dot.claude { background: #D97757; } .dot.sol { background: #10A37F; } .dot.astra { background: #7C5CFF; }
+
+  /* Tabs / ToggleGroup */
+  .tabs { display: inline-flex; align-items: center; height: 2.25rem; padding: 3px; border-radius: var(--radius); background: var(--muted); gap: 2px; }
+  .tab { display: inline-flex; align-items: center; gap: .375rem; height: 100%; padding: 0 .75rem; border: 0; border-radius: calc(var(--radius) - 3px); background: transparent;
+         font: 500 13px Inter; color: var(--muted-foreground); cursor: pointer; transition: background-color .15s, color .15s; }
+  .tab[aria-selected="true"], .tab[aria-pressed="true"] { background: var(--background); color: var(--foreground); box-shadow: var(--shadow-sm); }
+  .tab.icon { padding: 0 .5rem; }
+
+  /* Stage */
+  main { position: relative; min-height: 0; background: var(--muted); padding: 1rem; display: grid; }
+  .frame-card { position: relative; justify-self: center; width: 100%; height: 100%; min-height: 0; border: 1px solid var(--border); border-radius: calc(var(--radius) + 4px);
+                background: var(--background); box-shadow: var(--shadow-md); overflow: hidden; transition: width .3s cubic-bezier(.2,.8,.2,1); }
+  main[data-device="tablet"] .frame-card { width: min(820px, 100%); }
+  main[data-device="mobile"] .frame-card { width: min(390px, 100%); max-height: 844px; align-self: center; border-radius: 2rem; border-width: 8px; border-color: #18181b; }
+  iframe { display: block; width: 100%; height: 100%; border: 0; background: #fff; }
+  .spot { position: absolute; display: none; pointer-events: none; border-radius: calc(var(--radius) + 2px);
+          box-shadow: 0 0 0 2px var(--background), 0 0 0 4px #D9B566, 0 0 0 100vmax rgba(9,9,11,.6); transition: top .25s, left .25s, width .25s, height .25s; }
+  main[data-focus="calc"] .spot { display: block; }
+  .loading { position: absolute; inset: 0; display: grid; place-items: center; background: var(--background); color: var(--muted-foreground); font-size: 13px; opacity: 0; pointer-events: none; transition: opacity .2s; }
+  .frame-card.is-loading .loading { opacity: 1; }
+
+  /* Footer */
+  footer { display: flex; align-items: center; gap: 1rem; height: 3rem; padding: 0 1rem; border-top: 1px solid var(--border); color: var(--muted-foreground); font-size: 13px; }
+  .desc { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .dots { display: flex; gap: 6px; }
+  .dots button { width: 8px; height: 8px; padding: 0; border-radius: 999px; border: 0; background: var(--border); cursor: pointer; }
+  .dots button[aria-current="true"] { background: var(--foreground); width: 20px; }
+  kbd { display: inline-flex; align-items: center; height: 1.25rem; padding: 0 .375rem; border: 1px solid var(--border); border-bottom-width: 2px; border-radius: 4px; font: 500 11px Inter; color: var(--muted-foreground); background: var(--muted); }
+
+  /* Command dialog */
+  dialog { padding: 0; border: 1px solid var(--border); border-radius: calc(var(--radius) + 4px); background: var(--popover); color: var(--foreground); width: min(560px, calc(100vw - 2rem)); box-shadow: var(--shadow-lg); }
+  dialog::backdrop { background: rgba(0,0,0,.5); backdrop-filter: blur(2px); }
+  .cmd-search { display: flex; align-items: center; gap: .5rem; padding: 0 .75rem; border-bottom: 1px solid var(--border); color: var(--muted-foreground); }
+  .cmd-search input { flex: 1; height: 2.75rem; border: 0; background: transparent; font: 14px Inter; color: var(--foreground); outline: none; }
+  .cmd-list { max-height: min(60vh, 460px); overflow-y: auto; padding: .25rem; }
+  .cmd-group { padding: .25rem 0; }
+  .cmd-group h3 { margin: 0; padding: .375rem .5rem; font: 500 12px Inter; color: var(--muted-foreground); }
+  .cmd-item { display: flex; align-items: center; gap: .75rem; width: 100%; padding: .375rem .5rem; border: 0; border-radius: calc(var(--radius) - 2px); background: transparent; color: inherit; text-align: left; cursor: pointer; font: 14px Inter; }
+  .cmd-item img { width: 72px; aspect-ratio: 16/10; object-fit: cover; border-radius: 4px; border: 1px solid var(--border); flex: none; }
+  .cmd-item .t { display: grid; min-width: 0; }
+  .cmd-item .t b { font-weight: 500; }
+  .cmd-item .t span { font-size: 12px; color: var(--muted-foreground); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cmd-item .check { margin-left: auto; opacity: 0; }
+  .cmd-item[aria-current="true"] .check { opacity: 1; }
+  .cmd-item:hover, .cmd-item.active { background: var(--accent); }
+  .cmd-empty { padding: 1.5rem; text-align: center; color: var(--muted-foreground); }
+
+  @media (max-width: 1100px) { .hide-lg { display: none !important; } .combo { min-width: 12rem; } }
+  @media (max-width: 720px) {
+    header { height: auto; flex-wrap: wrap; padding: .5rem; gap: .5rem; }
+    .hide-md { display: none !important; }
+    .brand, header > .grow { display: none; }
+    .combo { flex: 1 1 calc(100% - 5.5rem); min-width: 0; }
+    main { padding: .5rem; }
+    footer .desc { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <a class="brand" href="./" aria-label="Dreiland Finanzen – Design-Review">
+    <img id="brandLogo" src="_assets/logo/dreiland-finanzen_horizontal_farbig.svg" alt="Dreiland Finanzen">
+  </a>
+  <span class="badge hide-md">Design-Review</span>
+  <span class="sep hide-md"></span>
+
+  <button class="btn btn-outline combo" id="comboBtn" aria-haspopup="dialog" aria-controls="cmd">
+    <span class="lbl"><span class="dot" id="comboDot"></span><span id="comboName"></span><span id="comboModel" class="hide-md"></span></span>
+    <svg class="i" viewBox="0 0 24 24"><path d="m7 15 5 5 5-5"/><path d="m7 9 5-5 5 5"/></svg>
+  </button>
+  <button class="btn btn-outline btn-icon" id="prev" aria-label="Vorheriges Design"><svg class="i" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+  <button class="btn btn-outline btn-icon" id="next" aria-label="Nächstes Design"><svg class="i" viewBox="0 0 24 24"><path d="m9 18 6-6-6-6"/></svg></button>
+
+  <span class="grow"></span>
+
+  <div class="tabs" role="tablist" aria-label="Ansicht">
+    <button class="tab" role="tab" id="tabPage" aria-selected="true">Seite</button>
+    <button class="tab" role="tab" id="tabCalc" aria-selected="false">Rechner</button>
+  </div>
+  <div class="tabs" role="group" aria-label="Gerät">
+    <button class="tab icon" data-device="desktop" aria-pressed="true" aria-label="Desktop" title="Desktop"><svg class="i" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></button>
+    <button class="tab icon hide-md" data-device="tablet" aria-pressed="false" aria-label="Tablet" title="Tablet"><svg class="i" viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M12 18h.01"/></svg></button>
+    <button class="tab icon" data-device="mobile" aria-pressed="false" aria-label="Mobile" title="Mobile"><svg class="i" viewBox="0 0 24 24"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M12 18h.01"/></svg></button>
+  </div>
+  <a class="btn btn-ghost btn-icon hide-md" id="open" target="_blank" rel="noopener" aria-label="In neuem Tab öffnen" title="In neuem Tab öffnen"><svg class="i" viewBox="0 0 24 24"><path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></svg></a>
+  <button class="btn btn-ghost btn-icon" id="theme" aria-label="Hell/Dunkel umschalten" title="Hell/Dunkel"><svg class="i" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg></button>
+</header>
+
+<main id="stage" data-device="desktop" data-focus="page">
+  <div class="frame-card is-loading" id="card">
+    <iframe id="frame" title="Design-Vorschau"></iframe>
+    <div class="spot" id="spot" aria-hidden="true"></div>
+    <div class="loading" aria-hidden="true">Lädt …</div>
+  </div>
+</main>
+
+<footer>
+  <span id="count" style="font-variant-numeric: tabular-nums; color: var(--foreground); font-weight: 500"></span>
+  <div class="dots" id="dots" aria-label="Designs"></div>
+  <span class="desc grow" id="desc"></span>
+  <span class="hide-md"><kbd>←</kbd> <kbd>→</kbd> wechseln · <kbd>⌘K</kbd> suchen</span>
+  <a class="btn btn-ghost btn-sm hide-md" href="uebersicht.html">Alle als Raster</a>
+</footer>
+
+<dialog id="cmd" aria-label="Design auswählen">
+  <div class="cmd-search">
+    <svg class="i" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <input id="cmdInput" placeholder="Design suchen …" autocomplete="off" aria-label="Design suchen">
+    <kbd>Esc</kbd>
+  </div>
+  <div class="cmd-list" id="cmdList" role="listbox"></div>
+</dialog>
+
+<script>
+const STYLES = [
+  ["claude-01-geschmack-a", "Augenmass", "claude", "Eigener Geschmack A", "Schweizer Raster, Bildmarke als Konstruktionszeichnung."],
+  ["claude-02-geschmack-b", "Das Heft", "claude", "Eigener Geschmack B", "Editorial wie ein Schweizer Magazin."],
+  ["claude-03-frei", "Die rote Linie", "claude", "Voll kreativ", "Eine rote Grenzlinie zieht sich durch die Seite."],
+  ["claude-04-ultramodern", "Isometrie", "claude", "Ultra-modern", "SVG-Konstruktionslinien und animierter Rechner."],
+  ["claude-05-webgpu", "Tragwerk", "claude", "WebGPU", "Partikel-Szene mit Tragbarkeitsring."],
+  ["sol-01-geschmack-a", "Spielraum", "sol", "Eigener Geschmack A", "Hell, ruhig, editorial."],
+  ["sol-02-geschmack-b", "Rhein & Haltung", "sol", "Eigener Geschmack B", "Dunkles Editorial mit Dreiland-Karte."],
+  ["sol-03-frei", "Spielraum (Architektur)", "sol", "Voll kreativ", "Räumliche Architektur."],
+  ["sol-04-ultramodern", "Im Einklang", "sol", "Ultra-modern", "Logo-Reveal, SVG-Flächenaufbau, Morphing."],
+  ["sol-05-webgpu", "Spielraum (WebGPU)", "sol", "WebGPU", "Plastische Farbflächen mit Compute-Partikeln."],
+  ["astra-01-ultrakreativ", "Eine Landschaft für Ihr Leben", "astra", "Ultra-kreativ", "Terrassierte Inseln, goldene Brücken."],
+  ["astra-02-ultrakreativ", "Der Dreiland-Atlas", "astra", "Ultra-kreativ", "Relief-Landschaft aus drei Ländern."],
+  ["astra-03-ultrakreativ", "Am selben Tisch", "astra", "Ultra-kreativ", "Die Seite als Beratungsgespräch."],
+];
+const MODELS = { claude: "Claude Opus 5.5", sol: "GPT-6.1 Sol", astra: "GPT-6 Astra" };
+const $ = id => document.getElementById(id);
+const frame = $("frame"), stage = $("stage"), card = $("card");
+let current = -1, focusMode = "page";
+
+/* ---------- Auswahl ---------- */
+function show(i) {
+  i = (i + STYLES.length) % STYLES.length;
+  if (i === current) return;
+  current = i;
+  const [dir, name, model, kind, desc] = STYLES[i];
+  card.classList.add("is-loading");
+  frame.src = `${dir}/index.html`;
+  frame.title = `Design-Vorschau: ${name}`;
+  $("comboName").textContent = name;
+  $("comboModel").textContent = `· ${MODELS[model]}`;
+  $("comboDot").className = `dot ${model}`;
+  $("count").textContent = `${i + 1} / ${STYLES.length}`;
+  $("desc").textContent = `${kind} — ${desc}`;
+  $("open").href = `${dir}/index.html`;
+  [...$("dots").children].forEach((d, j) => d.setAttribute("aria-current", j === i));
+  const q = new URLSearchParams(location.search);
+  focusMode === "calc" ? q.set("ansicht", "rechner") : q.delete("ansicht");
+  history.replaceState(null, "", `${q.toString() ? "?" + q : location.pathname}#${dir}`);
+}
+STYLES.forEach(([, name], i) => {
+  const b = document.createElement("button");
+  b.setAttribute("aria-label", `${i + 1}: ${name}`);
+  b.addEventListener("click", () => show(i));
+  $("dots").append(b);
+});
+$("prev").onclick = () => show(current - 1);
+$("next").onclick = () => show(current + 1);
+frame.addEventListener("load", () => { card.classList.remove("is-loading"); setTimeout(applyFocus, 300); });
+
+/* ---------- Ansicht: Seite / Rechner ---------- */
+function setFocus(mode) {
+  focusMode = mode;
+  stage.dataset.focus = mode;
+  $("tabPage").setAttribute("aria-selected", mode === "page");
+  $("tabCalc").setAttribute("aria-selected", mode === "calc");
+  const q = new URLSearchParams(location.search);
+  mode === "calc" ? q.set("ansicht", "rechner") : q.delete("ansicht");
+  history.replaceState(null, "", `${q.toString() ? "?" + q : location.pathname}${location.hash}`);
+  if (mode === "calc") applyFocus(); else { try { frame.contentWindow.scrollTo({ top: 0, behavior: "instant" }); } catch {} }
+}
+$("tabPage").onclick = () => setFocus("page");
+$("tabCalc").onclick = () => setFocus("calc");
+
+let tracked = null, raf = 0;
+function findCalc(doc) {
+  const input = doc.querySelector("input[type=range]") || doc.querySelector("#amount, #betrag");
+  if (!input) return null;
+  const vw = doc.documentElement.clientWidth;
+  const hasResult = el => /rate/i.test(el.innerText || "") && /CHF/.test(el.innerText || "") && el.querySelector("button, a");
+  for (let el = input.parentElement; el && el !== doc.body; el = el.parentElement) {
+    const r = el.getBoundingClientRect();
+    if (r.width >= Math.min(vw * 0.3, 320) && r.height > 160 && hasResult(el)) return el;
+  }
+  return input.closest("section") || input.parentElement;
+}
+function placeSpot() {
+  raf = 0;
+  if (focusMode !== "calc" || !tracked) return;
+  const r = tracked.getBoundingClientRect(), fh = frame.clientHeight, fw = frame.clientWidth;
+  const top = Math.max(r.top, 0), bottom = Math.min(r.bottom, fh);
+  Object.assign($("spot").style, { top: top + "px", left: Math.max(r.left, 0) + "px", width: Math.min(r.width, fw) + "px", height: Math.max(bottom - top, 0) + "px" });
+}
+const schedule = () => { if (!raf) raf = requestAnimationFrame(placeSpot); };
+function applyFocus() {
+  if (focusMode !== "calc") return;
+  let doc, win;
+  try { doc = frame.contentDocument; win = frame.contentWindow; } catch { return; }
+  if (!doc || !doc.body) return;
+  tracked = findCalc(doc);
+  if (!tracked) return;
+  const headerH = () => {
+    let h = 0;
+    for (const el of doc.querySelectorAll("header, nav, [class*=header]")) {
+      const cs = win.getComputedStyle(el), r = el.getBoundingClientRect();
+      if ((cs.position === "fixed" || cs.position === "sticky") && r.top <= 2 && r.height < 200 && r.width > win.innerWidth * .5) h = Math.max(h, r.bottom);
+    }
+    return h;
+  };
+  const go = () => win.scrollTo({ top: Math.max(0, tracked.getBoundingClientRect().top + win.scrollY - headerH() - 16), behavior: "instant" });
+  go(); setTimeout(() => { go(); schedule(); }, 450);
+  win.addEventListener("scroll", schedule, { passive: true });
+  win.addEventListener("resize", schedule);
+  schedule();
+}
+
+/* ---------- Gerät ---------- */
+document.querySelectorAll("[data-device]").forEach(b => b.addEventListener("click", () => {
+  stage.dataset.device = b.dataset.device;
+  document.querySelectorAll("[data-device]").forEach(x => x.tagName === "BUTTON" && x.setAttribute("aria-pressed", x === b));
+  setTimeout(applyFocus, 350);
+}));
+
+/* ---------- Theme ---------- */
+function setTheme(dark) {
+  document.documentElement.classList.toggle("dark", dark);
+  $("brandLogo").src = `_assets/logo/dreiland-finanzen_horizontal_${dark ? "darkmode" : "farbig"}.svg`;
+  try { localStorage.setItem("df-theme", dark ? "dark" : "light"); } catch {}
+}
+$("theme").onclick = () => setTheme(!document.documentElement.classList.contains("dark"));
+setTheme((() => { try { return localStorage.getItem("df-theme") === "dark"; } catch { return false; } })());
+
+/* ---------- Command (⌘K) ---------- */
+const cmd = $("cmd"), input = $("cmdInput"), list = $("cmdList");
+let active = 0, visible = [];
+function renderList() {
+  const q = input.value.trim().toLowerCase();
+  list.innerHTML = ""; visible = [];
+  for (const m of Object.keys(MODELS)) {
+    const items = STYLES.map((s, i) => [s, i]).filter(([s]) => s[2] === m && (!q || `${s[1]} ${s[3]} ${s[4]} ${MODELS[m]}`.toLowerCase().includes(q)));
+    if (!items.length) continue;
+    const g = document.createElement("div"); g.className = "cmd-group";
+    g.innerHTML = `<h3>${MODELS[m]}</h3>`;
+    for (const [[dir, name, , kind], i] of items) {
+      const b = document.createElement("button");
+      b.className = "cmd-item"; b.setAttribute("role", "option"); b.setAttribute("aria-current", i === current);
+      b.innerHTML = `<img src="_gallery/${dir}.jpg" alt=""><span class="t"><b>${name}</b><span>${kind}</span></span><svg class="i check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>`;
+      b.addEventListener("click", () => { show(i); cmd.close(); });
+      b.addEventListener("mousemove", () => setActive(visible.indexOf(b)));
+      g.append(b); visible.push(b);
+    }
+    list.append(g);
+  }
+  if (!visible.length) list.innerHTML = `<div class="cmd-empty">Kein Design gefunden.</div>`;
+  setActive(Math.max(0, visible.findIndex(b => b.getAttribute("aria-current") === "true")));
+}
+function setActive(i) {
+  if (!visible.length) return;
+  active = (i + visible.length) % visible.length;
+  visible.forEach((b, j) => b.classList.toggle("active", j === active));
+  visible[active].scrollIntoView({ block: "nearest" });
+}
+function openCmd() { input.value = ""; renderList(); cmd.showModal(); input.focus(); }
+$("comboBtn").onclick = openCmd;
+input.addEventListener("input", renderList);
+input.addEventListener("keydown", e => {
+  if (e.key === "ArrowDown") { e.preventDefault(); setActive(active + 1); }
+  if (e.key === "ArrowUp") { e.preventDefault(); setActive(active - 1); }
+  if (e.key === "Enter") { e.preventDefault(); visible[active]?.click(); }
+});
+cmd.addEventListener("click", e => { if (e.target === cmd) cmd.close(); });
+
+document.addEventListener("keydown", e => {
+  if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "k") { e.preventDefault(); cmd.open ? cmd.close() : openCmd(); return; }
+  if (cmd.open || /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)) return;
+  if (e.key === "ArrowRight") show(current + 1);
+  if (e.key === "ArrowLeft") show(current - 1);
+});
+window.addEventListener("hashchange", () => { const i = STYLES.findIndex(s => s[0] === location.hash.slice(1)); if (i >= 0) show(i); });
+
+/* ---------- Start ---------- */
+const q = new URLSearchParams(location.search);
+if (["rechner", "kreditrechner"].includes(q.get("ansicht"))) setFocus("calc");
+const start = STYLES.findIndex(s => s[0] === location.hash.slice(1));
+show(start >= 0 ? start : 0);
+</script>
+</body>
+</html>

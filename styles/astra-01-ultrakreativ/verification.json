@@ -1,0 +1,18 @@
+{
+  "result": "PASS",
+  "url": "http://127.0.0.1:5180/astra-01-ultrakreativ/index.html",
+  "checks": [
+    "hero-desktop.png: rendered at 1440x900; amount slider within viewport; no horizontal overflow",
+    "hero-mobile.png: rendered at 390x844; amount slider within viewport; no horizontal overflow",
+    "desktop.png: rendered at 1440x900; amount slider within viewport; no horizontal overflow",
+    "mobile.png: rendered at 390x844; amount slider within viewport; no horizontal overflow",
+    "mobile-360.png: rendered at 360x844; amount slider within viewport; no horizontal overflow",
+    "Amount slider changes monthly payment and total live",
+    "Duration slider keyboard operation updates its value",
+    "Expandable affordability check updates the budget state",
+    "file:// loads the calculator and local assets",
+    "No browser console or page errors"
+  ],
+  "console_errors": [],
+  "body_innerText_words_after": 407
+}
