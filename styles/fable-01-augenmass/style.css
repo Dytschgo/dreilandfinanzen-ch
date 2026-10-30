@@ -327,3 +327,10 @@ address { font-style: normal; line-height: 1.8; color: var(--ink); }
   html { scroll-behavior: auto; }
   *, *::before, *::after { transition: none !important; animation: none !important; }
 }
+
+/* Kontrast (WCAG AA): Gold nicht als Text/Fokus auf hellem Grund */
+.interest { color: #8A6620 !important; }
+:focus-visible { outline-color: var(--blue); }
+.slider:focus-visible::-webkit-slider-thumb, .slider:focus-visible::-moz-range-thumb { outline-color: var(--blue); }
+.chip-row input:focus-visible + span { outline-color: var(--blue); }
+.hero-text :focus-visible, .contact :focus-visible, footer :focus-visible { outline-color: var(--gold); }
