@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Dreiland Finanzen – Kreditberatung mit Klartext</title>
+<meta name="description" content="Kreditberatung im Dreiländereck: Wir rechnen zuerst – und sagen es offen, wenn ein kleinerer oder kein Kredit besser ist.">
+<link rel="icon" href="../_assets/logo/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<a class="skip" href="#rechner">Zum Kreditrechner</a>
+
+<header class="top">
+  <div class="wrap top-in">
+    <a href="#" class="brand"><img src="../_assets/logo/dreiland-finanzen_horizontal_farbig.svg" alt="Dreiland Finanzen" width="168" height="43"></a>
+    <nav aria-label="Hauptnavigation">
+      <a href="#beratung">Beratung</a>
+      <a href="#leistungen">Leistungen</a>
+      <a href="#fragen">Fragen</a>
+    </nav>
+    <a class="btn btn-ghost" href="#kontakt">Termin</a>
+  </div>
+</header>
+
+<main id="inhalt">
+  <!-- Hero: Die Antwort ist die Überschrift -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="answer">
+        <p class="eyebrow"><span class="tri" aria-hidden="true"><i></i><i></i><i></i></span>Kreditberatung im Dreiländereck</p>
+        <h1>
+          <span class="q" id="question">CHF 15'000 in 48 Monaten?</span>
+          <span class="v" id="verdict">Das passt.</span>
+        </h1>
+        <p class="sub" id="verdictSub" aria-live="polite">Die Rate lässt Ihnen genug Spielraum.</p>
+        <button class="suggest" id="suggest" type="button" hidden></button>
+
+      </div>
+
+      <form class="calc" id="rechner" aria-label="Kreditrechner" novalidate>
+        <div class="field">
+          <div class="row"><label for="amount">Kreditbetrag</label><output id="amountOut" for="amount">CHF 15'000.–</output></div>
+          <input id="amount" type="range" min="1000" max="80000" step="500" value="15000">
+          <div class="scale" aria-hidden="true"><span>1'000</span><span>80'000</span></div>
+        </div>
+
+        <fieldset class="field">
+          <legend>Laufzeit</legend>
+          <div class="chips" id="terms">
+            <label><input type="radio" name="term" value="12"><span>12</span></label>
+            <label><input type="radio" name="term" value="24"><span>24</span></label>
+            <label><input type="radio" name="term" value="36"><span>36</span></label>
+            <label><input type="radio" name="term" value="48" checked><span>48</span></label>
+            <label><input type="radio" name="term" value="60"><span>60</span></label>
+          </div>
+        </fieldset>
+
+        <div class="duo">
+          <div class="mini"><label for="income">Nettoeinkommen / Mt.</label><div class="money"><span>CHF</span><input id="income" inputmode="numeric" value="6'000" autocomplete="off"></div></div>
+          <div class="mini"><label for="fix">Fixkosten / Mt.</label><div class="money"><span>CHF</span><input id="fix" inputmode="numeric" value="3'900" autocomplete="off"></div></div>
+        </div>
+
+        <div class="result">
+          <div><span class="lbl">Monatsrate</span><output id="rate" class="big">CHF 372.60</output></div>
+          <div class="cost"><span class="lbl">Gesamtkosten</span><output id="cost">CHF 2'884.80</output></div>
+        </div>
+
+        <a class="btn btn-primary" href="#kontakt">Beratung vereinbaren</a>
+        <p class="fine"><b>Beispiel: 8.9 % eff. Jahreszins.</b> Kein Angebot.<br>Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+      </form>
+
+      <figure class="block" aria-labelledby="blockCap">
+          <svg id="blockSvg" viewBox="0 0 560 300" role="img" aria-label="Ihr Monatsbudget als Block: Fixkosten, Kreditrate und Spielraum"></svg>
+          <figcaption id="blockCap" class="legend">
+            <span><i class="sw sw-fix"></i>Fixkosten <b id="lgFix">CHF 3'900</b></span>
+            <span><i class="sw sw-rate"></i>Rate <b id="lgRate">CHF 372</b></span>
+            <span><i class="sw sw-free"></i>Spielraum <b id="lgFree">CHF 1'728</b></span>
+          </figcaption>
+        </figure>
+    </div>
+  </section>
+
+  <section class="steps" id="beratung" aria-labelledby="stepsTitle">
+    <div class="wrap">
+      <h2 id="stepsTitle">So rechnen wir mit Ihnen.</h2>
+      <ol>
+        <li><span class="n n1">01</span><b>Zuhören.</b><span>Was haben Sie vor?</span></li>
+        <li><span class="n n2">02</span><b>Durchrechnen.</b><span>Ihr Budget, Franken für Franken.</span></li>
+        <li><span class="n n3">03</span><b>Entscheiden.</b><span>Auch ein Nein ist eine Antwort.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="statement" aria-label="Unsere Haltung">
+    <div class="wrap">
+      <p>Ein Kredit soll Ihr Leben leichter machen.<br><em>Nicht schwerer.</em></p>
+    </div>
+  </section>
+
+  <section class="services" id="leistungen" aria-labelledby="servTitle">
+    <div class="wrap">
+      <h2 id="servTitle">Was wir für Sie tun.</h2>
+      <div class="svc-grid">
+        <article><h3>Privatkredit</h3><p>Faire Konditionen, passend zu Ihrem Budget.</p></article>
+        <article><h3>Kreditablösung</h3><p>Bestehende Kredite bündeln und Kosten senken.</p></article>
+        <article><h3>Budgetcheck</h3><p>Tragbarkeit prüfen – bevor Sie unterschreiben.</p></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="region" aria-labelledby="regTitle">
+    <div class="wrap region-in">
+      <h2 id="regTitle">Zu Hause im Dreiländereck.</h2>
+      <p class="places" aria-label="Basel, Lörrach, Saint-Louis"><span>Basel</span><span>Lörrach</span><span>Saint-Louis</span></p>
+      <p class="muted">Beratung vor Ort in Basel oder online.</p>
+    </div>
+  </section>
+
+  <section class="faq" id="fragen" aria-labelledby="faqTitle">
+    <div class="wrap faq-in">
+      <h2 id="faqTitle">Fragen.</h2>
+      <div>
+        <details><summary>Ist der Rechner verbindlich?</summary><p>Nein. Er zeigt ein Beispiel mit 8.9 % eff. Jahreszins. Ihre Zahlen bleiben im Browser.</p></details>
+        <details><summary>Was heisst «tragbar»?</summary><p>Unsere Faustregel: Die Rate sollte höchstens rund einen Drittel Ihres freien Budgets beanspruchen. Die genaue Prüfung machen wir im Gespräch.</p></details>
+        <details><summary>Raten Sie auch von Krediten ab?</summary><p>Ja. Wenn die Belastung zu hoch wäre, empfehlen wir einen kleineren oder keinen Kredit.</p></details>
+        <details><summary>Wie läuft die Beratung ab?</summary><p>Erstgespräch vor Ort oder online, dann rechnen wir gemeinsam Ihr Budget durch. Sie entscheiden in Ruhe.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="contact" id="kontakt" aria-labelledby="contactTitle">
+    <div class="wrap contact-in">
+      <h2 id="contactTitle">Reden wir.</h2>
+      <div class="contact-actions">
+        <a class="btn btn-light" href="mailto:info@dreilandfinanzen.ch">Termin vereinbaren</a>
+        <p>+41 61 000 00 00 · info@dreilandfinanzen.ch <span class="ph">Platzhalter</span></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <img src="../_assets/logo/dreiland-finanzen_horizontal_farbig.svg" alt="Dreiland Finanzen" width="150" height="38">
+    <p class="legal">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+    <p class="muted small">Musterstrasse 1 · 4051 Basel <span class="ph">Platzhalter</span> · <a href="#">Impressum</a> · <a href="#">Datenschutz</a></p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
