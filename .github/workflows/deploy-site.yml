@@ -2,13 +2,9 @@
 # Hostinger (Git-Deployment) zieht den Branch `site` ins Web-Root von dreilandfinanzen.ch.
 name: Website bauen
 
+# Nur manuell: GitHub Actions ist im Konto derzeit gesperrt (Billing).
+# Lokal stattdessen: python tools/publish_site.py
 on:
-  push:
-    branches: [main]
-    paths:
-      - "styles/**"
-      - "tools/build_site.py"
-      - ".github/workflows/deploy-site.yml"
   workflow_dispatch:
 
 permissions:

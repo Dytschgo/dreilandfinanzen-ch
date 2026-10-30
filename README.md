@@ -24,7 +24,13 @@ python tools/build_site.py
 ```
 
 Erzeugt `site/` (ohne Screenshots und Prüfskripte, mit `robots.txt` und `.htaccess` gegen Indexierung).
-Der Inhalt von `site/` gehört ins Web-Root von dreilandfinanzen.ch.
+
+```
+python tools/publish_site.py
+```
+
+Baut `site/` und legt es als Branch **`site`** auf GitHub ab. Hostinger (Git-Deployment) muss auf den Branch
+`site` zeigen – nicht auf `main`, sonst liegen README, `tools/` und `styles/` öffentlich im Web-Root.
 
 ## Brand Kit
 
