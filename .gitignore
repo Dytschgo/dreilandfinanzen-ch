@@ -12,3 +12,7 @@ styles/claude-04-ultramodern/screenshots/frames/
 # Deploy-Artefakte
 _backup-hostinger/
 _deploy-check.png
+
+# Referenz-Screenshots fremder Seiten nicht veröffentlichen
+styles/*/_referenz/
+styles/astra-04-vorlage-bf/screenshots/vergleich.png

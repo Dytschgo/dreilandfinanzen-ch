@@ -1,0 +1,386 @@
+{
+  "errors": [],
+  "failedRequests": [],
+  "viewports": {
+    "desktop": {
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "slider": {
+        "x": 421.359375,
+        "y": 735.3125,
+        "width": 275.375,
+        "height": 32,
+        "top": 735.3125,
+        "right": 696.734375,
+        "bottom": 767.3125,
+        "left": 421.359375
+      },
+      "term": {
+        "x": 726.734375,
+        "y": 711.390625,
+        "width": 236.8125,
+        "height": 48,
+        "top": 711.390625,
+        "right": 963.546875,
+        "bottom": 759.390625,
+        "left": 726.734375
+      },
+      "rate": {
+        "x": 1024.546875,
+        "y": 679.796875,
+        "width": 299.4375,
+        "height": 38.390625,
+        "top": 679.796875,
+        "right": 1323.984375,
+        "bottom": 718.1875,
+        "left": 1024.546875
+      },
+      "cta": {
+        "x": 1024.546875,
+        "y": 734.1875,
+        "width": 299.4375,
+        "height": 56.796875,
+        "top": 734.1875,
+        "right": 1323.984375,
+        "bottom": 790.984375,
+        "left": 1024.546875
+      },
+      "legal": {
+        "x": 80,
+        "y": 848.984375,
+        "width": 1147.25,
+        "height": 44,
+        "top": 848.984375,
+        "right": 1227.25,
+        "bottom": 892.984375,
+        "left": 80
+      },
+      "words": 231
+    },
+    "mobile": {
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "slider": {
+        "x": 45.640625,
+        "y": 392.046875,
+        "width": 146.921875,
+        "height": 32,
+        "top": 392.046875,
+        "right": 192.5625,
+        "bottom": 424.046875,
+        "left": 45.640625
+      },
+      "term": {
+        "x": 216.5625,
+        "y": 348.046875,
+        "width": 127.765625,
+        "height": 42,
+        "top": 348.046875,
+        "right": 344.328125,
+        "bottom": 390.046875,
+        "left": 216.5625
+      },
+      "rate": {
+        "x": 45.640625,
+        "y": 495.6875,
+        "width": 298.6875,
+        "height": 37.1875,
+        "top": 495.6875,
+        "right": 344.328125,
+        "bottom": 532.875,
+        "left": 45.640625
+      },
+      "cta": {
+        "x": 45.640625,
+        "y": 544.875,
+        "width": 298.6875,
+        "height": 56.796875,
+        "top": 544.875,
+        "right": 344.328125,
+        "bottom": 601.671875,
+        "left": 45.640625
+      },
+      "legal": {
+        "x": 21.640625,
+        "y": 640.671875,
+        "width": 346.703125,
+        "height": 51,
+        "top": 640.671875,
+        "right": 368.34375,
+        "bottom": 691.671875,
+        "left": 21.640625
+      },
+      "words": 216
+    },
+    "narrow": {
+      "width": 360,
+      "height": 844,
+      "scrollWidth": 360,
+      "slider": {
+        "x": 44,
+        "y": 391.109375,
+        "width": 132.640625,
+        "height": 32,
+        "top": 391.109375,
+        "right": 176.640625,
+        "bottom": 423.109375,
+        "left": 44
+      },
+      "term": {
+        "x": 200.640625,
+        "y": 347.109375,
+        "width": 115.34375,
+        "height": 42,
+        "top": 347.109375,
+        "right": 315.984375,
+        "bottom": 389.109375,
+        "left": 200.640625
+      },
+      "rate": {
+        "x": 44,
+        "y": 494.75,
+        "width": 271.984375,
+        "height": 37.1875,
+        "top": 494.75,
+        "right": 315.984375,
+        "bottom": 531.9375,
+        "left": 44
+      },
+      "cta": {
+        "x": 44,
+        "y": 543.9375,
+        "width": 271.984375,
+        "height": 56.796875,
+        "top": 543.9375,
+        "right": 315.984375,
+        "bottom": 600.734375,
+        "left": 44
+      },
+      "legal": {
+        "x": 20,
+        "y": 639.734375,
+        "width": 320,
+        "height": 51,
+        "top": 639.734375,
+        "right": 340,
+        "bottom": 690.734375,
+        "left": 20
+      },
+      "words": 216
+    },
+    "tablet": {
+      "width": 768,
+      "height": 1024,
+      "scrollWidth": 768,
+      "slider": {
+        "x": 66.625,
+        "y": 404.015625,
+        "width": 326.671875,
+        "height": 32,
+        "top": 404.015625,
+        "right": 393.296875,
+        "bottom": 436.015625,
+        "left": 66.625
+      },
+      "term": {
+        "x": 417.296875,
+        "y": 360.015625,
+        "width": 284.0625,
+        "height": 42,
+        "top": 360.015625,
+        "right": 701.359375,
+        "bottom": 402.015625,
+        "left": 417.296875
+      },
+      "rate": {
+        "x": 66.625,
+        "y": 507.65625,
+        "width": 634.734375,
+        "height": 37.1875,
+        "top": 507.65625,
+        "right": 701.359375,
+        "bottom": 544.84375,
+        "left": 66.625
+      },
+      "cta": {
+        "x": 66.625,
+        "y": 556.84375,
+        "width": 634.734375,
+        "height": 56.796875,
+        "top": 556.84375,
+        "right": 701.359375,
+        "bottom": 613.640625,
+        "left": 66.625
+      },
+      "legal": {
+        "x": 42.625,
+        "y": 652.640625,
+        "width": 682.75,
+        "height": 35,
+        "top": 652.640625,
+        "right": 725.375,
+        "bottom": 687.640625,
+        "left": 42.625
+      },
+      "words": 216
+    },
+    "medium": {
+      "width": 1024,
+      "height": 900,
+      "scrollWidth": 1024,
+      "slider": {
+        "x": 278.0625,
+        "y": 674.828125,
+        "width": 214.1875,
+        "height": 32,
+        "top": 674.828125,
+        "right": 492.25,
+        "bottom": 706.828125,
+        "left": 278.0625
+      },
+      "term": {
+        "x": 512.25,
+        "y": 650.890625,
+        "width": 175.234375,
+        "height": 48,
+        "top": 650.890625,
+        "right": 687.484375,
+        "bottom": 698.890625,
+        "left": 512.25
+      },
+      "rate": {
+        "x": 728.484375,
+        "y": 621.796875,
+        "width": 212.65625,
+        "height": 33.40625,
+        "top": 621.796875,
+        "right": 941.140625,
+        "bottom": 655.203125,
+        "left": 728.484375
+      },
+      "cta": {
+        "x": 728.484375,
+        "y": 671.203125,
+        "width": 212.65625,
+        "height": 56.796875,
+        "top": 671.203125,
+        "right": 941.140625,
+        "bottom": 728,
+        "left": 728.484375
+      },
+      "legal": {
+        "x": 56.828125,
+        "y": 778,
+        "width": 777.578125,
+        "height": 44,
+        "top": 778,
+        "right": 834.40625,
+        "bottom": 822,
+        "left": 56.828125
+      },
+      "words": 231
+    },
+    "wide": {
+      "width": 1920,
+      "height": 1080,
+      "scrollWidth": 1920,
+      "slider": {
+        "x": 661.359375,
+        "y": 736.765625,
+        "width": 275.375,
+        "height": 32,
+        "top": 736.765625,
+        "right": 936.734375,
+        "bottom": 768.765625,
+        "left": 661.359375
+      },
+      "term": {
+        "x": 966.734375,
+        "y": 712.828125,
+        "width": 236.8125,
+        "height": 48,
+        "top": 712.828125,
+        "right": 1203.546875,
+        "bottom": 760.828125,
+        "left": 966.734375
+      },
+      "rate": {
+        "x": 1264.546875,
+        "y": 679.796875,
+        "width": 299.4375,
+        "height": 41.28125,
+        "top": 679.796875,
+        "right": 1563.984375,
+        "bottom": 721.078125,
+        "left": 1264.546875
+      },
+      "cta": {
+        "x": 1264.546875,
+        "y": 737.078125,
+        "width": 299.4375,
+        "height": 56.796875,
+        "top": 737.078125,
+        "right": 1563.984375,
+        "bottom": 793.875,
+        "left": 1264.546875
+      },
+      "legal": {
+        "x": 320,
+        "y": 851.875,
+        "width": 1147.25,
+        "height": 44,
+        "top": 851.875,
+        "right": 1467.25,
+        "bottom": 895.875,
+        "left": 320
+      },
+      "words": 231
+    }
+  },
+  "url": "http://127.0.0.1:5180/astra-04-vorlage-bf/index.html",
+  "sliderChange": {
+    "before": "CHF 370.12",
+    "after": "CHF 370.15",
+    "method": "ArrowRight on range"
+  },
+  "termChange": "CHF 682.27",
+  "typedAmount": {
+    "amount": "20'000",
+    "slider": "20000",
+    "rate": "CHF 909.63"
+  },
+  "costs": {
+    "principal": "CHF 15'000.00",
+    "interest": "CHF 2'765.94",
+    "total": "CHF 17'765.94",
+    "panel": {
+      "x": 80,
+      "y": 908.984375,
+      "width": 1280,
+      "height": 324.125
+    }
+  },
+  "budgetNormal": "Rechnerischer Rest: CHF 1'629.88 / Monat nach der Beispielrate. Reserven und Tragbarkeit persönlich prüfen.",
+  "budgetDanger": "Kein Spielraum: Die Beispielrate übersteigt oder verbraucht Ihr verfügbares Budget.",
+  "dialog": "Ihr Beispiel: CHF 15'000.– über 48 Monate. Monatsrate CHF 370.12.",
+  "menu": "Open, Escape, focus return, anchor navigation and close: passed",
+  "anchors": [],
+  "images": [
+    {
+      "src": "../_assets/logo/dreiland-finanzen_horizontal_farbig.svg",
+      "loaded": true
+    },
+    {
+      "src": "wohnen.webp",
+      "loaded": true
+    },
+    {
+      "src": "../_assets/logo/dreiland-finanzen_horizontal_farbig.svg",
+      "loaded": true
+    }
+  ],
+  "reducedMotion": "auto",
+  "fileProtocol": "passed"
+}
