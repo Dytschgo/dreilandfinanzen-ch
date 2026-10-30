@@ -1,0 +1,153 @@
+{
+  "hinweis": "Farben aus Rastervorlage gemessen – Annäherung. CMYK rechnerisch, Pantone unverbindlich.",
+  "farben": {
+    "navy": {
+      "name": "Dreiland Navy",
+      "hex": "#062B63",
+      "rgb": [
+        6,
+        43,
+        99
+      ],
+      "cmyk": [
+        94,
+        57,
+        0,
+        61
+      ],
+      "pantone": "2758 C",
+      "rolle": "Primärfarbe · Wortmarke, Headlines, Text"
+    },
+    "blue": {
+      "name": "Rhein Blau",
+      "hex": "#0A4682",
+      "rgb": [
+        10,
+        70,
+        130
+      ],
+      "cmyk": [
+        92,
+        46,
+        0,
+        49
+      ],
+      "pantone": "2945 C",
+      "rolle": "Bildmarke · Akzent, Links, Diagramme"
+    },
+    "gold": {
+      "name": "Basler Gold",
+      "hex": "#C69D49",
+      "rgb": [
+        198,
+        157,
+        73
+      ],
+      "cmyk": [
+        0,
+        21,
+        63,
+        22
+      ],
+      "pantone": "7562 C",
+      "rolle": "Bildmarke · Akzent, Premium-Elemente (nicht für Text auf Weiss)"
+    },
+    "red": {
+      "name": "Grenz Rot",
+      "hex": "#CE2530",
+      "rgb": [
+        206,
+        37,
+        48
+      ],
+      "cmyk": [
+        0,
+        82,
+        77,
+        19
+      ],
+      "pantone": "1797 C",
+      "rolle": "Bildmarke · Signal, sparsam einsetzen"
+    },
+    "slate": {
+      "name": "Schiefer",
+      "hex": "#58637E",
+      "rgb": [
+        88,
+        99,
+        126
+      ],
+      "cmyk": [
+        30,
+        21,
+        0,
+        51
+      ],
+      "pantone": "7545 C",
+      "rolle": "Sekundärtext, Trennlinie, Rahmen"
+    },
+    "mist": {
+      "name": "Nebel",
+      "hex": "#EEF1F6",
+      "rgb": [
+        238,
+        241,
+        246
+      ],
+      "cmyk": [
+        3,
+        2,
+        0,
+        4
+      ],
+      "pantone": "656 C",
+      "rolle": "Helle Flächen, Hintergründe"
+    },
+    "ink": {
+      "name": "Nachtblau",
+      "hex": "#031A3D",
+      "rgb": [
+        3,
+        26,
+        61
+      ],
+      "cmyk": [
+        95,
+        57,
+        0,
+        76
+      ],
+      "pantone": "2767 C",
+      "rolle": "Dunkle Flächen, Dark Mode"
+    },
+    "white": {
+      "name": "Weiss",
+      "hex": "#FFFFFF",
+      "rgb": [
+        255,
+        255,
+        255
+      ],
+      "cmyk": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "pantone": "–",
+      "rolle": "Grundfläche"
+    }
+  },
+  "darkmode": {
+    "blue": "#4F86C6",
+    "gold": "#D9B566",
+    "red": "#E5484D",
+    "text": "#FFFFFF",
+    "divider": "#8FA0C2"
+  },
+  "typografie": {
+    "display": "Montserrat",
+    "text": "Inter",
+    "serif": "Source Serif 4"
+  }
+}

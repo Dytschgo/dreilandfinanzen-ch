@@ -18,17 +18,6 @@ SKIP_DIRS = {"screenshots", "test", "frames", "__pycache__"}
 SKIP_SUFFIX = {".py", ".md", ".pyc"}
 SKIP_NAMES = {"verification.json"}
 
-ROBOTS = "User-agent: *\nDisallow: /\n"
-HTACCESS = """# Design-Review: nicht indexieren
-<IfModule mod_headers.c>
-  Header set X-Robots-Tag "noindex, nofollow"
-</IfModule>
-DirectoryIndex index.html
-Options -Indexes
-AddType font/ttf .ttf
-AddType image/svg+xml .svg
-"""
-
 
 def ignore(dirpath: str, names: list[str]) -> set[str]:
     out = set()
@@ -44,9 +33,12 @@ def ignore(dirpath: str, names: list[str]) -> set[str]:
 def main() -> None:
     if OUT.exists():
         shutil.rmtree(OUT)
-    shutil.copytree(SRC, OUT, ignore=ignore)
-    (OUT / "robots.txt").write_text(ROBOTS, encoding="utf-8")
-    (OUT / ".htaccess").write_text(HTACCESS, encoding="utf-8")
+    # Gleiche Struktur wie der main-Branch: / leitet auf /styles/ weiter, Brand Kit unter /brand-kit/
+    shutil.copytree(SRC, OUT / "styles", ignore=ignore)
+    if (ROOT / "brand-kit").exists():
+        shutil.copytree(ROOT / "brand-kit", OUT / "brand-kit")
+    for name in ("index.html", "robots.txt", ".htaccess"):
+        shutil.copy(ROOT / name, OUT / name)
     files = [f for f in OUT.rglob("*") if f.is_file()]
     size = sum(f.stat().st_size for f in files) / 1e6
     print(f"site/ gebaut: {len(files)} Dateien, {size:.1f} MB")

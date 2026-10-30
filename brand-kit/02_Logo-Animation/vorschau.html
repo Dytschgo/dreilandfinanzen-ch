@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dreiland Finanzen – Logo-Animationen</title>
+<style>
+  :root { color-scheme: light; font-family: Inter, 'Segoe UI', Arial, sans-serif; color: #062B63; }
+  body { margin: 0; background: #EEF1F6; }
+  main { max-width: 1100px; margin: 0 auto; padding: 48px 24px; display: grid; gap: 24px; }
+  h1 { font-family: Montserrat, Arial, sans-serif; margin: 0; }
+  p { margin: 0; color: #58637E; max-width: 65ch; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 24px; }
+  figure { margin: 0; background: #fff; border-radius: 6px; padding: 32px; display: grid; gap: 16px; }
+  figure.dark { background: #031A3D; color: #fff; }
+  figure img { width: 100%; height: 180px; object-fit: contain; }
+  figcaption { font-size: 14px; display: flex; justify-content: space-between; align-items: center; }
+  button { font: inherit; border: 1px solid currentColor; background: none; color: inherit; border-radius: 4px; padding: 6px 12px; cursor: pointer; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Logo-Reveals</h1>
+  <p>Die Animationen laufen einmal ab (ca. 2 s). Bei aktivierter Systemeinstellung «Bewegung reduzieren» (prefers-reduced-motion) wird das Logo sofort statisch angezeigt.</p>
+  <div class="grid">
+    <figure><img src="logo-reveal_horizontal.svg" alt="Dreiland Finanzen"><figcaption>Horizontal <button>Wiederholen</button></figcaption></figure>
+    <figure><img src="logo-reveal_vertikal.svg" alt="Dreiland Finanzen"><figcaption>Vertikal <button>Wiederholen</button></figcaption></figure>
+    <figure><img src="logo-reveal_icon.svg" alt="Dreiland Finanzen"><figcaption>Bildmarke <button>Wiederholen</button></figcaption></figure>
+    <figure class="dark"><img src="logo-reveal_horizontal_darkmode.svg" alt="Dreiland Finanzen"><figcaption>Dark Mode <button>Wiederholen</button></figcaption></figure>
+  </div>
+</main>
+<script>
+  document.querySelectorAll('figure').forEach(f => {
+    f.querySelector('button').addEventListener('click', () => {
+      const img = f.querySelector('img'); const src = img.getAttribute('src').split('?')[0];
+      img.src = src + '?t=' + Date.now();
+    });
+  });
+</script>
+</body>
+</html>

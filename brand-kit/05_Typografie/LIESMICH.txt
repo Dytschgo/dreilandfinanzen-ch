@@ -1,0 +1,13 @@
+Schriften Dreiland Finanzen
+==========================
+
+Montserrat (Variable Font, 100–900)  – Display, Headlines, Wortmarke (Annäherung)
+Inter (Variable Font, 100–900)       – Fliesstext, UI, Tabellen
+Source Serif 4 (Variable Font)        – nur Richtung «Premium Finance», Zitate, Editorial
+
+Alle Schriften stehen unter der SIL Open Font License 1.1 (siehe OFL-*.txt)
+und dürfen frei kommerziell genutzt und weitergegeben werden.
+
+Wichtig: Die Original-Logoschrift ist nicht bekannt. Montserrat Bold/Regular ist die
+nächstliegende frei verfügbare Annäherung aus dem Raster. In den Logo-Dateien sind die
+Buchstaben in Pfade umgewandelt – das Logo nie neu setzen, immer die Dateien verwenden.

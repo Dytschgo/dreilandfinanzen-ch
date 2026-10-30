@@ -5,10 +5,10 @@ Danke fürs Mitarbeiten an den Dreiland-Finanzen-Designs!
 ## Lokal starten
 
 ```
-python -m http.server 5180 --bind 127.0.0.1 --directory styles
+python -m http.server 5180 --bind 127.0.0.1
 ```
 
-http://127.0.0.1:5180/ zeigt den Design-Viewer. Jedes Design liegt in `styles/<ordner>/` und läuft ohne Build-Schritt.
+http://127.0.0.1:5180/ zeigt den Design-Viewer, `/brand-kit/` das Brand Kit. Jedes Design liegt in `styles/<ordner>/` und läuft ohne Build-Schritt.
 
 ## Regeln für Designs
 
