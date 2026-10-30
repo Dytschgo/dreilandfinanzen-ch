@@ -1,0 +1,21 @@
+# dreilandfinanzen.ch – Auslieferung direkt aus dem Repo (Hostinger Git-Deployment, Branch main)
+DirectoryIndex index.html
+Options -Indexes
+AddType font/ttf .ttf
+AddType image/svg+xml .svg
+AddType application/manifest+json .webmanifest
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # www -> Hauptdomain
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L]
+  # Repo-Interna nicht ausliefern
+  RewriteRule ^(\.git|\.github|tools|dist|site|_backup-hostinger)(/|$) - [F,L]
+  RewriteRule (^|/)\.(gitignore|gitattributes)$ - [F,L]
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Entwürfe mit Platzhaltern: nicht indexieren
+  Header set X-Robots-Tag "noindex, nofollow"
+</IfModule>

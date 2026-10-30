@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#031A3D">
+  <meta name="description" content="Dreiland Finanzen: persönliche Kreditberatung in der Region Basel. Prüfen Sie Ihren Spielraum und finden Sie eine Finanzierung mit Augenmass.">
+  <title>Dreiland Finanzen — Kredit mit Augenmass.</title>
+  <link rel="icon" href="../_assets/logo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#inhalt">Zum Inhalt</a>
+  <header class="page-grid site-header">
+    <div class="header-inner">
+      <a class="brand" href="#" aria-label="Dreiland Finanzen — Startseite"><img src="../_assets/logo/dreiland-finanzen_horizontal_darkmode.svg" width="313" height="80" alt="Dreiland Finanzen"></a>
+      <nav class="desktop-nav" aria-label="Hauptnavigation"><a href="#haltung">Unsere Haltung</a><a href="#leistungen">Beratung</a><a href="#budgetcheck">Budgetcheck</a></nav>
+      <a class="header-contact" href="#kontakt">Ins Gespräch kommen <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="mobile-nav">Menü <span aria-hidden="true">+</span></button>
+    </div>
+    <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile Hauptnavigation" hidden><a href="#haltung">Unsere Haltung</a><a href="#leistungen">Beratung</a><a href="#budgetcheck">Budgetcheck</a><a href="#kontakt">Ins Gespräch kommen ↗</a></nav>
+  </header>
+
+  <main id="inhalt">
+    <section class="page-grid hero" aria-labelledby="hero-title">
+      <div class="hero-top"><p class="eyebrow"><span class="brand-line" aria-hidden="true"></span> Kreditberatung im Dreiland</p></div>
+      <div class="hero-content">
+        <div class="hero-copy">
+          <h1 id="hero-title">Kredit mit<br><em>Augenmass.</em></h1>
+          <p class="hero-intro">Fair finanziert. Persönlich begleitet.</p>
+          <p class="hero-note">Auch ein ehrliches Nein gehört dazu.</p>
+        </div>
+        <div class="calculator hero-calculator" id="budgetcheck">
+          <form id="calculator-form" class="calculator-inputs" aria-label="Kreditbetrag und Laufzeit wählen">
+            <fieldset><legend>Ihre Beispielrechnung</legend><div class="field-label"><label for="amount">Kreditbetrag</label><output for="amount" id="amount-label">CHF 15'000.–</output></div><input id="amount" name="amount" type="range" min="1000" max="80000" step="500" value="15000" aria-label="Kreditbetrag"><div class="range-scale"><span>CHF 1'000</span><span>CHF 80'000</span></div><div class="term-field"><label for="term">Laufzeit</label><select id="term" name="term"><option value="12">12 Monate</option><option value="24">24 Monate</option><option value="36" selected>36 Monate</option><option value="48">48 Monate</option><option value="60">60 Monate</option></select></div></fieldset>
+            <details class="budget-disclosure"><summary>Tragbarkeit prüfen <span aria-hidden="true">+</span></summary><div class="budget-disclosure-content"><div class="budget-inputs"><label for="income">Nettoeinkommen<span class="money-field"><span>CHF</span><input id="income" name="income" type="number" inputmode="decimal" min="0" max="1000000" step="50" value="5500" required></span></label><label for="expenses">Monatliche Ausgaben<span class="money-field"><span>CHF</span><input id="expenses" name="expenses" type="number" inputmode="decimal" min="0" max="1000000" step="50" value="3800" required></span></label></div><p class="field-help">Miete, Lebenshaltung, Steuern und Verpflichtungen.</p><div class="affordability" id="affordability" data-state="good"><div class="status-heading"><span class="traffic-lights" aria-hidden="true"><i></i><i></i><i></i></span><strong id="status-title">Spielraum vorhanden</strong></div><p id="status-description">Nach Ausgaben, Beispielrate und Reserve bleibt Spielraum.</p></div></div></details>
+          </form>
+          <div class="calculator-result" aria-live="polite" aria-atomic="true">
+            <p class="eyebrow">Monatliche Beispielrate</p><p class="monthly-payment"><span>CHF</span> <output id="monthly">473.90</output></p>
+            <a class="button button-navy" href="#kontakt">Beratung vereinbaren <span aria-hidden="true">↗</span></a>
+            <details class="cost-details"><summary>Kosten im Überblick</summary><dl class="cost-breakdown"><div><dt>Rückzahlung gesamt</dt><dd id="total">CHF 17'060.57</dd></div><div><dt>Zinskosten</dt><dd id="interest">CHF 2'060.57</dd></div><div><dt>Reserve¹</dt><dd id="reserve">CHF 825.–</dd></div></dl></details>
+            <p class="example-rate"><strong>Beispiel: 8,9 % eff. Jahreszins.</strong> Kein Angebot.</p>
+            <p class="legal-note">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+          </div>
+        </div>
+      </div>
+      <div class="hero-bottom"><span>Persönliche Beratung in der Region Basel</span><a href="#haltung">Unsere Haltung <span aria-hidden="true">↓</span></a></div>
+    </section>
+
+    <section id="haltung" class="page-grid philosophy">
+      <div class="section-label"><span class="eyebrow">Unsere Haltung</span><span aria-hidden="true">01 /</span></div>
+      <div class="philosophy-content"><h2>Ein ehrliches <em>Nein.</em></h2><div class="philosophy-copy"><p class="lead">Ein Kredit soll zu Ihrem Budget passen.</p><p>Passt die Belastung nicht, empfehlen wir weniger oder keinen Kredit.</p><p>Klare Bedingungen. Entscheidung in Ruhe.</p><a class="text-link" href="#ablauf">So begleiten wir Sie <span aria-hidden="true">↗</span></a></div></div>
+    </section>
+
+    <section id="leistungen" class="page-grid services">
+      <div class="section-heading"><div><h2>Unsere Beratung.</h2></div><p>Vor Ort oder online.</p></div>
+      <div class="service-list">
+        <a href="#budgetcheck" class="service-row"><span class="service-number">01</span><h3>Privatkredit</h3><p>Passend zu Ihrem Vorhaben und Budget.</p><span class="service-arrow" aria-hidden="true">↗</span></a>
+        <a href="#kontakt" class="service-row"><span class="service-number">02</span><h3>Kreditablösung</h3><p>Konditionen und Gesamtkosten gemeinsam prüfen.</p><span class="service-arrow" aria-hidden="true">↗</span></a>
+        <a href="#budgetcheck" class="service-row"><span class="service-number">03</span><h3>Budgetcheck</h3><p>Klarheit über Ihren monatlichen Spielraum.</p><span class="service-arrow" aria-hidden="true">↗</span></a>
+        <a href="#kontakt" class="service-row"><span class="service-number">04</span><h3>Persönliche Beratung</h3><p>Beratung in der Region Basel oder online.</p><span class="service-arrow" aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+
+    <section id="ablauf" class="page-grid process">
+      <div class="section-heading"><div><h2>So geht’s.</h2></div></div>
+      <ol class="steps"><li><span class="step-number">01 <span aria-hidden="true">→</span></span><h3>Wir hören zu.</h3><p>Sie schildern Ihr Vorhaben.</p></li><li><span class="step-number">02 <span aria-hidden="true">→</span></span><h3>Wir prüfen gemeinsam.</h3><p>Wir prüfen Budget und Konditionen.</p></li><li><span class="step-number">03 <span aria-hidden="true">↗</span></span><h3>Sie entscheiden in Ruhe.</h3><p>Sie entscheiden in Ruhe.</p></li></ol>
+    </section>
+
+    <section class="page-grid regional">
+      <div class="regional-inner"><div class="regional-mark" aria-hidden="true"><span>CH</span><span>DE</span><span>FR</span></div><div><h2>In Basel verwurzelt.</h2><p>Beratung vor Ort oder online.</p><a class="text-link" href="#kontakt">Lernen wir uns kennen <span aria-hidden="true">↗</span></a></div></div>
+    </section>
+
+    <section id="fragen" class="page-grid faq">
+      <div class="faq-layout"><div><h2>Häufige Fragen.</h2></div><div class="faq-items">
+        <details name="faq"><summary>Ist der Budgetcheck eine Zusage?<span aria-hidden="true">+</span></summary><div><p>Nein. Er zeigt eine vereinfachte Beispielrechnung, keine Kreditzusage.</p></div></details>
+        <details name="faq"><summary>Was, wenn die Rate zu hoch ist?<span aria-hidden="true">+</span></summary><div><p>Wir empfehlen einen kleineren Betrag oder verzichten gemeinsam auf einen Kredit.</p></div></details>
+        <details name="faq"><summary>Kann ich einen Kredit ablösen?<span aria-hidden="true">+</span></summary><div><p>Wir prüfen Bedingungen, Ablösekosten und Gesamtkosten gemeinsam.</p></div></details>
+        <details name="faq"><summary>Beraten Sie online?<span aria-hidden="true">+</span></summary><div><p>Ja. Gespräche sind vor Ort in der Region Basel oder online möglich.</p></div></details>
+      </div></div>
+    </section>
+
+    <section id="kontakt" class="page-grid contact">
+      <div class="contact-inner"><h2>Was ist Ihr<br><em>Vorhaben?</em></h2><div class="contact-bottom"><p>Lassen Sie uns gemeinsam hinschauen.</p><button class="button button-gold" type="button" data-open="contact-dialog">Gespräch vorbereiten <span aria-hidden="true">↗</span></button></div><p class="demo-note">Designvorschau: Sie können eine Gesprächsnotiz erstellen. Es werden keine Daten übermittelt. Kontaktdaten und Terminbuchung folgen.</p></div>
+    </section>
+  </main>
+
+  <footer class="page-grid footer"><div class="footer-top"><a class="brand" href="#" aria-label="Zurück zum Anfang"><img src="../_assets/logo/dreiland-finanzen_horizontal_darkmode.svg" width="313" height="80" alt="Dreiland Finanzen"></a><div class="footer-links"><button type="button" data-open="legal-dialog">Impressum</button><button type="button" data-open="privacy-dialog">Datenschutz</button><a href="#fragen">Häufige Fragen</a></div></div><p class="footer-legal">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p><div class="footer-bottom"><span>© <span id="year">2026</span> Dreiland Finanzen</span><span>Stilkonzept · Keine produktive Finanzdienstleistung</span><a href="#">Nach oben ↑</a></div></footer>
+
+  <dialog id="contact-dialog" aria-labelledby="contact-title"><button class="dialog-close" type="button" aria-label="Dialog schliessen">×</button><p class="eyebrow">Ihr erster Schritt</p><h2 id="contact-title">Ein Gespräch<br>beginnt mit Ihnen.</h2><p>Halten Sie Ihr Anliegen als persönliche Notiz fest. In dieser Vorschau wird keine Anfrage versendet.</p><form id="contact-form"><label for="topic">Worüber möchten Sie sprechen?<select id="topic" name="topic"><option>Privatkredit</option><option>Kreditablösung</option><option>Mein Budget</option><option>Eine andere Frage</option></select></label><label for="channel">Wie möchten Sie beraten werden?<select id="channel" name="channel"><option>Vor Ort in der Region Basel</option><option>Online</option><option>Noch offen</option></select></label><label for="message">Was ist Ihnen wichtig? <span class="optional">(optional)</span><textarea id="message" name="message" rows="3" maxlength="2000" placeholder="Ihr Vorhaben, Ihre Fragen …"></textarea></label><button class="button button-navy" type="submit">Gesprächsnotiz herunterladen <span aria-hidden="true">↓</span></button><p class="field-help">Die Notiz wird nur auf Ihrem Gerät erstellt. Ihre Eingaben werden weder gespeichert noch versendet.</p><p id="contact-status" class="download-status" role="status"></p></form></dialog>
+  <dialog id="legal-dialog" aria-labelledby="legal-title"><button class="dialog-close" type="button" aria-label="Dialog schliessen">×</button><p class="eyebrow">Designvorschau</p><h2 id="legal-title">Impressum</h2><p>Dreiland Finanzen · dreilandfinanzen.ch</p><p>Platzhalter: Rechtsform, verantwortliche Person, Geschäftsadresse, Telefonnummer und weitere erforderliche Angaben sind vor einer Veröffentlichung zu ergänzen.</p></dialog>
+  <dialog id="privacy-dialog" aria-labelledby="privacy-title"><button class="dialog-close" type="button" aria-label="Dialog schliessen">×</button><p class="eyebrow">Designvorschau</p><h2 id="privacy-title">Datenschutz</h2><p>Diese statische Vorschau nutzt keine Cookies, Analysewerkzeuge oder extern geladenen Schriften. Die Eingaben im Budgetcheck und in der Gesprächsnotiz werden ausschliesslich lokal verarbeitet und nicht gespeichert oder übermittelt.</p><p>Platzhalter: Eine vollständige Datenschutzerklärung mit verantwortlicher Stelle und den Angaben zur späteren produktiven Verarbeitung muss vor Veröffentlichung ergänzt werden.</p></dialog>
+</body>
+</html>

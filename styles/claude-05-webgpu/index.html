@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="de-CH" class="no-js">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dreiland Finanzen – Fair finanziert. Persönlich begleitet.</title>
+  <meta name="description" content="Kreditberatung im Dreiländereck Basel: faire Kreditbedingungen, ehrlicher Budgetcheck und persönliche Begleitung – auch mit einem ehrlichen Nein.">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#031A3D">
+  <link rel="icon" href="../_assets/logo/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <a class="skip" href="#main">Zum Inhalt springen</a>
+
+  <!-- Echtzeit-Szene (WebGPU, Fallback Canvas 2D). Rein dekorativ – alle Inhalte stehen im HTML. -->
+  <canvas id="scene" aria-hidden="true"></canvas>
+  <div class="town-labels" aria-hidden="true">
+    <span data-town="0"><i></i>Saint-Louis <b>FR</b></span>
+    <span data-town="1"><i></i>Lörrach <b>DE</b></span>
+    <span data-town="2"><i></i>Basel <b>CH</b></span>
+  </div>
+
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="brand" href="#top" aria-label="Dreiland Finanzen – zur Startseite">
+        <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 313.4 79.8" role="img" aria-labelledby="logo-title">
+          <title id="logo-title">Dreiland Finanzen</title>
+          <g id="bildmarke" transform="translate(-20.6 -26.2)">
+            <polygon id="flaeche-blau" fill="#4F86C6" points="20.6,26.8 20.6,51.6 40.4,63.03 61.88,50.63"/>
+            <polygon id="flaeche-gold" fill="#D9B566" points="95.6,26.2 60.9,46.23 66.3,49.35 66.3,69.52 95.6,52.6"/>
+            <polygon id="flaeche-rot" fill="#E5484D" points="43.3,64.9 62.8,53.64 62.8,75.39 71.0,70.65 71.0,104.39 43.3,88.4"/>
+          </g>
+          <rect id="trennlinie" fill="#8FA0C2" x="93.5" y="3.8" width="1.4" height="76"/>
+          <g id="wortmarke" fill="#FFFFFF" transform="translate(-20.6 -26.2)">
+            <path id="dreiland" transform="translate(138.1 70)" d="M3.9 0V-32.91H18.85Q24.21 -32.91 28.3 -30.86Q32.39 -28.82 34.7 -25.15Q37 -21.49 37 -16.45Q37 -11.47 34.7 -7.78Q32.39 -4.09 28.3 -2.05Q24.21 0 18.85 0ZM11.52 -6.25H18.48Q21.77 -6.25 24.19 -7.5Q26.61 -8.74 27.95 -11.05Q29.29 -13.35 29.29 -16.45Q29.29 -19.6 27.95 -21.89Q26.61 -24.17 24.19 -25.41Q21.77 -26.66 18.48 -26.66H11.52ZM40.57 0V-25.29H47.57V-18.15L46.58 -20.22Q47.71 -22.9 50.2 -24.28Q52.7 -25.67 56.27 -25.67V-18.9Q55.8 -18.95 55.42 -18.97Q55.05 -18.99 54.62 -18.99Q51.61 -18.99 49.76 -17.28Q47.9 -15.56 47.9 -11.94V0ZM71.31 0.38Q66.98 0.38 63.71 -1.32Q60.45 -3.01 58.66 -5.95Q56.87 -8.89 56.87 -12.65Q56.87 -16.45 58.64 -19.39Q60.4 -22.33 63.45 -24Q66.51 -25.67 70.37 -25.67Q74.08 -25.67 77.06 -24.09Q80.05 -22.52 81.79 -19.58Q83.53 -16.64 83.53 -12.55Q83.53 -12.13 83.48 -11.59Q83.43 -11.05 83.39 -10.58H62.84V-14.86H79.53L76.71 -13.59Q76.71 -15.56 75.91 -17.02Q75.11 -18.48 73.7 -19.3Q72.29 -20.12 70.41 -20.12Q68.53 -20.12 67.1 -19.3Q65.66 -18.48 64.86 -17Q64.07 -15.51 64.07 -13.49V-12.36Q64.07 -10.3 64.98 -8.72Q65.9 -7.15 67.57 -6.32Q69.24 -5.5 71.49 -5.5Q73.51 -5.5 75.04 -6.11Q76.57 -6.72 77.84 -7.95L81.74 -3.71Q80 -1.74 77.37 -0.68Q74.74 0.38 71.31 0.38ZM86.77 0V-25.29H94.1V0ZM90.43 -28.82Q88.41 -28.82 87.14 -29.99Q85.87 -31.17 85.87 -32.91Q85.87 -34.65 87.14 -35.82Q88.41 -37 90.43 -37Q92.45 -37 93.72 -35.9Q94.99 -34.79 94.99 -33.05Q94.99 -31.22 93.75 -30.02Q92.5 -28.82 90.43 -28.82ZM99.26 0V-34.88H106.6V0ZM127.28 0V-4.94L126.81 -6.02V-14.86Q126.81 -17.21 125.37 -18.52Q123.94 -19.84 120.98 -19.84Q118.96 -19.84 117 -19.21Q115.05 -18.57 113.69 -17.49L111.06 -22.61Q113.13 -24.07 116.04 -24.87Q118.96 -25.67 121.96 -25.67Q127.75 -25.67 130.94 -22.94Q134.14 -20.22 134.14 -14.43V0ZM119.57 0.38Q116.6 0.38 114.49 -0.63Q112.37 -1.65 111.24 -3.39Q110.12 -5.12 110.12 -7.29Q110.12 -9.54 111.22 -11.24Q112.33 -12.93 114.72 -13.89Q117.12 -14.86 120.98 -14.86H127.7V-10.58H121.78Q119.19 -10.58 118.23 -9.73Q117.26 -8.89 117.26 -7.62Q117.26 -6.21 118.37 -5.38Q119.47 -4.56 121.4 -4.56Q123.23 -4.56 124.69 -5.43Q126.15 -6.3 126.81 -7.99L127.93 -4.61Q127.14 -2.16 125.02 -0.89Q122.9 0.38 119.57 0.38ZM139.12 0V-25.29H146.12V-18.29L144.81 -20.4Q146.17 -22.94 148.71 -24.31Q151.25 -25.67 154.49 -25.67Q157.5 -25.67 159.87 -24.47Q162.25 -23.27 163.61 -20.8Q164.97 -18.34 164.97 -14.48V0H157.64V-13.35Q157.64 -16.41 156.3 -17.87Q154.96 -19.32 152.52 -19.32Q150.78 -19.32 149.39 -18.59Q148 -17.87 147.23 -16.36Q146.45 -14.86 146.45 -12.51V0ZM181 0.38Q177.43 0.38 174.56 -1.25Q171.69 -2.87 170.02 -5.78Q168.35 -8.7 168.35 -12.65Q168.35 -16.64 170.02 -19.56Q171.69 -22.47 174.56 -24.07Q177.43 -25.67 181 -25.67Q184.2 -25.67 186.59 -24.26Q188.99 -22.85 190.31 -19.98Q191.62 -17.11 191.62 -12.65Q191.62 -8.23 190.35 -5.34Q189.09 -2.44 186.71 -1.03Q184.34 0.38 181 0.38ZM182.27 -5.64Q184.05 -5.64 185.51 -6.49Q186.97 -7.33 187.84 -8.91Q188.71 -10.48 188.71 -12.65Q188.71 -14.86 187.84 -16.41Q186.97 -17.96 185.51 -18.81Q184.05 -19.65 182.27 -19.65Q180.43 -19.65 178.98 -18.81Q177.52 -17.96 176.65 -16.41Q175.78 -14.86 175.78 -12.65Q175.78 -10.48 176.65 -8.91Q177.52 -7.33 178.98 -6.49Q180.43 -5.64 182.27 -5.64ZM188.9 0V-5.17L189.04 -12.69L188.57 -20.17V-34.88H195.9V0Z"/>
+            <path id="finanzen" transform="translate(141.39 94)" d="M2.61 0V-16.04H13.61V-14.57H4.31V0ZM4.12 -6.8V-8.27H12.6V-6.8ZM27.74 0V-12.03H29.36V0ZM28.56 -14.69Q28.06 -14.69 27.71 -15.03Q27.37 -15.37 27.37 -15.85Q27.37 -16.34 27.71 -16.67Q28.06 -17 28.56 -17Q29.06 -17 29.41 -16.68Q29.75 -16.36 29.75 -15.88Q29.75 -15.37 29.42 -15.03Q29.09 -14.69 28.56 -14.69ZM44.86 0V-12.03H46.42V-8.73L46.17 -9.35Q46.74 -10.65 48 -11.4Q49.26 -12.14 51 -12.14Q52.47 -12.14 53.58 -11.58Q54.69 -11.02 55.32 -9.87Q55.95 -8.73 55.95 -6.99V0H54.33V-6.83Q54.33 -8.73 53.38 -9.7Q52.42 -10.68 50.71 -10.68Q49.42 -10.68 48.47 -10.16Q47.52 -9.65 47.01 -8.67Q46.49 -7.7 46.49 -6.32V0ZM78.86 0V-2.66L78.79 -3.09V-7.54Q78.79 -9.07 77.93 -9.9Q77.07 -10.72 75.37 -10.72Q74.2 -10.72 73.15 -10.33Q72.1 -9.94 71.36 -9.3L70.63 -10.52Q71.55 -11.3 72.83 -11.72Q74.11 -12.14 75.53 -12.14Q77.87 -12.14 79.14 -10.99Q80.41 -9.83 80.41 -7.47V0ZM74.71 0.11Q73.36 0.11 72.36 -0.33Q71.36 -0.78 70.84 -1.57Q70.31 -2.36 70.31 -3.39Q70.31 -4.33 70.76 -5.1Q71.2 -5.87 72.22 -6.33Q73.24 -6.8 74.96 -6.8H79.11V-5.59H75.01Q73.26 -5.59 72.59 -4.97Q71.91 -4.35 71.91 -3.44Q71.91 -2.41 72.71 -1.79Q73.52 -1.17 74.96 -1.17Q76.33 -1.17 77.33 -1.8Q78.33 -2.43 78.79 -3.62L79.15 -2.5Q78.69 -1.31 77.56 -0.6Q76.43 0.11 74.71 0.11ZM95.8 0V-12.03H97.36V-8.73L97.11 -9.35Q97.68 -10.65 98.94 -11.4Q100.2 -12.14 101.94 -12.14Q103.41 -12.14 104.52 -11.58Q105.63 -11.02 106.26 -9.87Q106.89 -8.73 106.89 -6.99V0H105.26V-6.83Q105.26 -8.73 104.31 -9.7Q103.36 -10.68 101.64 -10.68Q100.36 -10.68 99.41 -10.16Q98.46 -9.65 97.94 -8.67Q97.43 -7.7 97.43 -6.32V0ZM120.95 0V-1.08L128.97 -11.23L129.31 -10.68H121.08V-12.03H130.59V-10.97L122.6 -0.8L122.18 -1.35H130.75V0ZM149.83 0.11Q147.95 0.11 146.53 -0.68Q145.11 -1.47 144.31 -2.85Q143.51 -4.24 143.51 -6.03Q143.51 -7.81 144.27 -9.19Q145.04 -10.56 146.38 -11.35Q147.72 -12.14 149.39 -12.14Q151.09 -12.14 152.41 -11.38Q153.72 -10.61 154.48 -9.22Q155.24 -7.84 155.24 -6.03Q155.24 -5.91 155.22 -5.79Q155.21 -5.66 155.21 -5.52H144.74V-6.74H154.34L153.7 -6.25Q153.7 -7.56 153.14 -8.58Q152.58 -9.6 151.62 -10.17Q150.65 -10.75 149.39 -10.75Q148.16 -10.75 147.17 -10.17Q146.19 -9.6 145.64 -8.57Q145.09 -7.54 145.09 -6.21V-5.96Q145.09 -4.58 145.69 -3.54Q146.3 -2.5 147.39 -1.91Q148.48 -1.33 149.87 -1.33Q150.97 -1.33 151.93 -1.72Q152.88 -2.11 153.56 -2.91L154.48 -1.86Q153.68 -0.89 152.47 -0.39Q151.27 0.11 149.83 0.11ZM169.52 0V-12.03H171.08V-8.73L170.83 -9.35Q171.4 -10.65 172.66 -11.4Q173.92 -12.14 175.66 -12.14Q177.13 -12.14 178.24 -11.58Q179.35 -11.02 179.98 -9.87Q180.61 -8.73 180.61 -6.99V0H178.99V-6.83Q178.99 -8.73 178.03 -9.7Q177.08 -10.68 175.37 -10.68Q174.08 -10.68 173.13 -10.16Q172.18 -9.65 171.67 -8.67Q171.15 -7.7 171.15 -6.32V0Z"/>
+          </g>
+        </svg>
+      </a>
+      <nav class="nav" aria-label="Hauptnavigation">
+        <ul>
+          <li><a href="#leistungen">Leistungen</a></li>
+          <li><a href="#haltung">Haltung</a></li>
+          <li><a href="#ablauf">Ablauf</a></li>
+          <li><a href="#region">Region</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </nav>
+      <a class="btn btn-small btn-gold" href="#kontakt">Termin vereinbaren</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- 01 Hero: Claim links, Budgetcheck rechts, Tragbarkeits-Ring als Bühne links unter dem Claim -->
+    <section id="top" class="hero" data-scene="2" data-bg="#031A3D" data-r="1.85" data-explode="0.08" data-pitch="0.02" data-intensity="1" aria-labelledby="top-h">
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="eyebrow">Kreditberatung · Basel</p>
+          <h1 id="top-h">Fair finanziert.<br><span>Persönlich begleitet.</span></h1>
+          <p class="lead">Wir prüfen zuerst, was Ihr Budget trägt. Und raten auch mal ab.</p>
+        </div>
+
+        <form id="budget" class="calc panel" aria-labelledby="calc-h">
+          <h2 id="calc-h" class="calc-title">Ihr Budgetcheck</h2>
+          <div class="field">
+            <div class="field-row"><label for="betrag">Kreditbetrag</label><output id="betrag-out" for="betrag">CHF 15'000.–</output></div>
+            <input id="betrag" type="range" min="1000" max="80000" step="500" value="15000">
+          </div>
+          <div class="field">
+            <div class="field-row"><label for="laufzeit">Laufzeit</label><output id="laufzeit-out" for="laufzeit">48 Monate</output></div>
+            <input id="laufzeit" type="range" min="12" max="60" step="12" value="48">
+          </div>
+          <div class="rate" aria-live="polite">
+            <p class="rate-label" id="rate-label">Monatsrate</p>
+            <p class="rate-value" id="r-rate">–</p>
+          </div>
+          <a class="btn btn-gold btn-block" href="#kontakt">Beratung vereinbaren</a>
+          <div class="fine">
+            <p class="small">Beispiel: 8.9 % eff. Jahreszins.</p>
+            <p class="legal">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+          </div>
+
+          <details class="tragbar">
+            <summary>Tragbarkeit prüfen</summary>
+            <fieldset>
+              <legend>Ihr Monat</legend>
+              <div class="field two">
+                <div>
+                  <label for="einkommen">Nettoeinkommen</label>
+                  <div class="money"><span aria-hidden="true">CHF</span><input id="einkommen" type="number" inputmode="numeric" min="0" step="100" value="6200"></div>
+                </div>
+                <div>
+                  <label for="fixkosten">Fixkosten</label>
+                  <div class="money"><span aria-hidden="true">CHF</span><input id="fixkosten" type="number" inputmode="numeric" min="0" step="100" value="3900" aria-describedby="fix-hint"></div>
+                </div>
+              </div>
+              <p id="fix-hint" class="hint">Miete, Versicherungen, Raten, Steuern.</p>
+              <div id="ampel" class="ampel" data-level="gruen">
+                <span class="lights" aria-hidden="true"><i class="g"></i><i class="y"></i><i class="r"></i></span>
+                <div>
+                  <p class="ampel-label"><span class="sr-only">Tragbarkeit: </span><span id="ampel-label">Tragbar</span></p>
+                  <p id="ampel-text" class="ampel-text"></p>
+                </div>
+              </div>
+              <dl class="results">
+                <div><dt>Anteil freie Mittel</dt><dd id="r-anteil">–</dd></div>
+                <div><dt>Freie Mittel pro Monat</dt><dd id="r-frei">–</dd></div>
+                <div><dt>Zinskosten gesamt</dt><dd id="r-zins">–</dd></div>
+                <div><dt>Rückzahlung gesamt</dt><dd id="r-total">–</dd></div>
+              </dl>
+              <div id="r-meter" class="meter" aria-hidden="true"><span></span><i style="left:35%"></i><i style="left:60%"></i></div>
+              <p class="meter-legend" aria-hidden="true"><span>0 %</span><span>35 %</span><span>60 %</span><span>100 %</span></p>
+              <p class="small">Vereinfachte Orientierung, keine Kreditprüfung.</p>
+            </fieldset>
+          </details>
+        </form>
+
+        <div class="stage stage-hero" data-stage aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- 02 Leistungen -->
+    <section id="leistungen" class="section" data-scene="0" data-bg="#04224D" data-r="1.9" data-explode="0.22" data-pitch="0.1" data-intensity="0.7" aria-labelledby="leistungen-h">
+      <div class="wrap">
+        <div class="section-head split">
+          <div>
+            <p class="eyebrow"><span class="num">01</span> Leistungen</p>
+            <h2 id="leistungen-h">Was trägt Ihr Budget?</h2>
+          </div>
+          <div class="stage stage-small" data-stage aria-hidden="true"></div>
+        </div>
+        <ul class="cards">
+          <li class="card">
+            <svg class="card-ico" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 12 20 4l14 8-14 8z" fill="#4F86C6"/><path d="M6 12v16l14 8V20z" fill="#0A4682"/><path d="M34 12v16l-14 8V20z" fill="#D9B566" opacity=".9"/></svg>
+            <h3>Privatkredit</h3>
+            <p>Eine Rate, die zu Ihrem Alltag passt.</p>
+          </li>
+          <li class="card">
+            <svg class="card-ico" viewBox="0 0 40 40" aria-hidden="true"><path d="M4 22 18 14v14L4 36z" fill="#E5484D" opacity=".85"/><path d="M22 4l14 8v14l-14-8z" fill="#4F86C6"/><path d="M16 20h10l-3-3m3 3-3 3" stroke="#EEF1F6" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <h3>Kreditablösung</h3>
+            <p>Umschulden, wenn es sich lohnt.</p>
+          </li>
+          <li class="card">
+            <svg class="card-ico" viewBox="0 0 40 40" aria-hidden="true"><path d="M20 4 34 12v16l-14 8L6 28V12z" fill="none" stroke="#8FA0C2" stroke-width="2"/><path d="M20 20V4l14 8z" fill="#D9B566"/></svg>
+            <h3>Budgetcheck</h3>
+            <p>Erst das Budget, dann der Betrag.</p>
+          </li>
+          <li class="card">
+            <svg class="card-ico" viewBox="0 0 40 40" aria-hidden="true"><circle cx="15" cy="13" r="6" fill="#4F86C6"/><circle cx="27" cy="15" r="5" fill="#D9B566"/><path d="M4 34c1-7 6-11 11-11s10 4 11 11z" fill="#0A4682"/><path d="M22 34c.6-5 3-8 6-8 4 0 7 3 8 8z" fill="#E5484D" opacity=".85"/></svg>
+            <h3>Persönliche Beratung</h3>
+            <p>Vor Ort in Basel oder per Video.</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 03 Haltung -->
+    <section id="haltung" class="section" data-scene="0" data-bg="#031A3D" data-r="1.55" data-explode="0.55" data-pitch="0.0" data-intensity="1" aria-labelledby="haltung-h">
+      <div class="wrap split-grid reverse">
+        <div class="stage stage-tall" data-stage aria-hidden="true"></div>
+        <div class="panel-copy">
+          <p class="eyebrow"><span class="num">02</span> Unser Versprechen</p>
+          <h2 id="haltung-h" class="quote">«Auch ein ehrliches Nein.»</h2>
+          <p class="lead">Ein Kredit soll Spielraum geben, nicht nehmen.</p>
+          <ul class="checks">
+            <li><strong>Wir raten ab, wenn es eng wird.</strong></li>
+            <li><strong>Wir legen Kosten offen.</strong></li>
+            <li><strong>Wir drängen nicht.</strong></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 Ablauf -->
+    <section id="ablauf" class="section" data-scene="1" data-bg="#04224D" data-r="1.75" data-explode="0.0" data-slab="0" data-lift="0.6" data-pitch="0.42" data-intensity="1" aria-labelledby="ablauf-h">
+      <div class="wrap">
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">03</span> Ablauf</p>
+          <h2 id="ablauf-h">In drei Schritten zum Entscheid.</h2>
+        </div>
+        <div class="split-grid">
+          <ol class="steps">
+            <li>
+              <span class="step-n" aria-hidden="true">1</span>
+              <div>
+                <h3>Kennenlernen</h3>
+                <p>Gemeinsam Ihr Budget anschauen.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-n" aria-hidden="true">2</span>
+              <div>
+                <h3>Tragbarkeit prüfen</h3>
+                <p>Varianten rechnen, auch kleinere Beträge.</p>
+              </div>
+            </li>
+            <li>
+              <span class="step-n" aria-hidden="true">3</span>
+              <div>
+                <h3>Entscheid in Ruhe</h3>
+                <p>Alle Zahlen schriftlich, ohne Druck.</p>
+              </div>
+            </li>
+          </ol>
+          <div class="stage stage-tall" data-stage aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 Region -->
+    <section id="region" class="section region" data-scene="3" data-bg="#031A3D" data-r="1.55" data-slab="0" data-lift="1.2" data-pitch="0.32" data-intensity="1" aria-labelledby="region-h">
+      <div class="wrap">
+        <div class="section-head center">
+          <p class="eyebrow"><span class="num">04</span> Region</p>
+          <h2 id="region-h">Zu Hause am Dreiländereck.</h2>
+        </div>
+        <div class="stage stage-wide" data-stage aria-hidden="true"></div>
+        <ul class="region-points">
+          <li><strong>Beratung in Basel</strong><span>Im Büro oder bei Ihnen in der Region.</span></li>
+          <li><strong>Grenzgängerinnen und Grenzgänger</strong><span>Lohn in Franken, Wohnsitz im Ausland.</span></li>
+          <li><strong>Kurze Wege</strong><span>Direkt erreichbar, ohne Callcenter.</span></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 06 FAQ -->
+    <section id="faq" class="section" data-scene="1" data-bg="#04224D" data-fx="0.62" data-fy="0.45" data-dist="14" data-slab="0" data-lift="0.6" data-pitch="0.42" data-intensity="0.5" aria-labelledby="faq-h">
+      <div class="wrap narrow">
+        <div class="section-head">
+          <p class="eyebrow"><span class="num">05</span> Häufige Fragen</p>
+          <h2 id="faq-h">Gut zu wissen</h2>
+        </div>
+        <div class="faq">
+          <details>
+            <summary>Was kostet die Beratung?</summary>
+            <p>Erstgespräch und Budgetcheck sind kostenlos. <em>(Platzhalter – Konditionen folgen.)</em></p>
+          </details>
+          <details>
+            <summary>Was bedeutet «tragbar»?</summary>
+            <p>Die Rate passt zu Ihrem Einkommen und lässt Reserve. Das prüfen wir gemeinsam.</p>
+          </details>
+          <details>
+            <summary>Raten Sie auch von einem Kredit ab?</summary>
+            <p>Ja, wenn die Belastung zu hoch wäre.</p>
+          </details>
+          <details>
+            <summary>Geht das auch als Grenzgänger?</summary>
+            <p>Das hängt von Wohnsitz und Bedingungen ab. Wir klären es mit Ihnen.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 Kontakt -->
+    <section id="kontakt" class="section" data-scene="0" data-bg="#031A3D" data-r="1.6" data-explode="0.0" data-pitch="0.06" data-intensity="0.8" aria-labelledby="kontakt-h">
+      <div class="wrap contact-grid">
+        <div>
+          <p class="eyebrow"><span class="num">06</span> Kontakt &amp; Termin</p>
+          <h2 id="kontakt-h">Reden wir über Ihre Situation.</h2>
+          <p class="lead">Vertraulich und ohne Verpflichtung.</p>
+          <address class="contact-list">
+            <p><span class="k">Adresse</span> [Strasse Nr.], 4051 Basel <span class="tag">Platzhalter</span></p>
+            <p><span class="k">Telefon</span> <a href="tel:+41610000000">+41 61 000 00 00</a> <span class="tag">Platzhalter</span></p>
+            <p><span class="k">E-Mail</span> <a href="mailto:beratung@dreilandfinanzen.ch">beratung@dreilandfinanzen.ch</a> <span class="tag">Platzhalter</span></p>
+            <p><span class="k">Zeiten</span> Mo–Fr nach Vereinbarung <span class="tag">Platzhalter</span></p>
+          </address>
+          <div class="stage stage-small contact-stage" data-stage aria-hidden="true"></div>
+        </div>
+        <form id="kontaktform" class="panel contact-form" novalidate>
+          <div class="field">
+            <label for="k-name">Name</label>
+            <input id="k-name" name="name" type="text" autocomplete="name" required>
+          </div>
+          <div class="field two">
+            <div>
+              <label for="k-mail">E-Mail</label>
+              <input id="k-mail" name="email" type="email" autocomplete="email">
+            </div>
+            <div>
+              <label for="k-tel">Telefon <span class="opt">(optional)</span></label>
+              <input id="k-tel" name="tel" type="tel" autocomplete="tel">
+            </div>
+          </div>
+          <div class="field">
+            <label for="k-art">Gesprächsform</label>
+            <select id="k-art" name="art">
+              <option>Vor Ort in Basel</option>
+              <option>Online per Video</option>
+              <option>Telefonisch</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="k-msg">Ihr Anliegen <span class="opt">(optional)</span></label>
+            <textarea id="k-msg" name="msg" rows="4"></textarea>
+          </div>
+          <div class="field check">
+            <input id="k-ok" type="checkbox" required>
+            <label for="k-ok">Ich bin einverstanden, dass Dreiland Finanzen mich zur Terminvereinbarung kontaktiert.</label>
+          </div>
+          <button class="btn btn-gold" type="submit">Anfrage senden</button>
+          <p id="kontakt-msg" class="form-msg" tabindex="-1" role="status" hidden></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap footer-grid">
+      <div>
+        <img class="footer-logo" src="../_assets/logo/dreiland-finanzen_horizontal_darkmode.svg" alt="Dreiland Finanzen" width="250" height="64">
+        <p class="small">Kreditberatung im Dreiländereck · dreilandfinanzen.ch</p>
+      </div>
+      <p class="legal footer-legal"><strong>Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</strong><br>Alle Zinssätze, Adressen und Kontaktangaben auf dieser Seite sind Platzhalter.</p>
+      <nav aria-label="Rechtliches" class="footer-nav">
+        <a href="#">Impressum</a><a href="#">Datenschutz</a><a href="#top">Nach oben</a>
+      </nav>
+    </div>
+    <div class="wrap footer-bottom">
+      <p class="small">© 2026 Dreiland Finanzen <span class="tag">Gestaltungsvorlage</span></p>
+      <p class="small render-line">Darstellung: <span id="render-status">Statisch – ohne Canvas</span></p>
+    </div>
+  </footer>
+
+  <button id="motion-toggle" class="motion-toggle" type="button" aria-pressed="false" title="Szene anhalten">
+    <svg viewBox="0 0 16 16" aria-hidden="true"><rect class="pa" x="3" y="3" width="3.5" height="10" rx="1"/><rect class="pa" x="9.5" y="3" width="3.5" height="10" rx="1"/><path class="pl" d="M4 2.5v11l9.5-5.5z"/></svg>
+    <span>Szene anhalten</span>
+  </button>
+
+  <script src="js/shared.js"></script>
+  <script src="js/scene-webgpu.js"></script>
+  <script src="js/scene-2d.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

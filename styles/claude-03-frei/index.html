@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="de-CH">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dreiland Finanzen – Ihre rote Linie ist auch unsere</title>
+<meta name="description" content="Kreditberatung im Dreiländereck Basel: Zuerst Ihr Budget, dann der Kredit – und ein ehrliches Nein, wenn es besser passt.">
+<link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="style.css">
+<script>document.documentElement.classList.add('js');</script>
+</head>
+<body>
+<a class="skip" href="#inhalt">Zum Inhalt springen</a>
+
+<header class="top" id="top">
+  <div class="wrap top__in">
+    <a class="top__logo" href="#top" aria-label="Dreiland Finanzen – zum Seitenanfang">
+      <img src="assets/logo/dreiland-finanzen_horizontal_farbig.svg" alt="Dreiland Finanzen" width="188" height="48">
+    </a>
+    <button class="top__toggle" type="button" aria-expanded="false" aria-controls="hauptnav">
+      <span class="top__burger" aria-hidden="true"></span><span>Menü</span>
+    </button>
+    <nav class="top__nav" id="hauptnav" aria-label="Hauptnavigation">
+      <ul>
+        <li><a href="#versprechen">Versprechen</a></li>
+        <li><a href="#budgetcheck">Budgetcheck</a></li>
+        <li><a href="#leistungen">Leistungen</a></li>
+        <li><a href="#ablauf">Ablauf</a></li>
+        <li><a href="#region">Region</a></li>
+        <li><a href="#fragen">Fragen</a></li>
+        <li><a class="btn btn--small" href="#kontakt">Kontakt</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="inhalt">
+
+  <!-- ============ HERO (mit Kreditrechner) ============ -->
+  <section class="hero" aria-labelledby="hero-titel">
+    <span class="anchor" data-x="L" data-pos="top" aria-hidden="true"></span>
+    <div class="wrap hero__grid">
+      <div class="hero__head">
+        <p class="eyebrow">Kreditberatung · Basel</p>
+        <h1 id="hero-titel" class="hero__title">
+          <span class="hero__l1">Ihre <span class="redword">rote Linie</span></span> ist auch&nbsp;unsere.
+        </h1>
+      </div>
+
+      <section class="hcalc" aria-label="Kreditrechner">
+        <div class="hcalc__row">
+          <label for="h-betrag">Kreditbetrag</label>
+          <span class="hcalc__num"><span aria-hidden="true">CHF</span><input type="text" id="h-betrag-num" inputmode="numeric" autocomplete="off" aria-label="Kreditbetrag in Franken" value="15'000"></span>
+        </div>
+        <input type="range" id="h-betrag" min="1000" max="80000" step="500" value="15000">
+
+        <div class="hcalc__row">
+          <label for="h-laufzeit">Laufzeit</label>
+          <span class="hcalc__num"><input type="text" id="h-laufzeit-num" inputmode="numeric" autocomplete="off" aria-label="Laufzeit in Monaten" value="48"><span aria-hidden="true">Monate</span></span>
+        </div>
+        <input type="range" id="h-laufzeit" min="12" max="84" step="6" value="48">
+
+        <div class="hcalc__res">
+          <p class="hcalc__lab" id="h-rate-l">Monatsrate</p>
+          <p class="hcalc__big"><output id="h-rate" for="h-betrag h-laufzeit" aria-labelledby="h-rate-l">CHF 370.12</output></p>
+        </div>
+
+        <a class="btn hcalc__btn" href="#kontakt">Beratung vereinbaren</a>
+        <p class="hcalc__small">Beispiel: 8.9 % eff. Jahreszins</p>
+        <p class="pflicht hcalc__pflicht">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+      </section>
+
+      <div class="hero__copy">
+        <p class="hero__lead">Zuerst Ihr Budget, dann der Kredit.</p>
+        <p class="claim">Fair finanziert. <span>Persönlich begleitet.</span></p>
+        <figure class="hero__mark">
+          <svg class="mark" viewBox="0 0 78.19 78.19" role="img" aria-labelledby="mark-t">
+            <title id="mark-t">Bildmarke von Dreiland Finanzen: drei Flächen in Blau, Gold und Rot</title>
+            <g id="bildmarke" transform="translate(-19 -26.2)">
+              <polygon id="flaeche-blau" class="mark__p mark__p--b" fill="#0A4682" points="20.6,26.8 20.6,51.6 40.4,63.03 61.88,50.63"/>
+              <polygon id="flaeche-gold" class="mark__p mark__p--g" fill="#C69D49" points="95.6,26.2 60.9,46.23 66.3,49.35 66.3,69.52 95.6,52.6"/>
+              <polygon id="flaeche-rot" class="mark__p mark__p--r" fill="#CE2530" points="43.3,64.9 62.8,53.64 62.8,75.39 71.0,70.65 71.0,104.39 43.3,88.4"/>
+            </g>
+          </svg>
+        </figure>
+      </div>
+    </div>
+    <span class="anchor" data-x="L" data-pos="bottom" aria-hidden="true"></span>
+  </section>
+
+  <!-- ============ VERSPRECHEN / NEIN ============ -->
+  <section class="nein" id="versprechen" aria-labelledby="nein-titel">
+    <div class="wrap">
+      <p class="eyebrow"><span class="eyebrow__no">01</span> Versprechen</p>
+      <h2 id="nein-titel" class="nein__title">
+        <span class="nein__pre">Auch ein ehrliches</span>
+        <span class="nein__word">Nein<span class="nein__dot">.</span></span>
+      </h2>
+      <div class="nein__line" aria-hidden="true">
+        <span class="anchor" data-x="L" data-marker="" aria-hidden="true"></span>
+        <span class="anchor" data-x="R" aria-hidden="true"></span>
+      </div>
+      <div class="nein__grid">
+        <p class="nein__lead">Ein Kredit soll Ihr Leben leichter machen, nicht enger.</p>
+        <ol class="vows">
+          <li>
+            <h3>Zuerst Ihr Budget</h3>
+            <p>Einnahmen und Fixkosten zuerst.</p>
+          </li>
+          <li>
+            <h3>Alle Kosten in Franken</h3>
+            <p>Auch die Zinsen über die ganze Laufzeit.</p>
+          </li>
+          <li>
+            <h3>Kleiner oder gar nicht</h3>
+            <p>Dann raten wir ab.</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BUDGETCHECK ============ -->
+  <section class="calc" id="budgetcheck" aria-labelledby="calc-titel">
+    <span class="anchor" data-x="R" data-pos="top" aria-hidden="true"></span>
+    <div class="wrap">
+      <header class="calc__head">
+        <p class="eyebrow eyebrow--dark"><span class="eyebrow__no">02</span> Budgetcheck</p>
+        <h2 id="calc-titel">Wo liegt Ihre rote Linie?</h2>
+        <p>Die Rechnung bleibt im Browser.</p>
+      </header>
+
+      <form class="calc__grid" id="rechner" novalidate onsubmit="return false">
+        <fieldset class="calc__inputs">
+          <legend class="sr-only">Ihre Angaben</legend>
+
+          <div class="field">
+            <div class="field__top">
+              <label for="betrag">Kreditbetrag</label>
+              <span class="field__num"><span aria-hidden="true">CHF</span>
+                <input type="text" id="betrag-num" inputmode="numeric" autocomplete="off" aria-label="Kreditbetrag in Franken" value="15'000"></span>
+            </div>
+            <input type="range" id="betrag" min="1000" max="80000" step="500" value="15000">
+          </div>
+
+          <div class="field">
+            <div class="field__top">
+              <label for="laufzeit">Laufzeit</label>
+              <span class="field__num">
+                <input type="text" id="laufzeit-num" inputmode="numeric" autocomplete="off" aria-label="Laufzeit in Monaten" value="48"><span aria-hidden="true">Monate</span></span>
+            </div>
+            <input type="range" id="laufzeit" min="12" max="84" step="6" value="48">
+          </div>
+
+          <div class="field">
+            <div class="field__top">
+              <label for="einkommen">Nettoeinkommen</label>
+              <span class="field__num"><span aria-hidden="true">CHF</span>
+                <input type="text" id="einkommen-num" inputmode="numeric" autocomplete="off" aria-label="Nettoeinkommen pro Monat in Franken" value="6'200"></span>
+            </div>
+            <input type="range" id="einkommen" min="1000" max="25000" step="100" value="6200" aria-describedby="einkommen-hint">
+            <p class="field__hint" id="einkommen-hint">pro Monat</p>
+          </div>
+
+          <div class="field">
+            <div class="field__top">
+              <label for="fixkosten">Fixkosten</label>
+              <span class="field__num"><span aria-hidden="true">CHF</span>
+                <input type="text" id="fixkosten-num" inputmode="numeric" autocomplete="off" aria-label="Fixkosten pro Monat in Franken" value="3'900"></span>
+            </div>
+            <input type="range" id="fixkosten" min="0" max="25000" step="100" value="3900" aria-describedby="fixkosten-hint">
+            <p class="field__hint" id="fixkosten-hint">pro Monat: Miete, Versicherungen, Raten</p>
+          </div>
+
+          <p class="calc__rate">
+            Gerechnet mit <strong>8.9 % eff. Jahreszins</strong>
+            <span class="tag">Beispielwert</span>
+          </p>
+        </fieldset>
+
+        <div class="calc__out">
+          <div class="result">
+            <div class="result__main"><p class="result__label">Monatsrate</p>
+            <p class="result__big"><output id="o-rate" for="betrag laufzeit">CHF 370.12</output></p></div>
+            <dl class="result__list">
+              <div><dt>Zinsen gesamt</dt><dd id="o-zins">–</dd></div>
+              <div><dt>Rückzahlung gesamt</dt><dd id="o-total">–</dd></div>
+              <div><dt>Frei pro Monat</dt><dd id="o-frei">–</dd></div>
+              <div><dt>Anteil am freien Budget</dt><dd id="o-anteil">–</dd></div>
+            </dl>
+          </div>
+
+          <figure class="budget" aria-labelledby="budget-cap">
+            <figcaption id="budget-cap" class="budget__cap">Monatsbudget</figcaption>
+            <div class="budget__bar" aria-hidden="true">
+              <span class="budget__seg budget__seg--fix" id="seg-fix"></span>
+              <span class="budget__seg budget__seg--rate" id="seg-rate"></span>
+              <span class="budget__seg budget__seg--rest" id="seg-rest"></span>
+              <span class="budget__limit" id="seg-limit"><span>rote Linie</span></span>
+            </div>
+            <ul class="budget__legend">
+              <li><i class="sw sw--fix"></i>Fixkosten</li>
+              <li><i class="sw sw--rate"></i>Kreditrate</li>
+              <li><i class="sw sw--rest"></i>Zum Leben</li>
+              <li><i class="sw sw--limit"></i>Rate bis 40 %</li>
+            </ul>
+          </figure>
+
+          <div class="ampel" id="ampel" data-state="ok">
+            <ul class="ampel__lights" aria-hidden="true">
+              <li class="ampel__l ampel__l--ok"><i></i>tragbar</li>
+              <li class="ampel__l ampel__l--tight"><i></i>knapp</li>
+              <li class="ampel__l ampel__l--no"><i></i>zu hoch</li>
+            </ul>
+            <div class="ampel__msg" role="status" aria-live="polite">
+              <p class="ampel__title" id="o-status">Tragbar – nach dieser Orientierung.</p>
+              <p class="ampel__text" id="o-text">Die Rate lässt Ihnen genug Spielraum.</p>
+            </div>
+          </div>
+
+          <div class="calc__cta">
+            <a class="btn btn--gold" href="#kontakt" id="mitnehmen">Ins Gespräch mitnehmen</a>
+          </div>
+        </div>
+      </form>
+
+      <div class="calc__legal">
+        <p>Vereinfachte Orientierung. Die 40-%-Grenze ist eine Beispielregel.</p>
+        <p class="pflicht">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+      </div>
+    </div>
+    <span class="anchor" data-x="R" data-pos="bottom" aria-hidden="true"></span>
+  </section>
+
+  <!-- ============ LEISTUNGEN ============ -->
+  <section class="services" id="leistungen" aria-labelledby="services-titel">
+    <div class="services__border" aria-hidden="true">
+      <span class="anchor" data-x="R" aria-hidden="true"></span>
+      <span class="anchor" data-x="L" data-marker="" aria-hidden="true"></span>
+    </div>
+    <div class="wrap">
+      <p class="eyebrow"><span class="eyebrow__no">03</span> Leistungen</p>
+      <h2 id="services-titel" class="h2">Vier Wege. Ein Massstab.</h2>
+      <ul class="tiles">
+        <li class="tile tile--b">
+          <span class="tile__glyph" aria-hidden="true"></span>
+          <h3>Privatkredit</h3>
+          <p>Mit einer Rate, die auch im Engpass passt.</p>
+        </li>
+        <li class="tile tile--g">
+          <span class="tile__glyph" aria-hidden="true"></span>
+          <h3>Kreditablösung</h3>
+          <p>Wirklich entlastend? Wir prüfen es.</p>
+        </li>
+        <li class="tile tile--r">
+          <span class="tile__glyph" aria-hidden="true"></span>
+          <h3>Budgetcheck</h3>
+          <p>Vor jedem Abschluss gemeinsam gerechnet.</p>
+        </li>
+        <li class="tile tile--n">
+          <span class="tile__glyph" aria-hidden="true"></span>
+          <h3>Beratung vor Ort oder online</h3>
+          <p>In Basel oder per Video.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============ ABLAUF ============ -->
+  <section class="steps" id="ablauf" aria-labelledby="steps-titel">
+    <div class="wrap">
+      <p class="eyebrow"><span class="eyebrow__no">04</span> Ablauf</p>
+      <h2 id="steps-titel" class="h2">Drei Schritte. Ohne Zeitdruck.</h2>
+      <ol class="route">
+        <li class="route__stop">
+          <p class="route__no" aria-hidden="true">1</p>
+          <span class="route__pin" aria-hidden="true"><span class="anchor" data-x="self" data-marker="" aria-hidden="true"></span></span>
+          <h3>Kennenlernen</h3>
+          <p>Erstes Gespräch, vor Ort oder online.</p>
+        </li>
+        <li class="route__stop">
+          <p class="route__no" aria-hidden="true">2</p>
+          <span class="route__pin" aria-hidden="true"><span class="anchor" data-x="self" data-marker="" aria-hidden="true"></span></span>
+          <h3>Gemeinsam rechnen</h3>
+          <p>Varianten nebeneinander, auch ohne Kredit.</p>
+        </li>
+        <li class="route__stop">
+          <p class="route__no" aria-hidden="true">3</p>
+          <span class="route__pin" aria-hidden="true"><span class="anchor" data-x="self" data-marker="" aria-hidden="true"></span></span>
+          <h3>In Ruhe entscheiden</h3>
+          <p>14 Tage Widerrufsrecht nach Unterschrift.</p>
+        </li>
+      </ol>
+      <span class="steps__exit anchor" data-x="L" data-only="narrow" aria-hidden="true"></span>
+      <span class="steps__exit anchor" data-x="R" data-y="prev" aria-hidden="true"></span>
+    </div>
+  </section>
+
+  <!-- ============ REGION ============ -->
+  <section class="region" id="region" aria-labelledby="region-titel">
+    <div class="wrap region__grid">
+      <div class="region__text">
+        <p class="eyebrow"><span class="eyebrow__no">05</span> Region</p>
+        <h2 id="region-titel" class="h2">Zu Hause am Rheinknie.</h2>
+        <p>Wer hier lebt, kennt Grenzen – und respektiert sie.</p>
+      </div>
+      <figure class="region__map">
+        <svg viewBox="0 0 400 400" role="img" aria-labelledby="map-t map-d">
+          <title id="map-t">Schema des Dreiländerecks</title>
+          <desc id="map-d">Drei Flächen für Deutschland, Frankreich und die Schweiz treffen sich in einem Punkt. Der Rhein bildet ein Knie und folgt den Grenzen. Am Treffpunkt liegt Basel.</desc>
+          <polygon class="map__de" points="61,120 200,40 339,120 200,200"/>
+          <polygon class="map__ch" points="200,200 339,120 339,280 200,360"/>
+          <polygon class="map__fr" points="61,120 200,200 200,360 61,280"/>
+          <path class="map__rhein" d="M352 112 L200 200 L48 112"/>
+          <text class="map__lbl map__lbl--dark" x="200" y="104" text-anchor="middle">Deutschland</text>
+          <text class="map__lbl" x="128" y="262" text-anchor="middle">Frankreich</text>
+          <text class="map__lbl" x="272" y="262" text-anchor="middle">Schweiz</text>
+          <text class="map__river" x="0" y="0" text-anchor="middle" transform="translate(272 146) rotate(-30)">Rhein</text>
+          <circle class="map__ring" cx="200" cy="200" r="16"/>
+          <circle class="map__dot" cx="200" cy="200" r="6"/>
+        </svg>
+        <figcaption>Schematisch, nicht massstabsgetreu.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section class="faq" id="fragen" aria-labelledby="faq-titel">
+    <div class="faq__border" aria-hidden="true">
+      <span class="anchor" data-x="R" aria-hidden="true"></span>
+      <span class="anchor" data-x="L" data-marker="" aria-hidden="true"></span>
+    </div>
+    <div class="wrap faq__grid">
+      <div>
+        <p class="eyebrow"><span class="eyebrow__no">06</span> Fragen</p>
+        <h2 id="faq-titel" class="h2">Kurz beantwortet.</h2>
+      </div>
+      <div class="faq__list">
+        <details>
+          <summary>Was kostet die Beratung?</summary>
+          <p>Das erste Gespräch ist unverbindlich. <span class="tag tag--light">Platzhalter</span></p>
+        </details>
+        <details>
+          <summary>Was, wenn mein Budget nicht reicht?</summary>
+          <p>Dann zeigen wir eine tragbare Variante – oder raten ab.</p>
+        </details>
+        <details>
+          <summary>Was heisst «effektiver Jahreszins»?</summary>
+          <p>Alle Kosten pro Jahr. So werden Angebote vergleichbar.</p>
+        </details>
+        <details>
+          <summary>Muss ich mich sofort entscheiden?</summary>
+          <p>Nein. Sie nehmen die Zahlen mit und entscheiden in Ruhe.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ KONTAKT ============ -->
+  <section class="contact" id="kontakt" aria-labelledby="contact-titel">
+    <div class="wrap contact__grid">
+      <div class="contact__intro">
+        <p class="eyebrow eyebrow--dark"><span class="eyebrow__no">07</span> Kontakt</p>
+        <h2 id="contact-titel">Reden wir darüber.</h2>
+        <p>Ein Gespräch verpflichtet Sie zu nichts.</p>
+        <address class="contact__card">
+          <strong>Dreiland Finanzen</strong>
+          <span>Musterstrasse 00, 4000 Basel <span class="tag">Platzhalter</span></span>
+          <span><a href="tel:+41610000000">+41 61 000 00 00</a> <span class="tag">Platzhalter</span></span>
+          <span><a href="mailto:kontakt@dreilandfinanzen.ch">kontakt@dreilandfinanzen.ch</a> <span class="tag">Platzhalter</span></span>
+        </address>
+      </div>
+
+      <form class="contact__form" id="kontaktform" action="#" method="post" novalidate>
+        <span class="anchor contact__end" data-x="L" data-marker="end" aria-hidden="true"></span>
+        <div class="f">
+          <label for="k-name">Name</label>
+          <input id="k-name" name="name" type="text" autocomplete="name" required>
+        </div>
+        <div class="f">
+          <label for="k-mail">E-Mail oder Telefon</label>
+          <input id="k-mail" name="kontakt" type="text" autocomplete="email" required>
+        </div>
+        <fieldset class="f f--choice">
+          <legend>Wie möchten Sie sich treffen?</legend>
+          <label><input type="radio" name="art" value="vor Ort" checked> Vor Ort in Basel</label>
+          <label><input type="radio" name="art" value="online"> Online per Video</label>
+          <label><input type="radio" name="art" value="telefonisch"> Telefonisch</label>
+        </fieldset>
+        <div class="f">
+          <label for="k-msg">Worum geht es? <span class="optional">(freiwillig)</span></label>
+          <textarea id="k-msg" name="nachricht" rows="4"></textarea>
+        </div>
+        <button class="btn btn--gold" type="submit">Anfrage senden</button>
+        <p class="form__note">Demo-Formular: Es werden keine Daten übertragen.</p>
+        <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap foot__grid">
+    <img class="foot__logo" src="assets/logo/dreiland-finanzen_horizontal_darkmode-flaeche.svg" alt="Dreiland Finanzen" width="220" height="56">
+    <p class="foot__claim">Fair finanziert. Persönlich begleitet.</p>
+    <p class="pflicht pflicht--foot">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
+    <ul class="foot__links">
+      <li><a href="#">Impressum <span class="sr-only">(Platzhalter)</span></a></li>
+      <li><a href="#">Datenschutz <span class="sr-only">(Platzhalter)</span></a></li>
+      <li><a href="#top">Nach oben</a></li>
+    </ul>
+    <p class="foot__small">© 2026 Dreiland Finanzen</p>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
