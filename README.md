@@ -34,13 +34,15 @@ Die grobe Schätzung rechnet: Nettoeinkommen − Miete − geschätzte weitere A
 Monatsrate. Die früheren 30/36-Zahlungsbänder und Tragbarkeitseinstufungen sind aus dem Rechner
 entfernt. Eine längere Laufzeit verändert nur das Rechenbeispiel, nicht eine Kreditentscheidung.
 
-Für weitere Ausgaben gilt vorläufig `max(CHF 2'500, 40 % des Nettoeinkommens)` pro Monat,
-auf Rappen gerundet. Dies ist eine illustrative Projektannahme, keine bestätigte Geschäftsregel,
-Bankvorgabe oder gesetzliche Pauschale. Sie deckt andere Ausgaben einschliesslich eines Puffers nur
-überschlägig ab; Haushaltsgrösse, Steuern, Verpflichtungen und tatsächliche Ausgaben sind unbekannt.
-Der angesetzte Betrag wird als Schätzung sichtbar genannt. Auf die konkrete Rückfrage zur
-Veröffentlichung mit dieser Annahme hat der Nutzer anschliessend ausdrücklich mit «yes» geantwortet.
-Die Annahme ist damit für diesen Release freigegeben; sie bleibt eine grobe Schätzung.
+Weitere Ausgaben werden mit `40 % des Nettoeinkommens` pro Monat geschätzt, auf Rappen gerundet,
+ohne festen Mindestbetrag. Die Miete wird separat abgezogen. Der Nutzer hat auf Rückfrage die
+bestehenden 40 % ausdrücklich ausgewählt; der frühere Mindestbetrag von CHF 2'500 entfällt.
+Prozentsatz und errechneter Betrag werden im Ergebnis und in der Beratungszusammenfassung genannt.
+Dies bleibt eine illustrative Projektannahme, keine Bankvorgabe oder gesetzliche Pauschale.
+Haushaltsgrösse, Steuern, Verpflichtungen und tatsächliche Ausgaben sind unbekannt; das Einkommen
+allein bestimmt die tatsächlichen Kosten nicht. Auch bei 0 Einkommen entfällt der feste Mindestbetrag:
+0 geschätzte weitere Ausgaben sind eine Folge der Formel, keine Aussage über tatsächliche Kosten.
+Die Auswahl der Formel autorisiert keinen Merge und keine Veröffentlichung dieser Änderung.
 
 Ergebnisse zeigen einen geschätzten Spielraum oder eine Budgetlücke. Sie garantieren weder einen Kredit
 noch den gewünschten Betrag. Die vollständige Prüfung bleibt separat bei der Kreditgeberin.
@@ -60,15 +62,15 @@ git diff --check
 ```
 
 Der Test lädt die echte `index.html` mit `app.js` und `style.css` lokal in Headless Chrome.
-Er prüft die zwei Budgetfelder, fehlende/ungültige Angaben, Schätzpauschale, gewählte Rate,
+Er prüft die zwei Budgetfelder, fehlende/ungültige Angaben, einkommensabhängige Ausgabenschätzung, gewählte Rate,
 positive/negative/Null-Ergebnisse, Rappen, Laufzeitgrenzen, beide Laufzeitregler per Tastatur,
 Beratungszusammenfassung und Rücknavigation. Alle drei Schritte werden bei 1440/900/390/320 Pixeln
 sowie 200 % Textgrösse auf Überlauf und abgeschnittene Steuerelemente geprüft.
-Protokoll und Screenshots liegen unter `dist/qa/evidence/simple/`. Die Screenshots des Rechners
+Protokoll und Screenshots liegen unter `dist/qa/evidence/income-expenses/`. Die Screenshots des Rechners
 blenden nur für die Aufnahme den haftenden Seitenkopf und den Sprunglink aus.
 Es werden keine produktiven Anfragen gestellt.
 
-Die [Feedback-Auswertung](tools/feedback-affordability.md#vereinfachung-zum-schnellen-budgetcheck) dokumentiert
+Die [Feedback-Auswertung](tools/feedback-affordability.md#einkommensabhängige-weitere-ausgaben) dokumentiert
 Befund, Umsetzung, Annahmen und offene Freigabepunkte. Frühere Abschnitte sind historischer Kontext;
 ihre Veröffentlichungsfreigabe gilt nicht für diese neue Änderung.
 

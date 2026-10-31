@@ -6,7 +6,7 @@ const { pathToFileURL } = require('node:url');
 const { execFileSync } = require('node:child_process');
 const { chromium } = require('../dist/qa/node_modules/playwright');
 const root = path.resolve(__dirname, '..');
-const output = path.join(root, 'dist', 'qa', 'evidence', 'simple');
+const output = path.join(root, 'dist', 'qa', 'evidence', 'income-expenses');
 
 (async () => {
   await fs.mkdir(output, { recursive: true });
@@ -77,17 +77,18 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'simple');
     checks.push('Only income and rent are asked; missing entries block progression with labelled errors and focus');
 
     await setBudget();
-    assert.equal(await text('#est-frei'), "CHF 1'515.23");
-    assert.match(await text('#allowance-note'), /CHF 2'500.00/);
+    assert.equal(await text('#est-frei'), "CHF 1'615.23");
+    assert.match(await text('#allowance-note'), /40 % Ihres Nettoeinkommens/);
+    assert.match(await text('#allowance-note'), /CHF 2'400.00/);
     assert.match(await text('#est-unit'), /nach Rate/);
     await page.locator('#adj-lz').focus();
     await page.keyboard.press('End');
     assert.equal(await text('#adj-rate'), 'CHF 238.74');
-    assert.equal(await text('#est-frei'), "CHF 1'761.26");
+    assert.equal(await text('#est-frei'), "CHF 1'861.26");
     assert.equal(await page.locator('#laufzeit').inputValue(), '120');
     await page.keyboard.press('Home');
     assert.equal(await text('#adj-rate'), "CHF 1'736.33");
-    assert.equal(await text('#est-frei'), 'CHF 263.67');
+    assert.equal(await text('#est-frei'), 'CHF 363.67');
     await page.keyboard.press('ArrowRight');
     assert.equal(await text('#adj-lz-out'), '24 Monate');
     assert.equal(await page.locator('#adj-lz').getAttribute('aria-valuetext'), '24 Monate');
@@ -99,25 +100,50 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'simple');
     await go(1, 0);
     await page.locator('#betrag').fill('20000');
     await slider('#laufzeit', 48);
-    await setBudget('10000', '1500');
-    assert.match(await text('#allowance-note'), /CHF 4'000.00/);
-    assert.equal(await text('#est-frei'), "CHF 4'015.23");
-    checks.push('Illustrative expense floor and income share; selected-term rate, sliders and estimate stay in sync');
+    for (const [income, allowance, buffer] of [
+      ['3000', "CHF 1'200.00", 'CHF 184.77'],
+      ['4000', "CHF 1'600.00", 'CHF 415.23'],
+      ['6000', "CHF 2'400.00", "CHF 1'615.23"],
+      ['6249', "CHF 2'499.60", "CHF 1'764.63"],
+      ['6250', "CHF 2'500.00", "CHF 1'765.23"],
+      ['6251', "CHF 2'500.40", "CHF 1'765.83"],
+      ['10000', "CHF 4'000.00", "CHF 4'015.23"],
+    ]) {
+      await setBudget(income, '1500');
+      assert.ok((await text('#allowance-note')).includes(allowance));
+      assert.match(await text('#allowance-note'), /40 % Ihres Nettoeinkommens/);
+      assert.equal(await text('#est-frei'), buffer);
+      await page.locator('.step[data-step="2"] [data-consult]').click();
+      assert.ok((await text('#consult-text')).includes(allowance));
+      assert.match(await text('#consult-text'), /40 % des Nettoeinkommens/);
+    }
+    await go(2, 1);
+    await page.locator('#ink').fill('5000');
+    assert.match(await text('#allowance-note'), /CHF 2'000.00/);
+    await page.locator('#miete').fill('2000');
+    assert.match(await text('#allowance-note'), /CHF 2'000.00/);
+    await go(1, 2);
+    assert.equal(await text('#est-frei'), 'CHF 515.23');
+    checks.push('Expenses follow 40% of net income without a fixed floor, including both sides of the old CHF 6,250 boundary; income edits update immediately and rent stays separate');
+    checks.push('Selected-term rate, sliders and estimate stay in sync; consultation uses the same expense amount and percentage');
 
     for (const [income, rent, buffer, unit, status] of [
-      ['4484.77', '1500', 'CHF 0.00', 'bleiben pro Monat nach Rate', 'Kein geschätzter Spielraum'],
-      ['4484.76', '1500', 'CHF 0.01', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
-      ['0', '0', "CHF 2'984.77", 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
-      ["6'000,50", '1500,25', "CHF 1'515.48", 'bleiben pro Monat nach Rate', 'Grobe Budgetschätzung'],
+      ['4000', '1915.23', 'CHF 0.00', 'bleiben pro Monat nach Rate', 'Kein geschätzter Spielraum'],
+      ['4000', '1915.24', 'CHF 0.01', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
+      ['0', '0', 'CHF 484.77', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
+      ['0.01', '0', 'CHF 484.76', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
+      ['0.04', '0', 'CHF 484.75', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
+      ["6'000,50", '1500,25', "CHF 1'615.28", 'bleiben pro Monat nach Rate', 'Grobe Budgetschätzung'],
     ]) {
       await setBudget(income, rent);
       assert.equal(await text('#est-frei'), buffer);
       assert.equal(await text('#est-unit'), unit);
       assert.equal(await text('#est-status'), status);
-      if (income === '4484.77' || income === '4484.76') await capture(income === '4484.77' ? 'zero' : 'negative');
+      if (rent === '1915.23' || rent === '1915.24') await capture(rent === '1915.23' ? 'zero' : 'negative');
       await page.locator('.step[data-step="2"] [data-consult]').click();
       assert.match(await text('#consult-text'), /Miete/);
-      assert.match(await text('#consult-text'), /pauschal geschätzt/);
+      assert.match(await text('#consult-text'), /40 % des Nettoeinkommens/);
+      assert.match(await text('#consult-text'), /grob geschätzt/);
       assert.ok((await text('#consult-text')).includes(buffer.replace('CHF ', unit === 'fehlen pro Monat' ? 'CHF −' : 'CHF ')));
       assert.match(await text('#consult-text'), /keine Garantie/);
     }

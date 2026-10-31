@@ -19,8 +19,8 @@
     defaultAmount: 20000, defaultTerm: 48,
   });
   // Illustrative allowance for the quick estimate, not a lending or scoring rule.
-  // Approved for this release; rent is entered separately. Actual costs may differ.
-  const EXPENSE_ALLOWANCE = Object.freeze({ minimum: 2500, incomeShare: 0.4 });
+  // Income share selected in feedback; rent is entered separately. Actual costs may differ.
+  const EXPENSE_ALLOWANCE = Object.freeze({ incomeShare: 0.4 });
   const maxTermFor = amount => (amount > RULES.longTermMaxAmount ? RULES.standardMaxTerm : RULES.terms.at(-1));
   function estimate(amount, months) {
     const i = Math.pow(1 + RULES.exampleAnnualRate / 100, 1 / 12) - 1;
@@ -99,7 +99,7 @@
   function readBudget(rate) {
     const [inc, rent] = budgetFields.map(([id]) => parse($(id)));
     if (rate === null || [inc, rent].some(isNaN)) return null;
-    const allowance = Math.round(Math.max(EXPENSE_ALLOWANCE.minimum, inc * EXPENSE_ALLOWANCE.incomeShare) * 100) / 100;
+    const allowance = Math.round(inc * EXPENSE_ALLOWANCE.incomeShare * 100) / 100;
     const buffer = Math.round((inc - rent - allowance - rate) * 100) / 100;
     return { inc, rent, allowance, rate, buffer };
   }
@@ -111,7 +111,7 @@
       $("#est-text").textContent = "Bitte Nettoeinkommen und Miete als monatliche Beträge angeben.";
       $("#est-frei").textContent = "–";
       $("#est-unit").textContent = "";
-      $("#allowance-note").textContent = "Weitere Ausgaben werden pauschal geschätzt.";
+      $("#allowance-note").textContent = "Weitere Ausgaben schätzen wir aus Ihrem Nettoeinkommen.";
       return false;
     }
     $("#estimate").dataset.state = b.buffer < 0 ? "warn" : "review";
@@ -119,7 +119,7 @@
     $("#est-frei").textContent = chf2(Math.abs(b.buffer));
     $("#est-unit").textContent = b.buffer < 0 ? "fehlen pro Monat" : "bleiben pro Monat nach Rate";
     $("#est-text").textContent = b.buffer <= 0 ? "In dieser Schätzung bleibt kein Puffer. Besprechen Sie Ihre Möglichkeiten mit uns." : "Ein erster Anhaltspunkt für Ihr Budget. Ihre tatsächlichen Ausgaben können abweichen.";
-    $("#allowance-note").textContent = `Weitere Ausgaben neben der Miete sind pauschal mit ${chf2(b.allowance)} pro Monat geschätzt.`;
+    $("#allowance-note").textContent = `Weitere Ausgaben neben der Miete: ${EXPENSE_ALLOWANCE.incomeShare * 100} % Ihres Nettoeinkommens (${chf2(b.allowance)} pro Monat), grob geschätzt.`;
     return true;
   }
   function validateBudget() {
@@ -170,7 +170,7 @@
     const e = estimate(state.amount, state.months);
     let s = `${chf(state.amount)} über ${state.months} Monate, Rate ca. ${chf2(e.monthly)} (Beispiel 7.9 %).`;
     const b = readBudget(e.monthly);
-    if (b) s += ` Grobe Budgetschätzung: Nettoeinkommen ${chf2(b.inc)}, Miete ${chf2(b.rent)}, weitere Ausgaben pauschal geschätzt ${chf2(b.allowance)} pro Monat. Geschätzter Spielraum nach Rate ${chf2(b.buffer)} pro Monat. Keine Kreditzusage und keine Garantie für den gewünschten Betrag; die Kreditgeberin prüft Ihre vollständige Situation separat.`;
+    if (b) s += ` Grobe Budgetschätzung: Nettoeinkommen ${chf2(b.inc)}, Miete ${chf2(b.rent)}, weitere Ausgaben mit ${EXPENSE_ALLOWANCE.incomeShare * 100} % des Nettoeinkommens grob geschätzt: ${chf2(b.allowance)} pro Monat. Geschätzter Spielraum nach Rate ${chf2(b.buffer)} pro Monat. Keine Kreditzusage und keine Garantie für den gewünschten Betrag; die Kreditgeberin prüft Ihre vollständige Situation separat.`;
     return s;
   }
   $$("[data-consult]").forEach(a => a.addEventListener("click", () => {
