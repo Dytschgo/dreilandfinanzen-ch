@@ -38,8 +38,9 @@ Für weitere Ausgaben gilt vorläufig `max(CHF 2'500, 40 % des Nettoeinkommens)`
 auf Rappen gerundet. Dies ist eine illustrative Projektannahme, keine bestätigte Geschäftsregel,
 Bankvorgabe oder gesetzliche Pauschale. Sie deckt andere Ausgaben einschliesslich eines Puffers nur
 überschlägig ab; Haushaltsgrösse, Steuern, Verpflichtungen und tatsächliche Ausgaben sind unbekannt.
-Der angesetzte Betrag wird als Schätzung sichtbar genannt. Vor Veröffentlichung fachlich prüfen.
-Der Reviewer bestätigte «only rent» als einzige Ausgabenfrage, aber keinen bestimmten Pauschalbetrag.
+Der angesetzte Betrag wird als Schätzung sichtbar genannt. Auf die konkrete Rückfrage zur
+Veröffentlichung mit dieser Annahme hat der Nutzer anschliessend ausdrücklich mit «yes» geantwortet.
+Die Annahme ist damit für diesen Release freigegeben; sie bleibt eine grobe Schätzung.
 
 Ergebnisse zeigen einen geschätzten Spielraum oder eine Budgetlücke. Sie garantieren weder einen Kredit
 noch den gewünschten Betrag. Die vollständige Prüfung bleibt separat bei der Kreditgeberin.

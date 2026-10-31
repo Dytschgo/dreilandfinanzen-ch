@@ -159,7 +159,8 @@ PR-, Merge- und Produktionsstatus werden im Veröffentlichungsablauf separat bes
 ## Vereinfachung zum schnellen Budgetcheck
 
 Stand: 31. Oktober 2026. Ausgangspunkt: `5309314` auf `main`, zu Beginn ohne lokale Änderungen.
-Kategorie: Verbesserung. Lokal umgesetzt und geprüft; Veröffentlichung nicht freigegeben.
+Kategorie: Verbesserung. Lokal umgesetzt und geprüft; Veröffentlichung anschliessend ausdrücklich
+freigegeben (siehe «Freigabe und Release-Prüfung» unten).
 
 ### Vor Änderung geprüft
 
@@ -214,7 +215,8 @@ auf Rappen gerundet. Das ist eine illustrative Annahme, keine nachgewiesene Bank
 und keine gesetzliche Pauschale. Sie soll weitere Lebenshaltung, Steuern, Verpflichtungen und einen
 Puffer nur überschlägig abbilden. Ihre individuelle Höhe ist unbekannt. Der verwendete Schätzbetrag
 wird in der Oberfläche genannt; die Konfiguration ist in `EXPENSE_ALLOWANCE` zusammengefasst.
-Vor Veröffentlichung muss die verantwortliche Person diese Annahme fachlich bestätigen oder ersetzen.
+Diese Annahme war bei Erstellung noch offen; der Nutzer hat die Veröffentlichung damit anschliessend
+auf konkrete Rückfrage ausdrücklich bestätigt (siehe unten).
 Eine spätere vollständige Kreditprüfung muss die tatsächlichen Verhältnisse berücksichtigen.
 
 Beispiel: CHF 6'000 netto − CHF 1'500 Miete − CHF 2'500 geschätzte weitere Ausgaben − CHF 484.77
@@ -242,4 +244,35 @@ Nach Abschluss der lokalen Prüfung hat der Nutzer den Push dieser Änderung aus
 Die Änderung wird auf einen Review-Branch gepusht und per Pull Request gegen `main` vorgelegt.
 Kein Merge oder Deployment ist Teil dieses Push-Auftrags. Die frühere Veröffentlichungsanweisung
 und frühere Agentenreviews gelten nur für den damaligen Stand. Der Pull-Request-Weg aus
-`CONTRIBUTING.md` bleibt bestehen; die vorläufige Ausgabenannahme ist vor Veröffentlichung zu prüfen.
+`CONTRIBUTING.md` bleibt bestehen. Der anschliessende Freigabeschritt ist unten dokumentiert.
+
+### Freigabe und Release-Prüfung
+
+Auf die konkrete Frage, ob PR #2 gemergt und mit `max(CHF 2'500, 40 % des Nettoeinkommens)` als
+Ausgabenannahme veröffentlicht werden soll, hat der Nutzer ausdrücklich mit «yes» geantwortet.
+Diese Antwort gilt der konkreten Freigabefrage, nicht bloss einer unspezifischen Feedbackmeldung.
+Sie autorisiert diesen Merge und die damit verbundene automatische Veröffentlichung über Hostinger.
+Die Kostenannahme bleibt eine illustrative Schätzung und keine allgemeine Bank- oder Rechtsregel.
+
+Unmittelbar vor dem Release war PR #2 offen und konfliktfrei, `main` stand auf `5309314` und der
+geprüfte Implementierungsstand auf `a616d30`. GitHub meldete keinen Branchschutz, keine anwendbaren
+Branch-Regeln und keine CI-Checks. Der öffentliche HTTP-Abruf bestätigte noch die alte Budgetansicht
+mit `pflicht`-Feld, ohne `miete`-Feld und mit Assetversion `2026-10-31-bands`.
+
+Zwei unabhängige, rein lesende Agentenreviews prüften die Änderungen gegenüber `5309314` getrennt
+auf Repository-Standards und ursprüngliche Anforderungen. Standards: keine blockierenden Codebefunde;
+kleiner Nachweismangel durch einen fest codierten Quellstand im Prüfprotokoll. Anforderungen: keine
+Befunde; zusätzlich wurden fünf Einkommens-/Mietszenarien unabhängig im Browser geprüft.
+Der Nachweismangel wurde korrigiert: Das Protokoll nennt nun die tatsächliche Git-Revision und meldet,
+ob versionierte Dateien lokale Änderungen enthalten. Freigabetexte wurden aktualisiert; die
+Berechnung und Bedienung bleiben gegenüber dem unabhängig geprüften Stand unverändert.
+
+Vorher-/Nachher-Nachweise: Der bisherige Rechner verlangte acht Budgetangaben und zeigte die
+30/36-Zahlungsbänder. Die neue Fassung verlangt genau zwei Angaben und zeigt einen geschätzten
+Monatsspielraum ohne Kreditentscheidung. Frühere Aufnahmen liegen unter `dist/qa/evidence/`, neue
+Aufnahmen und das reproduzierbare Prüfprotokoll unter `dist/qa/evidence/simple/`.
+
+Der Release ist reversibel: Bei einem Problem kann der Merge über einen regulären Revert-PR
+zurückgenommen werden. Es gibt keine Datenbankänderung und keine Migration gespeicherter Kundendaten.
+Merge-Ergebnis und Abgleich der live ausgelieferten HTML-, JavaScript- und CSS-Dateien werden nach
+der Veröffentlichung separat bestätigt; diese Freigabenotiz allein behauptet keinen Live-Erfolg.

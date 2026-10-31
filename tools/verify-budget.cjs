@@ -3,6 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs/promises');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
+const { execFileSync } = require('node:child_process');
 const { chromium } = require('../dist/qa/node_modules/playwright');
 const root = path.resolve(__dirname, '..');
 const output = path.join(root, 'dist', 'qa', 'evidence', 'simple');
@@ -173,7 +174,9 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'simple');
     checks.push('200% text remains usable without overflow or clipped controls');
     assert.deepEqual(errors, [], 'Browser runtime errors');
     assert.deepEqual(externalRequests, [], 'Calculator must not send data to external services');
-    const report = { sourceBase: '5309314 (local working changes)', checks, runtimeErrors: errors, externalRequests, evidence: output };
+    const sourceRevision = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
+    const sourceHasTrackedChanges = Boolean(execFileSync('git', ['status', '--porcelain', '--untracked-files=no'], { cwd: root, encoding: 'utf8' }).trim());
+    const report = { sourceRevision, sourceHasTrackedChanges, checks, runtimeErrors: errors, externalRequests, evidence: output };
     await fs.writeFile(path.join(output, 'checks.json'), JSON.stringify(report, null, 2) + '\n');
     console.log(JSON.stringify(report, null, 2));
   } finally { await browser.close(); }

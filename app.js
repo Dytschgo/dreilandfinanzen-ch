@@ -19,7 +19,7 @@
     defaultAmount: 20000, defaultTerm: 48,
   });
   // Illustrative allowance for the quick estimate, not a lending or scoring rule.
-  // Review with the business before release; rent is entered separately.
+  // Approved for this release; rent is entered separately. Actual costs may differ.
   const EXPENSE_ALLOWANCE = Object.freeze({ minimum: 2500, incomeShare: 0.4 });
   const maxTermFor = amount => (amount > RULES.longTermMaxAmount ? RULES.standardMaxTerm : RULES.terms.at(-1));
   function estimate(amount, months) {
