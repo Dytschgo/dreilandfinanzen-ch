@@ -281,7 +281,7 @@ der Veröffentlichung separat bestätigt; diese Freigabenotiz allein behauptet k
 
 Stand: 31. Oktober 2026. Kategorie: Verbesserung. Ausgangsstand: `93c56ee` auf `main`,
 zu Beginn ohne lokale Änderungen. Lokal umgesetzt und geprüft auf `feedback/income-based-expenses`.
-Keine Merge- oder Veröffentlichungsfreigabe für diese Änderung.
+Die Veröffentlichung wurde nach dem Push separat ausdrücklich freigegeben (siehe unten).
 
 ### Vor Änderung geprüft
 
@@ -346,5 +346,32 @@ entsprechend `CONTRIBUTING.md`. Syntaxprüfungen, die vollständige Chrome-Regre
 `git diff --check` wurden vor dem Push erneut erfolgreich ausgeführt. Der Basisbranch auf dem
 Remote war dabei unverändert gegenüber `93c56ee`.
 
-Ein Merge geht unmittelbar live und ist nicht Teil dieses Push-Auftrags. Es wurden kein Merge
-und kein Deployment durchgeführt. Frühere Veröffentlichungsfreigaben gelten für frühere Änderungen.
+Ein Merge geht unmittelbar live und war nicht Teil dieses Push-Auftrags. Zum Abschluss des
+Push-Auftrags waren weder Merge noch Deployment durchgeführt. Frühere Veröffentlichungsfreigaben
+gelten für frühere Änderungen.
+
+### Separate Merge-Freigabe und Release-Prüfung
+
+Nach Erstellung von PR #3 hat der Nutzer ausdrücklich den Merge angefordert. Diese Anweisung
+autorisiert den Merge von PR #3 gegen `main` und die damit verbundene automatische Veröffentlichung
+über Hostinger. Sie ist von der vorherigen Formelwahl und dem vorherigen Push-Auftrag getrennt.
+
+Geprüfter Implementierungsstand: `18663b0abd0ce0c5fceb9ed46ee96d6d92f62bd2`, Basis:
+`93c56ee732ea50db23321386d606190a6ddc4562`. Zwei unabhängige, rein lesende Agentenreviews
+prüften Repository-Standards und ursprüngliche Anforderungen getrennt. Beide meldeten keine
+Befunde. Der Anforderungsreview prüfte zusätzlich acht Einkommens-/Mietszenarien unabhängig
+in lokalem Chrome, einschliesslich Rappenrundung, Null-Einkommen und Löschen veralteter Ergebnisse.
+Syntaxprüfungen, die vollständige Chrome-Regression und `git diff --check` bestanden am sauberen
+Implementierungsstand. Das Protokoll nennt genau diese Revision. Die anschliessende Ergänzung
+dokumentiert ausschliesslich Freigabe und Release-Prüfung; Produktcode und Tests bleiben unverändert.
+
+GitHub meldete vor dem Merge keinen Branchschutz und keine anwendbaren Regeln für `main`.
+PR #3 war offen, konfliktfrei und hatte keine CI-Checks oder offenen Review-Kommentare.
+Der aktuelle öffentliche HTTP-Abruf bestätigte vor dem Release weiterhin die alte Skriptversion
+und die Mindestbetragsregel. Nachweise liegen unter `dist/qa/evidence/income-expenses-release/`.
+
+Vorher: Bis CHF 6'250 Einkommen blieb der Ansatz bei CHF 2'500. Nachher: Der Ansatz folgt
+für jedes gültige Einkommen den ausgewählten 40 %, während die Miete separat abgezogen wird.
+Der Release kann mit einem regulären Revert-PR rückgängig gemacht werden. Es gibt keine Migration
+und keine Änderung gespeicherter Kundendaten. Merge-Ergebnis und tatsächliche Live-Auslieferung
+werden nach der Ausführung separat geprüft; diese Notiz allein behauptet keinen Live-Erfolg.
