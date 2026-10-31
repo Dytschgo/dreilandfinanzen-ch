@@ -91,7 +91,7 @@
         <section class="step" data-step="1" aria-labelledby="s2-title" hidden>
           <h3 class="step__title" id="s2-title" tabindex="-1">Ihr Budget</h3>
           <p class="carry"><span id="carry">CHF 20'000.– · 48 Monate · Rate CHF 484.77</span> <button type="button" class="linkbtn" data-go="0">Ändern</button></p>
-          <p class="muted">Zwei Angaben für eine grobe Schätzung. Weitere Ausgaben rechnen wir pauschal ein.</p>
+          <p class="muted">Zwei Angaben für eine grobe Schätzung. Weitere Ausgaben neben der Miete schätzen wir mit 40 % Ihres Nettoeinkommens.</p>
           <div class="field">
             <label for="ink">Nettoeinkommen pro Monat <span>CHF</span></label>
             <input id="ink" inputmode="decimal" autocomplete="off" placeholder="z. B. 6'000" aria-describedby="ink-hint budget-err">
@@ -117,7 +117,7 @@
             <p class="estimate__amount"><b id="est-frei">–</b> <span id="est-unit">bleiben pro Monat nach Rate</span></p>
             <p class="estimate__text" id="est-text"></p>
           </div>
-          <p class="fine" id="allowance-note">Weitere Ausgaben werden pauschal geschätzt.</p>
+          <p class="fine" id="allowance-note">Weitere Ausgaben schätzen wir aus Ihrem Nettoeinkommen.</p>
           <p class="fine">Keine Kreditzusage und keine Garantie für den gewünschten Betrag. Die Kreditgeberin prüft Ihre vollständige Situation separat.</p>
           <div class="adjust">
             <p class="adjust__title">Betrag oder Laufzeit anpassen</p>
@@ -227,7 +227,7 @@
       <h2 id="faq-title">Gut zu wissen.</h2>
       <div class="faq">
         <details><summary>Kann eine tiefere Monatsrate insgesamt mehr kosten?</summary><p>Ja. Eine längere Laufzeit senkt die Rate, erhöht aber die Zinskosten. Der Rechner zeigt beides.</p></details>
-        <details><summary>Bedeutet ein positives Budgetcheck-Ergebnis eine Kreditzusage?</summary><p>Nein. Der Rechner gibt nur eine grobe Orientierung mit pauschal geschätzten Ausgaben. Ein positives Ergebnis garantiert weder einen Kredit noch den gewünschten Betrag. Die Kreditgeberin prüft Ihre vollständige Situation separat.</p></details>
+        <details><summary>Bedeutet ein positives Budgetcheck-Ergebnis eine Kreditzusage?</summary><p>Nein. Der Rechner schätzt weitere Ausgaben neben der Miete mit 40 % Ihres Nettoeinkommens. Ihre tatsächlichen Ausgaben können abweichen. Ein positives Ergebnis garantiert weder einen Kredit noch den gewünschten Betrag. Die Kreditgeberin prüft Ihre vollständige Situation separat.</p></details>
         <details><summary>Entsteht durch den Rechner eine Verpflichtung?</summary><p>Nein. Ihre Eingaben bleiben im Browser und werden nicht gesendet.</p></details>
         <details><summary>Was kostet die Beratung?</summary><p>Das Erstgespräch ist unverbindlich. <span class="ph">(Konditionen: Platzhalter)</span></p></details>
       </div>
@@ -279,6 +279,6 @@
   </div>
 </footer>
 
-<script src="app.js?v=2026-10-31-simple"></script>
+<script src="app.js?v=2026-10-31-income-expenses"></script>
 </body>
 </html>

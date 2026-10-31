@@ -1,8 +1,8 @@
 # Feedback-Auswertung: persönlicher Budgetcheck
 
-Aktuell: [Vereinfachung zum schnellen Budgetcheck](#vereinfachung-zum-schnellen-budgetcheck).
+Aktuell: [Einkommensabhängige weitere Ausgaben](#einkommensabhängige-weitere-ausgaben).
 Die folgenden früheren Auswertungen und Veröffentlichungsfreigaben sind historisch und gelten
-nicht als Freigabe für die neue Vereinfachung.
+nicht als Freigabe für die neue Ausgabenschätzung.
 
 Stand: 31. Oktober 2026. Auswertung vor Veröffentlichung; lokale Prüfung abgeschlossen.
 Ausgangsstand: `10e7aeb` auf `main`, vor Beginn ohne lokale Änderungen.
@@ -276,3 +276,102 @@ Der Release ist reversibel: Bei einem Problem kann der Merge über einen regulä
 zurückgenommen werden. Es gibt keine Datenbankänderung und keine Migration gespeicherter Kundendaten.
 Merge-Ergebnis und Abgleich der live ausgelieferten HTML-, JavaScript- und CSS-Dateien werden nach
 der Veröffentlichung separat bestätigt; diese Freigabenotiz allein behauptet keinen Live-Erfolg.
+
+## Einkommensabhängige weitere Ausgaben
+
+Stand: 31. Oktober 2026. Kategorie: Verbesserung. Ausgangsstand: `93c56ee` auf `main`,
+zu Beginn ohne lokale Änderungen. Lokal umgesetzt und geprüft auf `feedback/income-based-expenses`.
+Die Veröffentlichung wurde nach dem Push separat ausdrücklich freigegeben (siehe unten).
+
+### Vor Änderung geprüft
+
+Im ausgewählten Projekt und seinen übergeordneten Verzeichnissen wurde keine `AGENTS.md` gefunden.
+Im Projekt gibt es keine `.out-of-scope/`-Einträge. Verwendet wurden `CONTRIBUTING.md`, `README.md`,
+diese Auswertung und der vorhandene Chrome-Prüfablauf `tools/verify-budget.cjs`.
+Der unveränderte Browser-Test bestand; die lokale Ergebnisansicht wurde visuell geprüft.
+
+Der Quelltext verwendete `max(CHF 2'500, Nettoeinkommen × 0.4)`. Damit änderte das Einkommen
+unter CHF 6'250 den Ausgabenansatz nicht. Das bestätigt den Kern des Feedbacks; oberhalb dieser
+Grenze war die Schätzung bereits einkommensabhängig. Ein Abruf über das Web-Werkzeug scheiterte
+mit «is not accessible via this tool». Der anschliessende direkte HTTP-Abruf von Website und
+`app.js` lieferte jeweils Status 200 und bestätigte das Mietfeld und dieselbe Mindestbetragsregel.
+Die Live-Prüfung war rein lesend per HTTP; die Browser-Bedienung erfolgte lokal.
+
+### Angenommen und umgesetzt
+
+- Weitere Ausgaben betragen nun genau 40 % des angegebenen monatlichen Nettoeinkommens,
+  auf Rappen gerundet. Der feste Mindestbetrag von CHF 2'500 entfällt vollständig.
+- Die Miete bleibt ein separater Abzug und beeinflusst den Ausgabenansatz nicht.
+  Es bleiben genau zwei Budgetfragen: Nettoeinkommen und eigener Mietanteil.
+- Budgetansicht, Ergebnis und FAQ erklären die Einkommensbasis. Ergebnis und Beratungszusammenfassung
+  nennen denselben Prozentsatz und denselben berechneten Monatsbetrag als grobe Schätzung.
+- Kreditrate, Laufzeitgrenzen, Validierung und Pflichtinformationen bleiben erhalten.
+  Die Skriptversion im HTML wurde für die geänderte Berechnung erhöht.
+
+### Nicht übernommen und Grenzen
+
+Keine Verbesserungsanforderung wurde abgelehnt. Die 40 % werden weiterhin nicht als nachgewiesene
+tatsächliche Lebenshaltungskosten, Bankvorgabe oder formelle Kreditfähigkeitsprüfung ausgegeben.
+Einkommen allein bestimmt die individuellen Kosten nicht. Bei 0 Einkommen ergibt die Formel auch
+0 geschätzte weitere Ausgaben; daraus folgt keine Aussage über tatsächliche Kosten. Die Hinweise
+auf abweichende tatsächliche Ausgaben und die separate vollständige Prüfung bleiben sichtbar.
+
+### Rückfrage und Antwort
+
+Gefragt wurde nach einer freigegebenen einkommensabhängigen Formel, mit der bestehenden
+40-%-Schätzung ohne Mindestbetrag als konkreter Option. Der Nutzer wählte ausdrücklich
+«Use the existing 40% estimate». Damit ist die Formel für diese Umsetzung geklärt.
+Es gibt keine offene blockierende Frage. Diese Antwort autorisiert keinen Merge und kein Deployment.
+
+### Verifikation und Freigabegrenze
+
+Der angepasste Browser-Test scheiterte vor der Implementierung am neuen erwarteten Spielraum
+und bestand nach der Änderung. Syntaxprüfungen für `app.js` und den Test sowie `git diff --check`
+bestanden. Geprüft wurden mehrere Einkommen von CHF 3'000 bis CHF 10'000, Werte unter, auf und
+über der früheren CHF-6'250-Grenze, sofortige Neuberechnung bei Einkommensänderung, separater
+Mietabzug, Null-Einkommen, Rappenrundung, positive/negative/Null-Ergebnisse und identische Angaben
+in der Beratungszusammenfassung. Die bestehenden Kredit-, Eingabe-, Tastatur- und Navigationstests
+bestanden ebenfalls. Alle drei Schritte wurden bei 1440/900/390/320 Pixeln und 200 % Textgrösse
+auf Überlauf und abgeschnittene Steuerelemente geprüft. Keine Browser-Laufzeitfehler oder externen
+HTTP-Anfragen während des lokalen Browser-Tests.
+
+Neue Nachweise liegen unter `dist/qa/evidence/income-expenses/`; der unveränderte Ausgangstest,
+ausgewählte Ausgangsaufnahmen und die Live-HTTP-Antworten unter `dist/qa/evidence/income-expenses-before/`.
+Die neue Desktop-Budgetansicht und die schmale Ergebnisansicht wurden visuell geprüft.
+Keine Prüfung auf physischen Mobilgeräten oder mit einem Screenreader.
+
+Nach der lokalen Umsetzung hat der Nutzer den Push ausdrücklich angefordert. Der Auftrag wird
+als Push des geprüften Feedback-Branches und Vorlage per Pull Request gegen `main` umgesetzt,
+entsprechend `CONTRIBUTING.md`. Syntaxprüfungen, die vollständige Chrome-Regression und
+`git diff --check` wurden vor dem Push erneut erfolgreich ausgeführt. Der Basisbranch auf dem
+Remote war dabei unverändert gegenüber `93c56ee`.
+
+Ein Merge geht unmittelbar live und war nicht Teil dieses Push-Auftrags. Zum Abschluss des
+Push-Auftrags waren weder Merge noch Deployment durchgeführt. Frühere Veröffentlichungsfreigaben
+gelten für frühere Änderungen.
+
+### Separate Merge-Freigabe und Release-Prüfung
+
+Nach Erstellung von PR #3 hat der Nutzer ausdrücklich den Merge angefordert. Diese Anweisung
+autorisiert den Merge von PR #3 gegen `main` und die damit verbundene automatische Veröffentlichung
+über Hostinger. Sie ist von der vorherigen Formelwahl und dem vorherigen Push-Auftrag getrennt.
+
+Geprüfter Implementierungsstand: `18663b0abd0ce0c5fceb9ed46ee96d6d92f62bd2`, Basis:
+`93c56ee732ea50db23321386d606190a6ddc4562`. Zwei unabhängige, rein lesende Agentenreviews
+prüften Repository-Standards und ursprüngliche Anforderungen getrennt. Beide meldeten keine
+Befunde. Der Anforderungsreview prüfte zusätzlich acht Einkommens-/Mietszenarien unabhängig
+in lokalem Chrome, einschliesslich Rappenrundung, Null-Einkommen und Löschen veralteter Ergebnisse.
+Syntaxprüfungen, die vollständige Chrome-Regression und `git diff --check` bestanden am sauberen
+Implementierungsstand. Das Protokoll nennt genau diese Revision. Die anschliessende Ergänzung
+dokumentiert ausschliesslich Freigabe und Release-Prüfung; Produktcode und Tests bleiben unverändert.
+
+GitHub meldete vor dem Merge keinen Branchschutz und keine anwendbaren Regeln für `main`.
+PR #3 war offen, konfliktfrei und hatte keine CI-Checks oder offenen Review-Kommentare.
+Der aktuelle öffentliche HTTP-Abruf bestätigte vor dem Release weiterhin die alte Skriptversion
+und die Mindestbetragsregel. Nachweise liegen unter `dist/qa/evidence/income-expenses-release/`.
+
+Vorher: Bis CHF 6'250 Einkommen blieb der Ansatz bei CHF 2'500. Nachher: Der Ansatz folgt
+für jedes gültige Einkommen den ausgewählten 40 %, während die Miete separat abgezogen wird.
+Der Release kann mit einem regulären Revert-PR rückgängig gemacht werden. Es gibt keine Migration
+und keine Änderung gespeicherter Kundendaten. Merge-Ergebnis und tatsächliche Live-Auslieferung
+werden nach der Ausführung separat geprüft; diese Notiz allein behauptet keinen Live-Erfolg.
