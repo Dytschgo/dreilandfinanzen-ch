@@ -1,5 +1,9 @@
 # Feedback-Auswertung: persönlicher Budgetcheck
 
+Aktuell: [Vereinfachung zum schnellen Budgetcheck](#vereinfachung-zum-schnellen-budgetcheck).
+Die folgenden früheren Auswertungen und Veröffentlichungsfreigaben sind historisch und gelten
+nicht als Freigabe für die neue Vereinfachung.
+
 Stand: 31. Oktober 2026. Auswertung vor Veröffentlichung; lokale Prüfung abgeschlossen.
 Ausgangsstand: `10e7aeb` auf `main`, vor Beginn ohne lokale Änderungen.
 
@@ -151,3 +155,124 @@ sich auf die Änderungen gegenüber `10e7aebd3dbdf9ea4b9712b82d63a26772f0a01d`.
 Die Änderung ist reversibel: Bei einem Releaseproblem kann der Merge per regulärem Revert-PR
 zurückgenommen werden. Es werden keine gespeicherten Kundendaten oder Datenbankschemata geändert.
 PR-, Merge- und Produktionsstatus werden im Veröffentlichungsablauf separat bestätigt.
+
+## Vereinfachung zum schnellen Budgetcheck
+
+Stand: 31. Oktober 2026. Ausgangspunkt: `5309314` auf `main`, zu Beginn ohne lokale Änderungen.
+Kategorie: Verbesserung. Lokal umgesetzt und geprüft; Veröffentlichung anschliessend ausdrücklich
+freigegeben (siehe «Freigabe und Release-Prüfung» unten).
+
+### Vor Änderung geprüft
+
+Im ausgewählten Projekt gibt es weiterhin keine `AGENTS.md` und keine `.out-of-scope/`-Einträge.
+Verwendet wurden `CONTRIBUTING.md`, `README.md`, diese bestehende Auswertung und
+`tools/verify-budget.cjs`. Der unveränderte Chrome-Test bestand vor der Bearbeitung.
+Die echte lokale Website wurde gerendert und bedient; Budgetansicht auf Desktop und Ergebnisansicht
+auf schmalem Bildschirm wurden angesehen. Der Abruf von `https://dreilandfinanzen.ch` über das
+Web-Werkzeug scheiterte mit «is not accessible via this tool». Keine neue Aussage über den
+Produktionsstand; die Umsetzung und Nachweise betreffen den lokalen Quellstand.
+
+Der Befund bestätigt das Feedback: acht Pflichtangaben im Budget (sechs Geldbeträge, Haushaltsgrösse,
+Einkommensstabilität), lange Hilfetexte und eine ausführliche Ausgabe der 30/36-Zahlungsregel.
+Der Kredit-Schritt bot zehn Laufzeit-Radiobuttons, die Ergebnisansicht ein Laufzeit-Dropdown.
+Die gewünschte kurze Schätzung war somit noch nicht vorhanden. Frühere Feedbackabschnitte
+verlangen diese Detailansicht; das neue Feedback ersetzt diese Vorgabe für den öffentlichen Rechner.
+
+### Angenommen und umgesetzt
+
+- Nur zwei Budgetfelder: monatliches Nettoeinkommen und eigener Mietanteil inklusive Nebenkosten.
+  Keine weiteren Ausgaben-, Haushalts- oder Stabilitätsfragen. Der optionale Verwendungszweck entfällt.
+- Laufzeit als nativer Schieberegler in beiden Ansichten, mit sichtbarem Wert und Tastaturbedienung.
+  Bestehende Laufzeiten, Zinsformel, Betragsgrenzen und die 84-Monatsgrenze über CHF 80'000 bleiben erhalten.
+- Grobe Monatsrechnung aus Einkommen minus Miete, pauschal geschätzten weiteren Ausgaben und der
+  gewählten Monatsrate. Keine Berechnung oder Anzeige von 30/36-Zahlungsbändern im Schnellrechner.
+  Der Rechner trifft keine Scoring-Entscheidung und berechnet keinen zugesagten Kreditbetrag.
+- Kurzes Ergebnis als geschätzter Spielraum, Null-Spielraum oder Budgetlücke. Auch ein negativer Wert
+  ist eine Schätzung, keine Ablehnung. Die lange Abzugstabelle, Grafik und Scoring-Erklärung entfallen.
+- Kurzer sichtbarer Hinweis auf die geschätzten weiteren Ausgaben, keine zusätzliche Eingabe dafür.
+  Beratungszusammenfassung und FAQ verwenden dieselbe Schätzung und dieselbe Abgrenzung.
+- Keine Zusage oder Garantie für den gewünschten Betrag; vollständige Prüfung durch die Kreditgeberin
+  separat. Beispielzins und bestehender rechtlicher Pflichthinweis bleiben sichtbar.
+- Eingabefehler löschen alte Ergebnisse, blockieren den Ergebnisschritt und fokussieren das betroffene Feld.
+  Null ist erlaubt, leere oder negative Werte werden nicht als Null ausgelegt.
+
+### Nicht übernommen
+
+Keine inhaltliche Verbesserungsanforderung wurde abgelehnt. «Einfach» wird jedoch nicht als Weglassen
+der bestehenden Pflichtinformationen oder als Zusage eines Kreditbetrags umgesetzt. Kurze Angaben
+zum Beispielzins, zu pauschalen Kosten und zur fehlenden Kreditzusage bleiben, damit das Rechenbeispiel
+verständlich ist. Das Feedback autorisiert weder Merge noch Deployment.
+
+### Rückfrage, Antwort und Annahme
+
+Gefragt wurde nach einer vereinbarten Pauschale für Ausgaben neben der Miete. Als vorläufige
+Alternative wurden CHF 2'500 oder mindestens 40 % des Nettoeinkommens vorgeschlagen.
+Die Antwort «only rent» bestätigt die Miete als einzige Ausgabenfrage, legt aber keine Pauschale fest.
+Deshalb gibt es keine weitere Ausgabenfrage; weitere Kosten werden wie im Feedback gewünscht geschätzt.
+
+Die lokale Umsetzung verwendet vorläufig `max(CHF 2'500, Nettoeinkommen × 0.4)` pro Monat,
+auf Rappen gerundet. Das ist eine illustrative Annahme, keine nachgewiesene Bank- oder Geschäftsregel
+und keine gesetzliche Pauschale. Sie soll weitere Lebenshaltung, Steuern, Verpflichtungen und einen
+Puffer nur überschlägig abbilden. Ihre individuelle Höhe ist unbekannt. Der verwendete Schätzbetrag
+wird in der Oberfläche genannt; die Konfiguration ist in `EXPENSE_ALLOWANCE` zusammengefasst.
+Diese Annahme war bei Erstellung noch offen; der Nutzer hat die Veröffentlichung damit anschliessend
+auf konkrete Rückfrage ausdrücklich bestätigt (siehe unten).
+Eine spätere vollständige Kreditprüfung muss die tatsächlichen Verhältnisse berücksichtigen.
+
+Beispiel: CHF 6'000 netto − CHF 1'500 Miete − CHF 2'500 geschätzte weitere Ausgaben − CHF 484.77
+Rate für CHF 20'000 über 48 Monate ergibt CHF 1'515.23 geschätzten monatlichen Spielraum.
+Die Änderung auf 120 Monate ergibt CHF 1'761.26, weil die Beispielrate CHF 238.74 beträgt.
+Das verbessert ausschliesslich diese Schätzung und garantiert keinen Kredit.
+
+### Verifikation und Freigabegrenze
+
+Der bestehende Chrome-Prüfablauf wurde an den neuen Verhaltensvertrag angepasst. Die früheren
+Zahlungsbandtests entfallen, weil diese Einstufungen aus dem Schnellrechner entfernt wurden.
+Syntaxprüfungen für Anwendung und Test, `node tools/verify-budget.cjs` und `git diff --check` bestanden.
+Geprüft: genau zwei Budgetfelder, Kreditgrenzen, Laufzeitregler und deren Synchronisierung,
+Schätzpauschale, Zahlenformate, positive/negative/Null-Werte und Rappenfälle, fehlende/ungültige
+Eingaben, keine veralteten Budgetwerte in der Beratungszusammenfassung sowie die sichtbaren Hinweise.
+Alle drei Schritte wurden bei 1440/900/390/320 Pixeln und 200 % Textgrösse geprüft. Ein dabei gefundener
+Überlauf im Betragskopf und in den Gesamtkosten wurde durch Umbruch und ein anpassendes Raster behoben.
+Keine Browser-Laufzeitfehler oder externen HTTP-Anfragen im lokalen Test.
+
+Neue Nachweise liegen unter `dist/qa/evidence/simple/`; frühere Aufnahmen werden nicht als Beleg
+für diese Änderung verwendet. Die Prüfung erfolgt in lokalem Chrome, ohne physische Mobilgeräte
+oder Screenreader. Die Screenshots der geänderten Ansichten wurden visuell geprüft.
+
+Nach Abschluss der lokalen Prüfung hat der Nutzer den Push dieser Änderung ausdrücklich angefordert.
+Die Änderung wird auf einen Review-Branch gepusht und per Pull Request gegen `main` vorgelegt.
+Kein Merge oder Deployment ist Teil dieses Push-Auftrags. Die frühere Veröffentlichungsanweisung
+und frühere Agentenreviews gelten nur für den damaligen Stand. Der Pull-Request-Weg aus
+`CONTRIBUTING.md` bleibt bestehen. Der anschliessende Freigabeschritt ist unten dokumentiert.
+
+### Freigabe und Release-Prüfung
+
+Auf die konkrete Frage, ob PR #2 gemergt und mit `max(CHF 2'500, 40 % des Nettoeinkommens)` als
+Ausgabenannahme veröffentlicht werden soll, hat der Nutzer ausdrücklich mit «yes» geantwortet.
+Diese Antwort gilt der konkreten Freigabefrage, nicht bloss einer unspezifischen Feedbackmeldung.
+Sie autorisiert diesen Merge und die damit verbundene automatische Veröffentlichung über Hostinger.
+Die Kostenannahme bleibt eine illustrative Schätzung und keine allgemeine Bank- oder Rechtsregel.
+
+Unmittelbar vor dem Release war PR #2 offen und konfliktfrei, `main` stand auf `5309314` und der
+geprüfte Implementierungsstand auf `a616d30`. GitHub meldete keinen Branchschutz, keine anwendbaren
+Branch-Regeln und keine CI-Checks. Der öffentliche HTTP-Abruf bestätigte noch die alte Budgetansicht
+mit `pflicht`-Feld, ohne `miete`-Feld und mit Assetversion `2026-10-31-bands`.
+
+Zwei unabhängige, rein lesende Agentenreviews prüften die Änderungen gegenüber `5309314` getrennt
+auf Repository-Standards und ursprüngliche Anforderungen. Standards: keine blockierenden Codebefunde;
+kleiner Nachweismangel durch einen fest codierten Quellstand im Prüfprotokoll. Anforderungen: keine
+Befunde; zusätzlich wurden fünf Einkommens-/Mietszenarien unabhängig im Browser geprüft.
+Der Nachweismangel wurde korrigiert: Das Protokoll nennt nun die tatsächliche Git-Revision und meldet,
+ob versionierte Dateien lokale Änderungen enthalten. Freigabetexte wurden aktualisiert; die
+Berechnung und Bedienung bleiben gegenüber dem unabhängig geprüften Stand unverändert.
+
+Vorher-/Nachher-Nachweise: Der bisherige Rechner verlangte acht Budgetangaben und zeigte die
+30/36-Zahlungsbänder. Die neue Fassung verlangt genau zwei Angaben und zeigt einen geschätzten
+Monatsspielraum ohne Kreditentscheidung. Frühere Aufnahmen liegen unter `dist/qa/evidence/`, neue
+Aufnahmen und das reproduzierbare Prüfprotokoll unter `dist/qa/evidence/simple/`.
+
+Der Release ist reversibel: Bei einem Problem kann der Merge über einen regulären Revert-PR
+zurückgenommen werden. Es gibt keine Datenbankänderung und keine Migration gespeicherter Kundendaten.
+Merge-Ergebnis und Abgleich der live ausgelieferten HTML-, JavaScript- und CSS-Dateien werden nach
+der Veröffentlichung separat bestätigt; diese Freigabenotiz allein behauptet keinen Live-Erfolg.
