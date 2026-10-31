@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/Montserrat-VF.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="assets/fonts/Inter-VF.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="style.css?v=2026-10-31">
+<link rel="stylesheet" href="style.css?v=2026-10-31-bands">
 </head>
 <body>
 <a class="skip" href="#rechner">Zum Kredit &amp; Budgetcheck springen</a>
@@ -102,19 +102,50 @@
         <section class="step" data-step="1" aria-labelledby="s2-title" hidden>
           <h3 class="step__title" id="s2-title" tabindex="-1">Ihr Budget</h3>
           <p class="carry"><span id="carry">CHF 20'000.– · 48 Monate · Rate CHF 486.70</span> <button type="button" class="linkbtn" data-go="0">Ändern</button></p>
+          <p class="muted">Für den Budgetcheck rechnen wir mit 30 Zahlungen, bei kürzerer gewählter Laufzeit mit deren höherer Rate. Bitte alle Beträge erfassen; 0, falls keine Kosten anfallen.</p>
           <div class="field">
-            <label for="ink">Nettoeinkommen pro Monat <span>CHF</span></label>
-            <input id="ink" inputmode="numeric" autocomplete="off" placeholder="z. B. 6'000">
+            <label for="ink">Verlässliches Nettoeinkommen pro Monat <span>CHF</span></label>
+            <input id="ink" inputmode="decimal" autocomplete="off" placeholder="z. B. 6'000" aria-describedby="ink-hint budget-err">
+            <small id="ink-hint">Regelmässiges Einkommen nach Abzügen. Unsichere Boni oder Überstunden nicht einrechnen.</small>
           </div>
           <div class="field">
-            <label for="aus">Ausgaben pro Monat <span>CHF</span></label>
-            <input id="aus" inputmode="numeric" autocomplete="off" placeholder="z. B. 3'800" aria-describedby="aus-hint">
-            <small id="aus-hint">Inklusive jährlicher Rechnungen auf den Monat verteilt (z. B. Steuern, Versicherungen) und bestehender Kreditraten.</small>
+            <label for="aus">Lebenshaltung pro Monat <span>CHF</span></label>
+            <input id="aus" inputmode="decimal" autocomplete="off" placeholder="z. B. 3'800" aria-describedby="aus-hint budget-err">
+            <small id="aus-hint">Wohnen, Krankenkasse, Essen, Transport, Haushalt und Kosten für Angehörige. Verpflichtungen und Jahresrechnungen unten separat erfassen.</small>
+          </div>
+          <div class="field">
+            <label for="pflicht">Bestehende Verpflichtungen pro Monat <span>CHF</span></label>
+            <input id="pflicht" inputmode="decimal" autocomplete="off" placeholder="0, falls keine" aria-describedby="pflicht-hint budget-err">
+            <small id="pflicht-hint">Andere Kreditraten, Leasing, Unterhaltszahlungen und ähnliche Verpflichtungen.</small>
+          </div>
+          <div class="field">
+            <label for="jahr">Steuern und andere Jahresrechnungen <span>CHF pro Jahr</span></label>
+            <input id="jahr" inputmode="decimal" autocomplete="off" placeholder="z. B. 6'000" aria-describedby="jahr-hint budget-err">
+            <small id="jahr-hint">Wir teilen den Betrag durch zwölf. Nur erfassen, was nicht bereits vom Einkommen abgezogen oder oben eingerechnet ist.</small>
           </div>
           <div class="field">
             <label for="res">Monatliche Reserve <span>CHF</span></label>
-            <input id="res" inputmode="numeric" autocomplete="off" placeholder="z. B. 500" aria-describedby="res-hint">
-            <small id="res-hint">Was Sie für Unvorhergesehenes zurücklegen möchten.</small>
+            <input id="res" inputmode="decimal" autocomplete="off" placeholder="z. B. 500" aria-describedby="res-hint budget-err">
+            <small id="res-hint">Für unerwartete Kosten und Änderungen Ihrer Situation. Eine Reserve von 0 bietet keinen zusätzlichen Schutz.</small>
+          </div>
+          <div class="field">
+            <label for="mehr">Zusatzkosten in einem teureren Monat <span>CHF</span></label>
+            <input id="mehr" inputmode="decimal" autocomplete="off" placeholder="z. B. 300" aria-describedby="mehr-hint budget-err">
+            <small id="mehr-hint">Zusätzliche Ausgaben über dem normalen Budget. Damit prüfen Sie den Spielraum, ohne die monatliche Reserve aufzubrauchen. Bei 0 wird keine Mehrbelastung geprüft.</small>
+          </div>
+          <div class="field">
+            <label for="haushalt">Personen, die von diesem Budget leben</label>
+            <input id="haushalt" inputmode="numeric" autocomplete="off" placeholder="z. B. 2" aria-describedby="haushalt-hint budget-err">
+            <small id="haushalt-hint">Sie selbst und alle mitversorgten Personen. Die Haushaltsgrösse besprechen wir persönlich; der Rechner setzt keine Pauschalen an.</small>
+          </div>
+          <div class="field">
+            <label for="stabil">Wie stabil ist dieses Einkommen?</label>
+            <select id="stabil" aria-describedby="stabil-hint budget-err">
+              <option value="">Bitte wählen</option>
+              <option value="stabil">Voraussichtlich stabil</option>
+              <option value="unsicher">Schwankend / unsicher</option>
+            </select>
+            <small id="stabil-hint">Bei unsicherem Einkommen braucht es eine genauere persönliche Prüfung.</small>
           </div>
           <p class="err" id="budget-err" role="alert"></p>
           <div class="actions">
@@ -126,13 +157,29 @@
         <!-- 3 · Ihr Spielraum -->
         <section class="step" data-step="2" aria-labelledby="s3-title" hidden>
           <h3 class="step__title" id="s3-title" tabindex="-1">Ihr Spielraum</h3>
-          <div class="estimate" id="estimate" data-state="ok" aria-live="polite">
-            <p class="estimate__status" id="est-status">Rechnerischer Spielraum</p>
+          <div class="estimate" id="estimate" data-state="review" aria-live="polite">
+            <p class="estimate__status" id="est-status">Persönliche Prüfung nötig</p>
             <p class="estimate__amount"><b id="est-frei">–</b> <span id="est-unit">bleiben pro Monat</span></p>
             <div class="bar" aria-hidden="true"><i class="bar__aus"></i><i class="bar__res"></i><i class="bar__rate"></i><i class="bar__frei"></i></div>
-            <ul class="legend"><li class="l-aus">Ausgaben</li><li class="l-res">Reserve</li><li class="l-rate">Kreditrate</li><li class="l-frei">Spielraum</li></ul>
+            <ul class="legend"><li class="l-aus">Lebenshaltung, Verpflichtungen &amp; Jahresanteil</li><li class="l-res">Reserve</li><li class="l-rate">Prüfrate</li><li class="l-frei">Spielraum</li></ul>
             <p class="estimate__text" id="est-text"></p>
           </div>
+          <dl class="budget-math" aria-label="Monatliche Budgetrechnung in CHF">
+            <div><dt>Verlässliches Nettoeinkommen</dt><dd id="b-ink">–</dd></div>
+            <div><dt>− Lebenshaltung</dt><dd id="b-aus">–</dd></div>
+            <div><dt>− Bestehende Verpflichtungen</dt><dd id="b-pflicht">–</dd></div>
+            <div><dt>− Jahresrechnungen ÷ 12</dt><dd id="b-jahr">–</dd></div>
+            <div><dt>− Reserve</dt><dd id="b-res">–</dd></div>
+            <div><dt>= Für Rückzahlung verfügbar</dt><dd id="b-capacity">–</dd></div>
+            <div><dt id="budget-rate-label">− Prüfrate</dt><dd id="b-rate">–</dd></div>
+            <div><dt>= Monatlicher Spielraum</dt><dd id="b-frei">–</dd></div>
+            <div><dt>Spielraum im teureren Monat</dt><dd id="b-stress">–</dd></div>
+            <div><dt>Benötigte Zahlungen mit verfügbarem Budget</dt><dd id="b-payments">–</dd></div>
+          </dl>
+          <p class="fine">Dreiland-Budgetregel: bis 30 Zahlungen rechnerisch tragbar, 31–36 Zahlungen Optimierung nötig, ab 37 Zahlungen nicht tragbar. Berechnet mit dem verfügbaren Monatsbudget und dem Beispielzins; unabhängig von der gewählten Vertragslaufzeit.</p>
+          <p class="fine" id="budget-context"></p>
+          <p class="fine">Diese Berechnung zeigt Ihren geschätzten monatlichen Spielraum. Ob ein Kredit tragbar ist, prüfen wir gemeinsam anhand Ihrer vollständigen Situation.</p>
+          <p class="fine">Unser Budgetcheck ersetzt die formelle Schweizer Kreditfähigkeitsprüfung durch die Kreditgeberin nicht.</p>
           <div class="adjust">
             <p class="adjust__title">Betrag oder Laufzeit anpassen</p>
             <div class="adjust__row">
@@ -153,8 +200,12 @@
           <ul>
             <li>Rate als gleichbleibende Monatsrate mit einem Beispielzins von 7.9 % effektivem Jahreszins. Ihr tatsächlicher Zins hängt von der Prüfung durch die Bank ab.</li>
             <li>Gesamtrückzahlung = Rate × Laufzeit. Zinskosten = Gesamtrückzahlung − Kreditbetrag.</li>
-            <li>Spielraum = Nettoeinkommen − Ausgaben − Reserve − Rate.</li>
-            <li>Beispielschwellen: unter CHF 0 «zu wenig Spielraum», unter 10 % des Nettoeinkommens «wenig Spielraum». Das ist keine Kreditfähigkeitsprüfung.</li>
+            <li>Spielraum = verlässliches Nettoeinkommen − Lebenshaltung − bestehende Verpflichtungen − Jahresrechnungen ÷ 12 − Reserve − Prüfrate.</li>
+            <li>Für Dreilands Budgetcheck berechnen wir die Prüfrate mit 30 monatlichen Zahlungen zum gleichen Beispielzins. Bei einer kürzeren gewählten Laufzeit verwenden wir deren höhere Rate. Die angezeigte Monatsrate und Gesamtrückzahlung beziehen sich weiterhin auf Ihre gewählte Laufzeit.</li>
+            <li>Für die Einstufung berechnen wir, wie viele monatliche Zahlungen mit Nettoeinkommen − Lebenshaltung − Verpflichtungen − Jahresrechnungen ÷ 12 − Reserve nötig sind, inklusive Beispielzins. Bis 30 Zahlungen: rechnerisch tragbar. 31–36: Optimierung nötig. Ab 37 oder wenn keine Rückzahlung möglich ist: im Budgetcheck nicht tragbar. Teilzahlungen zählen als ganze Zahlung; benötigte Monatsbeträge werden auf volle Rappen aufgerundet.</li>
+            <li>Ein negativer Spielraum zeigt eine Lücke gegenüber der Prüfrate. Bei 0 bleibt kein Puffer. Zusatzkosten im teureren Monat werden nochmals vom Spielraum abgezogen. Auch im Bereich bis 30 Zahlungen bleiben Hinweise auf fehlenden Puffer, fehlende Reserve und unsicheres Einkommen sichtbar.</li>
+            <li>Auch ein positiver Spielraum, etwa CHF 50, bedeutet nicht automatisch, dass der Kredit gut tragbar ist. Haushaltsgrösse, Einkommensstabilität und vollständiges Budget prüfen wir gemeinsam. Ein fester Einkommensanteil ist keine Freigaberegel.</li>
+            <li>Dies ist eine persönliche Budgetplanung. Die Kreditgeberin führt ihre formelle Schweizer Kreditfähigkeitsprüfung separat durch; die 30 Zahlungen sind keine gesetzliche Zusage- oder Ablehnungsgrenze.</li>
             <li>Kreditbetrag ab CHF 5'000; über CHF 80'000 höchstens 84 Monate. Ihre Eingaben bleiben im Browser.</li>
           </ul>
         </details>
@@ -246,7 +297,7 @@
       <h2 id="faq-title">Gut zu wissen.</h2>
       <div class="faq">
         <details><summary>Kann eine tiefere Monatsrate insgesamt mehr kosten?</summary><p>Ja. Eine längere Laufzeit senkt die Rate, erhöht aber die Zinskosten. Der Rechner zeigt beides.</p></details>
-        <details><summary>Bedeutet ein positives Budgetcheck-Ergebnis eine Kreditzusage?</summary><p>Nein. Es ist eine erste Einschätzung mit Beispielwerten. Die Kreditfähigkeit wird im persönlichen Gespräch und von der Bank geprüft.</p></details>
+        <details><summary>Bedeutet ein positives Budgetcheck-Ergebnis eine Kreditzusage?</summary><p>Nein. Auch ein kleiner positiver Spielraum kann zu knapp sein. Wir prüfen gemeinsam Ihr vollständiges Budget, Ihre Haushaltsgrösse und die Stabilität Ihres Einkommens. Die formelle Schweizer Kreditfähigkeitsprüfung durch die Kreditgeberin bleibt davon getrennt und wird durch diesen Rechner nicht ersetzt.</p></details>
         <details><summary>Entsteht durch den Rechner eine Verpflichtung?</summary><p>Nein. Ihre Eingaben bleiben im Browser und werden nicht gesendet.</p></details>
         <details><summary>Was kostet die Beratung?</summary><p>Das Erstgespräch ist unverbindlich. <span class="ph">(Konditionen: Platzhalter)</span></p></details>
       </div>
@@ -298,6 +349,6 @@
   </div>
 </footer>
 
-<script src="app.js?v=2026-10-31"></script>
+<script src="app.js?v=2026-10-31-bands"></script>
 </body>
 </html>

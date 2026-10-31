@@ -17,6 +17,8 @@
     exampleAnnualRate: 7.9, minAmount: 5000, sliderMaxAmount: 300000, amountStep: 500,
     terms: [12, 24, 36, 48, 60, 72, 84, 96, 108, 120], standardMaxTerm: 84, longTermMaxAmount: 80000,
     defaultAmount: 20000, defaultTerm: 48,
+    budgetPayments: 30, // Dreiland-Budgetplanung, keine formelle Kreditfähigkeitsprüfung
+    optimisationPayments: 36,
   });
   const maxTermFor = amount => (amount > RULES.longTermMaxAmount ? RULES.standardMaxTerm : RULES.terms.at(-1));
   function estimate(amount, months) {
@@ -36,8 +38,16 @@
   /* ---------- Format ---------- */
   const group = n => String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, "'");
   const chf = n => `CHF ${group(n)}.–`;
-  const chf2 = n => { const [a, b] = Math.abs(n).toFixed(2).split("."); return `CHF ${group(+a)}.${b}`; };
-  const parse = el => { const s = String(el.value).replace(/[\s'’]/g, ""); return /^\d+$/.test(s) ? +s : NaN; };
+  const chf2 = n => { const [a, b] = Math.abs(n).toFixed(2).split("."); return `CHF ${n < 0 ? "−" : ""}${group(+a)}.${b}`; };
+  const parse = el => {
+    const s = String(el.value).replace(/[\s'’]/g, "");
+    const v = /^\d+(?:[.,]\d{1,2})?$/.test(s) ? Number(s.replace(",", ".")) : NaN;
+    return Number.isSafeInteger(Math.round(v * 100)) ? v : NaN;
+  };
+  const formatInput = v => {
+    const [whole, decimals] = String(v).split(".");
+    return group(+whole) + (decimals ? `.${decimals}` : "");
+  };
 
   /* ---------- Zustand ---------- */
   const tool = $("#rechner");
@@ -81,29 +91,76 @@
     $("#adj-rate").textContent = e ? chf2(e.monthly) : "–";
     $("#adj-betrag-out").textContent = ok ? chf(state.amount) : "–";
     $("#carry").textContent = e ? `${chf(state.amount)} · ${state.months} Monate · Rate ${chf2(e.monthly)}` : "Bitte zuerst einen gültigen Kreditbetrag wählen.";
-    if (e) budget(e.monthly);
+    budget(e ? estimate(state.amount, Math.min(state.months, RULES.budgetPayments)).monthly : null);
   }
 
   /* ---------- Budget ---------- */
   const TEXT = {
-    ok: ["Rechnerischer Spielraum", "Nach Ausgaben, Reserve und Rate bleibt Ihnen rechnerisch Luft. Im Gespräch prüfen wir, ob das auch in einem schwierigen Monat gilt."],
-    warn: ["Wenig Spielraum", "Die Rate passt rechnerisch, aber knapp. Oft hilft ein kleinerer Betrag oder eine längere Laufzeit – unten anpassen oder gemeinsam besprechen."],
-    bad: ["Zu wenig Spielraum", "Für diese Rate bleibt nicht genug übrig. Ein kleinerer Betrag oder ein anderer Weg passt hier besser."],
+    go: ["Tragbar im Budgetcheck", "Mit dem verfügbaren Monatsbudget ist die Rückzahlung in höchstens 30 Zahlungen rechnerisch möglich. Auch ein positiver Spielraum, etwa CHF 50, bedeutet nicht automatisch komfortable Tragbarkeit. Die persönliche Prüfung bleibt nötig."],
+    optimise: ["Optimierung nötig", "Das verfügbare Monatsbudget reicht rechnerisch für 31 bis 36 Zahlungen. Wir prüfen gemeinsam, ob ein kleinerer Kreditbetrag oder eine Anpassung des Budgets sinnvoll ist."],
+    unaffordable: ["Im Budgetcheck nicht tragbar", "Das verfügbare Monatsbudget reicht nicht für eine Rückzahlung innerhalb von 36 Zahlungen. Bitte besprechen Sie einen kleineren Kreditbetrag oder andere Möglichkeiten mit uns."],
   };
-  const budgetFields = [["#ink", "Nettoeinkommen"], ["#aus", "Ausgaben"], ["#res", "Reserve"]];
+  function repaymentAssessment(capacity) {
+    // Ganze Zahlungen inklusive Beispielzins. Auf volle Rappen aufrunden, damit
+    // ein rechnerisch fehlender Rappen nicht zur besseren Einstufung führt.
+    for (let payments = 1; payments <= RULES.optimisationPayments; payments++) {
+      const required = Math.ceil((estimate(state.amount, payments).monthly - 1e-9) * 100) / 100;
+      if (capacity >= required) return { payments, band: payments <= RULES.budgetPayments ? "go" : "optimise" };
+    }
+    return { payments: 37, band: "unaffordable" };
+  }
+  const budgetFields = [["#ink", "Nettoeinkommen"], ["#aus", "Lebenshaltung"], ["#pflicht", "Verpflichtungen"], ["#jahr", "Jahresrechnungen"], ["#res", "Reserve"], ["#mehr", "Zusatzkosten"]];
+  const householdValid = () => Number.isSafeInteger(parse($("#haushalt"))) && parse($("#haushalt")) >= 1;
+  const stabilityValid = () => ["stabil", "unsicher"].includes($("#stabil").value);
+  function readBudget(rate) {
+    const [inc, living, commitments, annual, reserve, extra] = budgetFields.map(([id]) => parse($(id)));
+    if (rate === null || [inc, living, commitments, annual, reserve, extra].some(isNaN) || !householdValid() || !stabilityValid()) return null;
+    const annualMonth = annual / 12;
+    const expenses = living + commitments + annualMonth;
+    const capacity = Math.floor((inc - expenses - reserve) * 100 + 1e-6) / 100;
+    const assessment = repaymentAssessment(capacity);
+    // Rappen für Ergebnis und Status: Anzeige und Warnung müssen übereinstimmen.
+    const buffer = Math.round((inc - expenses - reserve - rate) * 100) / 100;
+    const stressed = Math.round((buffer - extra) * 100) / 100;
+    const uncertain = $("#stabil").value === "unsicher";
+    const pressure = buffer <= 0 || stressed <= 0 || reserve === 0 || uncertain;
+    const status = assessment.band === "unaffordable" ? "bad" : assessment.band === "optimise" || pressure ? "warn" : "review";
+    const paymentsText = capacity <= state.amount * (Math.pow(1 + RULES.exampleAnnualRate / 100, 1 / 12) - 1) ? "Keine Rückzahlung möglich" : assessment.payments === 37 ? "37 oder mehr" : String(assessment.payments);
+    return { inc, living, commitments, annualMonth, reserve, extra, expenses, rate, buffer, stressed, uncertain, status, pressure, capacity, paymentsText, ...assessment, household: parse($("#haushalt")) };
+  }
   function budget(rate) {
-    const [inc, aus, res] = budgetFields.map(([id]) => parse($(id)));
-    if ([inc, aus, res].some(isNaN)) return false;
-    const frei = inc - aus - res - rate;
-    const st = frei < 0 ? "bad" : frei < inc * 0.1 ? "warn" : "ok";
-    const base = Math.max(inc, aus + res + rate) || 1;
+    const b = readBudget(rate);
+    if (!b) {
+      $("#estimate").dataset.state = "incomplete";
+      delete $("#estimate").dataset.band;
+      $("#est-status").textContent = "Bitte Eingaben vervollständigen";
+      $("#est-text").textContent = "Für Ihren Spielraum brauchen wir einen gültigen Kreditbetrag und alle Budgetangaben. Bitte 0 eintragen, wenn keine Kosten anfallen.";
+      $("#est-frei").textContent = "–";
+      $("#est-unit").textContent = "";
+      $$(".budget-math dd").forEach(el => { el.textContent = "–"; });
+      $$(".bar i", tool).forEach(el => el.style.setProperty("--w", "0%"));
+      $("#budget-context").textContent = "";
+      return false;
+    }
+    const base = Math.max(b.inc, b.expenses + b.reserve + rate) || 1;
     const w = (cls, v) => $(cls, tool).style.setProperty("--w", `${(Math.max(v, 0) / base) * 100}%`);
-    w(".bar__aus", aus); w(".bar__res", res); w(".bar__rate", rate); w(".bar__frei", frei);
-    $("#estimate").dataset.state = st;
-    $("#est-status").textContent = TEXT[st][0];
-    $("#est-text").textContent = TEXT[st][1];
-    $("#est-frei").textContent = chf(Math.abs(frei));
-    $("#est-unit").textContent = frei < 0 ? "fehlen pro Monat" : "bleiben pro Monat";
+    w(".bar__aus", b.expenses); w(".bar__res", b.reserve); w(".bar__rate", rate); w(".bar__frei", b.buffer);
+    $("#estimate").dataset.state = b.status;
+    $("#estimate").dataset.band = b.band;
+    $("#est-status").textContent = b.band === "go" && b.pressure ? "Bis 30 Zahlungen – Budget unter Druck" : TEXT[b.band][0];
+    const concerns = [];
+    if (b.buffer <= 0) concerns.push("Für die angezeigte Prüfrate bleibt kein positiver Puffer.");
+    else if (b.stressed <= 0) concerns.push("Die Zusatzkosten im teureren Monat schöpfen den Puffer aus.");
+    if (b.reserve === 0) concerns.push("Eine Reserve fehlt.");
+    if (b.uncertain) concerns.push("Das Einkommen ist unsicher.");
+    $("#est-text").textContent = `${TEXT[b.band][1]} ${concerns.join(" ")}`.trim();
+    $("#est-frei").textContent = chf2(Math.abs(b.buffer));
+    $("#est-unit").textContent = b.buffer < 0 ? "fehlen pro Monat" : "bleiben pro Monat";
+    for (const [id, v] of Object.entries({ ink: b.inc, aus: b.living, pflicht: b.commitments, jahr: b.annualMonth, res: b.reserve, capacity: b.capacity, rate, frei: b.buffer, stress: b.stressed })) $("#b-" + id).textContent = chf2(v);
+    $("#b-payments").textContent = b.paymentsText;
+    const payments = Math.min(state.months, RULES.budgetPayments);
+    $("#budget-rate-label").textContent = `− Prüfrate (${payments} Zahlungen)`;
+    $("#budget-context").textContent = `${b.household} ${b.household === 1 ? "Person lebt" : "Personen leben"} von diesem Budget. ${b.uncertain ? "Das Einkommen ist unsicher und muss genauer geprüft werden." : "Sie haben das Einkommen als stabil eingeschätzt."} ${b.extra === 0 ? "Es wurde keine Mehrbelastung geprüft." : `Im teureren Monat sind ${chf2(b.extra)} zusätzliche Kosten berücksichtigt.`} Die Prüfrate basiert auf ${payments} Zahlungen; eine längere gewählte Laufzeit vergrössert diesen Budgetspielraum nicht.`;
     return true;
   }
   function validateBudget() {
@@ -112,8 +169,14 @@
       $(id).setAttribute("aria-invalid", String(bad));
       return bad;
     });
-    $("#budget-err").textContent = missing.length ? `Bitte als Zahl in CHF angeben: ${missing.map(m => m[1]).join(", ")}.` : "";
-    return !missing.length;
+    $("#haushalt").setAttribute("aria-invalid", String(!householdValid()));
+    $("#stabil").setAttribute("aria-invalid", String(!stabilityValid()));
+    const errors = [];
+    if (missing.length) errors.push(`Bitte als nicht negative Zahl in CHF mit höchstens zwei Nachkommastellen angeben (0, falls keine): ${missing.map(m => m[1]).join(", ")}.`);
+    if (!householdValid()) errors.push("Bitte mindestens 1 Person als ganze Zahl angeben.");
+    if (!stabilityValid()) errors.push("Bitte die Einkommensstabilität wählen.");
+    $("#budget-err").textContent = errors.join(" ");
+    return !errors.length;
   }
 
   /* ---------- Schritte ---------- */
@@ -146,8 +209,12 @@
   adjLz.addEventListener("change", () => { state.months = +adjLz.value; render(); });
   budgetFields.forEach(([id]) => {
     $(id).addEventListener("input", () => { render(); if ($("#budget-err").textContent) validateBudget(); });
-    $(id).addEventListener("blur", e => { const v = parse(e.target); if (!isNaN(v)) e.target.value = group(v); });
+    $(id).addEventListener("blur", e => { const v = parse(e.target); if (!isNaN(v)) e.target.value = formatInput(v); });
   });
+  ["#haushalt", "#stabil"].forEach(id => $(id).addEventListener(id === "#stabil" ? "change" : "input", () => {
+    render();
+    if ($("#budget-err").textContent) validateBudget();
+  }));
 
   /* ---------- Beratung anfragen (aus jedem Schritt) ---------- */
   function consultSummary() {
@@ -155,8 +222,9 @@
     const e = estimate(state.amount, state.months);
     const zweck = $("#zweck").value;
     let s = `${zweck ? zweck + ": " : ""}${chf(state.amount)} über ${state.months} Monate, Rate ca. ${chf2(e.monthly)} (Beispiel 7.9 %).`;
-    const [inc, aus, res] = budgetFields.map(([id]) => parse($(id)));
-    if (![inc, aus, res].some(isNaN)) s += ` Spielraum nach Rate: ${chf(inc - aus - res - e.monthly)} pro Monat.`;
+    const payments = Math.min(state.months, RULES.budgetPayments);
+    const b = readBudget(estimate(state.amount, payments).monthly);
+    if (b) s += ` Budgetcheck mit ${payments} Zahlungen und Prüfrate ${chf2(b.rate)}: Nettoeinkommen ${chf2(b.inc)} − Lebenshaltung ${chf2(b.living)} − Verpflichtungen ${chf2(b.commitments)} − Jahresanteil ${chf2(b.annualMonth)} − Reserve ${chf2(b.reserve)}. Verfügbar für Rückzahlung ${chf2(b.capacity)} pro Monat; benötigte Zahlungen: ${b.paymentsText}; Dreiland-Einstufung: ${TEXT[b.band][0]}.${b.pressure ? " Zusätzlicher Budgetdruck: bitte Ergebnis und vollständige Situation persönlich prüfen." : ""} Spielraum ${chf2(b.buffer)} pro Monat; im teureren Monat nach ${chf2(b.extra)} Zusatzkosten ${chf2(b.stressed)}. Haushalt: ${b.household} Person(en), Einkommen ${b.uncertain ? "unsicher" : "als stabil eingeschätzt"}. Persönliche Prüfung nötig; keine formelle Kreditfähigkeitsprüfung.`;
     return s;
   }
   $$("[data-consult]").forEach(a => a.addEventListener("click", () => {

@@ -82,8 +82,8 @@ h1 { font-size: clamp(2.4rem, 1.6rem + 3.4vw, 4rem); font-weight: 700; line-heig
 .tool__head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; margin-bottom: 1rem; }
 .tool__title { margin: 0; font-size: 1.15rem; font-weight: 700; }
 .tool__badge { padding: .3rem .55rem; border-radius: 3px; background: var(--mist); border: 1px solid var(--line-strong); font: 600 .72rem/1.2 var(--display); letter-spacing: .02em; color: var(--navy); }
-.stepper { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0 0 1.1rem; padding: 0; list-style: none; }
-.stepper button { width: 100%; display: flex; align-items: center; gap: .45rem; padding: .5rem .6rem; border: 1px solid var(--line); border-radius: var(--r); background: #fff; font: 600 .82rem/1.2 var(--display); color: var(--slate); cursor: pointer; text-align: left; }
+.stepper { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 6rem), 1fr)); gap: 6px; margin: 0 0 1.1rem; padding: 0; list-style: none; }
+.stepper button { width: 100%; display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; padding: .5rem .6rem; border: 1px solid var(--line); border-radius: var(--r); background: #fff; font: 600 .82rem/1.2 var(--display); color: var(--slate); cursor: pointer; text-align: left; }
 .stepper button span { display: grid; place-items: center; flex: none; width: 1.35rem; height: 1.35rem; border: 1px solid currentColor; border-radius: 50%; font-size: .72rem; }
 .stepper button:hover { border-color: var(--navy); color: var(--navy); }
 .stepper button[aria-current="step"] { background: var(--navy); border-color: var(--navy); color: #fff; }
@@ -135,6 +135,7 @@ input[type="range"]:focus-visible::-webkit-slider-runnable-track { box-shadow: 0
 .result__costs dd { margin: .15rem 0 0; font: 600 1.05rem/1.2 var(--display); font-variant-numeric: tabular-nums; }
 .actions { display: flex; flex-wrap: wrap; gap: .6rem; }
 .actions .btn--primary:only-child { width: 100%; }
+.tool .actions .btn { padding-block: .75em; }
 
 .carry { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .4rem 1rem; margin-bottom: 1rem; padding: .7rem .9rem; background: var(--mist); border-radius: var(--r); font: 600 .9rem/1.4 var(--display); color: var(--navy); font-variant-numeric: tabular-nums; }
 .linkbtn { padding: 0; border: 0; background: none; font: 500 .9rem var(--text); color: var(--blue); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
@@ -154,9 +155,12 @@ input[type="range"]:focus-visible::-webkit-slider-runnable-track { box-shadow: 0
 .legend { display: flex; flex-wrap: wrap; gap: .25rem 1rem; margin: 0 0 .8rem; padding: 0; list-style: none; font-size: .8rem; }
 .legend li::before { content: ""; display: inline-block; width: 9px; height: 9px; margin-right: .4rem; }
 .estimate__text { color: #fff; font-size: .95rem; }
+.budget-math { display: grid; gap: .5rem; margin-block: 1rem; font-size: .9rem; }
+.budget-math > div { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: .2rem 1rem; }
+.budget-math dd { margin: 0; font-weight: 600; color: var(--navy); font-variant-numeric: tabular-nums; }
 .adjust { margin: 1rem 0; padding: .9rem 0 0; border-top: 1px solid var(--line); }
 .adjust__title { margin-bottom: .6rem; font: 600 .95rem var(--display); color: var(--navy); }
-.adjust__row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 1rem; align-items: end; }
+.adjust__row { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); gap: 1rem; align-items: end; }
 .adjust__row .field { margin-bottom: 0; }
 .adjust__row label span { font: 600 .9rem var(--display); color: var(--navy); margin-left: .3rem; }
 .adjust__rate { margin-top: .6rem; display: flex; justify-content: space-between; font-size: .92rem; }
