@@ -22,24 +22,28 @@ Dann http://127.0.0.1:5180/ öffnen.
 
 ## Kredit & Budgetcheck
 
-Ein Werkzeug in drei Schritten (Ihr Kredit → Ihr Budget → Ihr Spielraum). Kreditregeln und Schätzformel entsprechen
-`credit-core` v0.2 (`shared/credit-rules.json`, `estimateCredit`): Beispielzins 7.9 % eff., ab CHF 5'000, Start CHF 20'000 /
-48 Monate, Laufzeiten 12–120 Monate, über CHF 80'000 höchstens 84 Monate. Rate ohne Einkommensangabe; Budget optional.
-Antragsformular und Zustellung aus credit-core sind noch nicht angebunden (siehe offene Punkte im Projekt).
+Drei kurze Schritte: Ihr Kredit → Ihr Budget → Ihr Spielraum. Im Budget werden nur Nettoeinkommen
+und Miete inklusive Nebenkosten erfragt. Betrag und Laufzeit lassen sich per Schieberegler ändern;
+die Laufzeit ist in 12-Monats-Schritten wählbar. Kein Verwendungszweck, keine weiteren Budgetfragen.
 
-Der persönliche Budgetcheck zieht Lebenshaltung, bestehende Verpflichtungen, Jahresrechnungen ÷ 12,
-Reserve und die Prüfrate vom verlässlichen Nettoeinkommen ab. Dreilands Prüfrate basiert auf 30 monatlichen
-Zahlungen zum Beispielzins; bei kürzerer gewählter Laufzeit gilt deren höhere Rate. Die Kreditkonditionen
-oben bleiben auf die gewählte Laufzeit bezogen. Zusatzkosten zeigen den Spielraum in einem teureren Monat.
-Haushaltsgrösse und Einkommensstabilität ergänzen die persönliche Prüfung, ohne automatische Haushalts-Pauschalen.
-Keine 10-%-Freigabe, keine Kreditzusage und kein Ersatz für die formelle Kreditfähigkeitsprüfung der Kreditgeberin.
+Kreditregeln und Zinsformel entsprechen weiterhin `credit-core` v0.2: Beispielzins 7.9 % effektiv,
+ab CHF 5'000, Start CHF 20'000 / 48 Monate, Laufzeiten 12–120 Monate, über CHF 80'000 höchstens
+84 Monate. Antragsformular und Zustellung sind noch nicht angebunden; das Kontaktformular ist eine Demo.
 
-Die Einstufung richtet sich nach den benötigten Zahlungen mit dem Betrag, der vor der neuen Rate
-nach allen Ausgaben und Reserve verfügbar ist, inklusive Beispielzins: bis 30 rechnerisch tragbar,
-31–36 Optimierung nötig, ab 37 nicht tragbar. Benötigte Monatsbeträge werden auf volle Rappen
-aufgerundet; eine Restzahlung zählt als ganze Zahlung. Die Vertragslaufzeit verändert diese Einstufung
-nicht. Auch im Bereich bis 30 bleiben Hinweise auf einen fehlenden Puffer, unsicheres Einkommen
-oder fehlende Reserve bestehen. Keine Rückzahlungsmöglichkeit ist ebenfalls «nicht tragbar».
+Die grobe Schätzung rechnet: Nettoeinkommen − Miete − geschätzte weitere Ausgaben − gewählte
+Monatsrate. Die früheren 30/36-Zahlungsbänder und Tragbarkeitseinstufungen sind aus dem Rechner
+entfernt. Eine längere Laufzeit verändert nur das Rechenbeispiel, nicht eine Kreditentscheidung.
+
+Für weitere Ausgaben gilt vorläufig `max(CHF 2'500, 40 % des Nettoeinkommens)` pro Monat,
+auf Rappen gerundet. Dies ist eine illustrative Projektannahme, keine bestätigte Geschäftsregel,
+Bankvorgabe oder gesetzliche Pauschale. Sie deckt andere Ausgaben einschliesslich eines Puffers nur
+überschlägig ab; Haushaltsgrösse, Steuern, Verpflichtungen und tatsächliche Ausgaben sind unbekannt.
+Der angesetzte Betrag wird als Schätzung sichtbar genannt. Vor Veröffentlichung fachlich prüfen.
+Der Reviewer bestätigte «only rent» als einzige Ausgabenfrage, aber keinen bestimmten Pauschalbetrag.
+
+Ergebnisse zeigen einen geschätzten Spielraum oder eine Budgetlücke. Sie garantieren weder einen Kredit
+noch den gewünschten Betrag. Die vollständige Prüfung bleibt separat bei der Kreditgeberin.
+Beispielzins, Pflichthinweis und «Erste Einschätzung, keine Kreditzusage» bleiben sichtbar.
 
 ### Budgetcheck prüfen
 
@@ -49,18 +53,23 @@ im ignorierten Verzeichnis `dist/qa` installiert; die Website bleibt ohne extern
 ```powershell
 npm install --prefix dist/qa --no-save --package-lock=false playwright
 node --check app.js
+node --check tools/verify-budget.cjs
 node tools/verify-budget.cjs
 git diff --check
 ```
 
 Der Test lädt die echte `index.html` mit `app.js` und `style.css` lokal in Headless Chrome.
-Er prüft Berechnung, 30/31/36/37-Zahlungsgrenzen (auch einen Rappen darunter), Warnungen,
-Eingabefehler, Beratungszusammenfassung, Tastaturbedienung und Layout
-bei 1440/900/390/320 Pixeln sowie 200 % Textgrösse. Protokoll und Screenshots liegen unter
-`dist/qa/evidence/`. Die Screenshots des Rechners blenden nur für die Aufnahme den haftenden Seitenkopf
-und den Sprunglink aus. Es werden keine produktiven Anfragen gestellt.
+Er prüft die zwei Budgetfelder, fehlende/ungültige Angaben, Schätzpauschale, gewählte Rate,
+positive/negative/Null-Ergebnisse, Rappen, Laufzeitgrenzen, beide Laufzeitregler per Tastatur,
+Beratungszusammenfassung und Rücknavigation. Alle drei Schritte werden bei 1440/900/390/320 Pixeln
+sowie 200 % Textgrösse auf Überlauf und abgeschnittene Steuerelemente geprüft.
+Protokoll und Screenshots liegen unter `dist/qa/evidence/simple/`. Die Screenshots des Rechners
+blenden nur für die Aufnahme den haftenden Seitenkopf und den Sprunglink aus.
+Es werden keine produktiven Anfragen gestellt.
 
-Die [Feedback-Auswertung](tools/feedback-affordability.md) dokumentiert Annahmen und Abgrenzung.
+Die [Feedback-Auswertung](tools/feedback-affordability.md#vereinfachung-zum-schnellen-budgetcheck) dokumentiert
+Befund, Umsetzung, Annahmen und offene Freigabepunkte. Frühere Abschnitte sind historischer Kontext;
+ihre Veröffentlichungsfreigabe gilt nicht für diese neue Änderung.
 
 ## Veröffentlichen
 
