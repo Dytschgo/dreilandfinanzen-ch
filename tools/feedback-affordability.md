@@ -1,6 +1,6 @@
 # Feedback-Auswertung: persönlicher Budgetcheck
 
-Aktuell: [Schnelle Schätzung und gesetzliche Prüfung](#schnelle-schätzung-und-gesetzliche-prüfung).
+Aktuell: [Verständliche Tragbarkeitsbegriffe](#verständliche-tragbarkeitsbegriffe).
 Die folgenden früheren Auswertungen und Veröffentlichungsfreigaben sind historisch und gelten
 nicht als Freigabe für die neue Ausgabenschätzung.
 
@@ -566,3 +566,136 @@ Ein lesender öffentlicher HTTP-Abruf vor dem Merge bestätigte die bisherige Sk
 nach Ausführung separat geprüft; diese Notiz allein behauptet keinen Release-Erfolg.
 Bei Problemen ist ein regulärer Revert-PR möglich. Keine Datenmigration oder Änderung gespeicherter
 Kundendaten. Unternehmensplatzhalter und die dokumentierten rechtlichen Grenzen bleiben bestehen.
+
+
+## Sichtbare Beratung und farbiger Budgetstatus
+
+Stand: 2. November 2026. Kategorie: Verbesserung. Ausgangsstand `6652b80` auf `main`,
+zu Beginn ohne lokale Änderungen. Umsetzung lokal auf `feedback/consultation-cta-status`.
+Keine `AGENTS.md` im ausgewählten Projekt; massgebend bleiben `CONTRIBUTING.md`, `README.md`
+und die bestehende Feedbackauswertung mit Chrome-Verifikation.
+
+### Befund und Auswahl vor Umsetzung
+
+Der vorherige Durchgang verglich die öffentlich ausgelieferten Dateien `index.html` und `style.css`
+mit dem lokalen Stand; sie stimmten überein. Der Beratungsbutton im Desktop-Header verschwindet
+auf schmalen Bildschirmen im Menü, im Einstieg fehlt eine Beratungsaktion und der Link unter dem
+Rechner ist klein. Die echte lokale Website wurde für zwei isolierte Vorschläge gerendert und
+bei 1440/390/320 Pixeln geprüft: A «Direkt im Einstieg» und B «Beim Scrollen sichtbar».
+Beide wurden als Vergleich im Gespräch gezeigt. Die Auswahl lautet ausdrücklich «A».
+Referenz: `dist/qa/evidence/consultation-options/hero-button.html`, Screenshot `A-390.png`.
+Das ist die gewählte Komposition, nicht die dauerhaft sichtbare Leiste von B.
+
+Vor der Änderung bestand die unveränderte Chrome-Regression. Im Quelltext gab es drei bestehende
+Ergebnisfälle: positiver Spielraum, exakt Null und Budgetlücke, alle mit weissem Statuswort.
+Eine verbindliche Tragbarkeit wurde nicht behauptet. Die aktuelle Auswahl ergänzt ausdrücklich
+Grün/Gelb/Rot für eine schneller lesbare Einschätzung.
+
+### Angenommen und umgesetzt
+
+- Variante A: dunkelblauer Beratungsbutton direkt unter der Hauptaussage, mit Pfeil und
+  «Persönlich und unverbindlich». Unter dem Rechner ersetzt ein vollbreiter Button den Textlink,
+  mit eigener kurzer Einleitung und Trennlinie. Kein neuer Kontaktprozess und keine feste Leiste.
+- Bestehendes `data-consult` und `#kontakt` bleiben erhalten. Angaben werden wie bisher in die
+  Beratungszusammenfassung übernommen; aus allen Schritten per Tastatur erreichbar.
+- Grün: «Rate rechnerisch gedeckt» bei positivem monatlichem Spielraum nach Rate.
+  Gelb: «Budget ausgeschöpft» bei exakt CHF 0.00. Rot: «Budgetlücke» bei negativem Spielraum.
+  Es gelten die vorhandenen Rappenrundungen. CHF 0.01 positiv ist grün, CHF 0.01 negativ rot.
+- Keine zusätzliche CHF-50/100-Grenze und keine neue Scoringlogik. Fehlende oder ungültige
+  Angaben entfernen den farbigen Status. Status in Ergebnis und Beratungszusammenfassung identisch.
+- Farbe betrifft das Statuswort; Betrag und erklärender Text bleiben gut lesbar.
+  Textlabels vermitteln die Bedeutung auch ohne Farberkennung. Gelb dient nur als semantischer
+  Status, nicht als dekorative Goldfarbe. Logo und Markenmaterial bleiben unverändert.
+
+### Grenzen und Fragen
+
+Keine angefragte visuelle Verbesserung abgelehnt. Die Interpretation «grün = Kredit tragbar oder
+bewilligt» wird nicht übernommen. Der Status beschreibt ausschliesslich das vorhandene Rechenbeispiel.
+Die sichtbare Abgrenzung zur formellen KKG-Prüfung und die Pflichtwarnung bleiben erhalten.
+[Art. 28 KKG](https://www.fedlex.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/2002/593/20230901/de/pdf-a/fedlex-data-admin-ch-eli-cc-2002-593-20230901-de-pdf-a.pdf)
+begründet weiterhin die bereits dokumentierte Trennung; die Farben ersetzen diese Prüfung nicht.
+Keine neue rechtliche Gesamtfreigabe behauptet.
+
+Keine blockierende Rückfrage. Für Gelb wird der vorhandene Null-Fall verwendet; eine neue Grenze
+für «knapp» ist nicht definiert und wird nicht erfunden. Die Berechnung mit Reserve bleibt unverändert.
+Frühere Push-/Merge-/Deployment-Freigaben betreffen PR #4 und gelten nicht für diese neue Änderung.
+
+### Verifikation und Freigabegrenze
+
+Syntaxchecks für Anwendung und Test, erweiterte Chrome-Regression sowie `git diff --check` bestanden.
+Geprüft: CTA-Ziele und Tastaturbedienung, Übernahme der Angaben aus allen drei Schritten,
+Farben und Wortlaut bei positiv/Null/negativ einschliesslich Rappengrenzen, Statuswechsel bei
+Regleränderungen, fehlende Angaben, identische Zusammenfassung und mindestens 4.5:1 Textkontrast
+auf dem tatsächlichen Panelhintergrund. Bestehende Rechen-, Eingabe-, Laufzeit- und Navigationstests
+bleiben erhalten. Alle drei Schritte bei 1440/900/390/320 Pixeln und 200 % Textgrösse ohne Überlauf.
+Keine Browser-Laufzeitfehler und keine externen Anfragen im lokalen Test.
+Einstieg bei 390 Pixeln sowie grüne, gelbe und rote Ergebnisansichten wurden visuell geprüft.
+Nachweise: `dist/qa/evidence/cta-status/`. Keine Screenreader- oder physische Geräteprüfung.
+
+Die Änderungen bleiben lokal zur Prüfung. Kein Push, Merge oder Deployment. Der PR-Weg nach
+`main` und die separate Veröffentlichungsfreigabe bleiben bestehen.
+
+
+## Verständliche Tragbarkeitsbegriffe
+
+Stand: 2. November 2026. Kategorie: Textverbesserung. Fortsetzung auf
+`feedback/consultation-cta-status`, Basis `6652b80`. Die sechs vorhandenen lokalen Änderungen
+zur gewählten CTA-Variante A und den Statusfarben bleiben erhalten. Keine `AGENTS.md` im
+Projekt; bestehende CONTRIBUTING-/README-Regeln und Chrome-Verifikation weiterverwendet.
+
+### Vor Änderung geprüft
+
+Die echte lokale Ergebnisansicht wurde geöffnet und visuell geprüft; der unveränderte Test bestand.
+Der Status lautete grün «Rate rechnerisch gedeckt», gelb «Budget ausgeschöpft» und rot «Budgetlücke».
+Der erklärende Text nannte bei positiven Ergebnissen nur die noch nötige Tragfähigkeitsprüfung.
+Damit waren die ausdrücklich gewünschten Wörter in Status und Erklärung noch nicht vorhanden.
+Die öffentliche Website wurde zuletzt als identisch mit Basis `6652b80` bestätigt; die Farb- und
+CTA-Änderungen dieses Branches sind weiterhin lokal und nicht veröffentlicht.
+
+### Angenommen und umgesetzt
+
+- Die gewünschten Wörter stehen nun ausdrücklich im farbigen Ergebnisstatus:
+  «Tragbar (Schätzung)», «Knapp tragbar (Schätzung)», «Nicht tragbar (Schätzung)».
+- Auch der erklärende Satz nennt die Rate in dieser Budgetschätzung jeweils «tragbar»,
+  «knapp tragbar» oder «nicht tragbar». Beim Null-Fall erklärt er die vollständige Budgetnutzung;
+  beim negativen Fall die Budgetlücke. Der Beratungsübertrag verwendet dieselben Begriffe.
+- Grün bleibt positiver Rest nach Rate, Gelb exakt CHF 0.00, Rot negativ. Keine neue Schwelle,
+  keine zusätzliche CHF-50/100-Forderung; Berechnung, separater Sicherheitspuffer und Rappenrundung
+  bleiben bestehen. Ein Rappen positiv bleibt grün, ein Rappen negativ rot.
+- Qualifikation als Schätzung steht unmittelbar beim farbigen Wort, die Abgrenzung zur KKG-Prüfung
+  und der Hinweis «keine Kreditzusage» bleiben sichtbar. Unvollständige Angaben erhalten keine Einstufung.
+
+### Nicht übernommen und Fragen
+
+Keine Textanforderung abgelehnt. Die frühere Wahl neutralerer Synonyme ist durch diesen ausdrücklichen
+Wortlautwunsch ersetzt; eine definitive Kreditzusage oder gesetzliche Kreditfähigkeitsprüfung ist
+weiterhin nicht Teil des Rechners. «Tragbar» beschreibt nur das vorhandene illustrative Rechenbeispiel.
+
+Keine blockierende Frage: Die Bitte betrifft den Wortlaut; die vorhandenen drei Bereiche werden
+beibehalten. Eine zusätzliche «knapp»-Spanne ist nicht definiert und wird nicht stillschweigend ergänzt.
+
+### Verifikation und Freigabegrenze
+
+Syntaxchecks, `git diff --check` und die angepasste Chrome-Regression bestanden. Die Tests prüfen
+alle drei Wörter in Label, erklärendem Satz und Beratungszusammenfassung, einschliesslich
+Schätzungszusatz, Ein-Rappen-Grenzen und neutralem Zustand bei unvollständigen Angaben.
+Farb- und Kontrastchecks, bestehende Rechen-/Eingabe-/Regler-/CTA-Tastaturtests und Navigation
+bestehen weiterhin. Alle drei Schritte bei 1440/900/390/320 Pixeln und 200 % Textgrösse ohne
+Überlauf; keine Browser-Laufzeitfehler und keine externen Anfragen im lokalen Test.
+Die drei Ergebnisfarben und die schmale Darstellung wurden visuell geprüft.
+Nachweise: `dist/qa/evidence/affordability-wording/`.
+
+Kein Push, Merge oder Deployment. Frühere Freigaben gelten für frühere PRs; der bestehende
+PR- und Freigabeweg bleibt erforderlich.
+
+### Separate Push-Freigabe für Beratungsbutton und Statuswortlaut
+
+Nach Abschluss der lokalen Umsetzung hat der Nutzer ausdrücklich «push» angefordert. Dieser Auftrag
+autorisiert Commit und Push von `feedback/consultation-cta-status` sowie einen Pull Request gegen
+`main`. Enthalten sind die ausgewählte CTA-Variante A, die Statusfarben und die anschliessend
+präzisierten Begriffe «Tragbar», «Knapp tragbar» und «Nicht tragbar», jeweils als Schätzung.
+Die sechs geänderten Dateien wurden erneut geprüft; `origin/main` steht unverändert auf `6652b80`.
+Syntaxchecks und `git diff --check` bestanden. Die Chrome-Regression wird vor dem Push am
+committeten Stand ausgeführt; Nachweise bleiben lokal unter `dist/qa/evidence/affordability-wording/`.
+Kein Merge oder Deployment ist Teil dieser Freigabe. Die bestehenden Prüf- und Freigabeanforderungen
+vor Veröffentlichung bleiben erhalten.

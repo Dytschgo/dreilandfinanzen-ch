@@ -6,7 +6,7 @@ const { pathToFileURL } = require('node:url');
 const { execFileSync } = require('node:child_process');
 const { chromium } = require('../dist/qa/node_modules/playwright');
 const root = path.resolve(__dirname, '..');
-const output = path.join(root, 'dist', 'qa', 'evidence', 'quick-estimate');
+const output = path.join(root, 'dist', 'qa', 'evidence', 'affordability-wording');
 
 (async () => {
   await fs.mkdir(output, { recursive: true });
@@ -40,6 +40,22 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'quick-estimate');
       assert.deepEqual(clipped, [], label + ': clipped controls');
     };
     const capture = name => page.locator('#rechner').screenshot({ path: path.join(output, name + '.png'), style: '.header, .skip { visibility: hidden; }' });
+
+    for (const width of [1440, 900, 390, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      const cta = page.locator('.hero__consult [data-consult]');
+      const bounds = await cta.boundingBox();
+      assert.ok(bounds.height >= 44 && bounds.x >= 0 && bounds.x + bounds.width <= width);
+      await cta.focus();
+      await page.keyboard.press('Enter');
+      assert.equal(await page.evaluate(() => location.hash), '#kontakt');
+      assert.match(await text('#consult-text'), /CHF 20'000/);
+      await step(0);
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await page.screenshot({ path: path.join(output, 'hero-' + width + '.png') });
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    checks.push('Option A hero CTA and full-width calculator CTA; hero contact navigation works by keyboard at 1440/900/390/320px');
 
     assert.equal(await text('#rate'), 'CHF 484.77');
     assert.equal(await page.locator('#zweck').count(), 0);
@@ -98,6 +114,7 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'quick-estimate');
     await slider('#adj-betrag', 1000);
     assert.equal(await text('#adj-betrag-out'), "CHF 300'000.–");
     assert.equal(await page.locator('#adj-lz').getAttribute('max'), '84');
+    assert.equal(await page.locator('#estimate').getAttribute('data-state'), 'negative');
     await go(2, 1);
     await go(1, 0);
     await page.locator('#betrag').fill('20000');
@@ -136,15 +153,16 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'quick-estimate');
     checks.push('Selected-term rate, sliders and estimate stay in sync; housing stays separate');
 
     for (const [income, rent, buffer, unit, status] of [
-      ['3000', '1500', 'CHF 115.23', 'bleiben pro Monat nach Rate', 'Grobe Budgetschätzung'],
-      ['10000', '1500', "CHF 5'015.23", 'bleiben pro Monat nach Rate', 'Grobe Budgetschätzung'],
-      ['4000', '2265.23', 'CHF 50.00', 'bleiben pro Monat nach Rate', 'Grobe Budgetschätzung'],
-      ['4000', '2315.23', 'CHF 0.00', 'bleiben pro Monat nach Rate', 'Kein geschätzter Spielraum'],
-      ['4000', '2315.24', 'CHF 0.01', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
-      ['0', '0', 'CHF 484.77', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
-      ['0.01', '0', 'CHF 484.76', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
-      ['0.04', '0', 'CHF 484.74', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
-      ["6'000,50", '1500,25', "CHF 2'215.32", 'bleiben pro Monat nach Rate', 'Grobe Budgetschätzung'],
+      ['3000', '1500', 'CHF 115.23', 'bleiben pro Monat nach Rate', 'Tragbar (Schätzung)'],
+      ['10000', '1500', "CHF 5'015.23", 'bleiben pro Monat nach Rate', 'Tragbar (Schätzung)'],
+      ['4000', '2265.23', 'CHF 50.00', 'bleiben pro Monat nach Rate', 'Tragbar (Schätzung)'],
+      ['4000', '2315.22', 'CHF 0.01', 'bleiben pro Monat nach Rate', 'Tragbar (Schätzung)'],
+      ['4000', '2315.23', 'CHF 0.00', 'bleiben pro Monat nach Rate', 'Knapp tragbar (Schätzung)'],
+      ['4000', '2315.24', 'CHF 0.01', 'fehlen pro Monat', 'Nicht tragbar (Schätzung)'],
+      ['0', '0', 'CHF 484.77', 'fehlen pro Monat', 'Nicht tragbar (Schätzung)'],
+      ['0.01', '0', 'CHF 484.76', 'fehlen pro Monat', 'Nicht tragbar (Schätzung)'],
+      ['0.04', '0', 'CHF 484.74', 'fehlen pro Monat', 'Nicht tragbar (Schätzung)'],
+      ["6'000,50", '1500,25', "CHF 2'215.32", 'bleiben pro Monat nach Rate', 'Tragbar (Schätzung)'],
     ]) {
       await setBudget(income, rent);
       assert.equal(await text('#est-frei'), buffer);
@@ -154,6 +172,33 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'quick-estimate');
       }
       assert.equal(await text('#est-unit'), unit);
       assert.equal(await text('#est-status'), status);
+      assert.match(await text('#est-status'), /\(Schätzung\)/);
+      const description = await text('#est-text');
+      if (status.startsWith('Nicht')) assert.match(description, /Budgetschätzung nicht tragbar/);
+      else if (status.startsWith('Knapp')) assert.match(description, /Budgetschätzung knapp tragbar/);
+      else assert.match(description, /Budgetschätzung tragbar/);
+      const expectedState = status === 'Nicht tragbar (Schätzung)' ? 'negative' : status === 'Knapp tragbar (Schätzung)' ? 'balanced' : 'positive';
+      assert.equal(await page.locator('#estimate').getAttribute('data-state'), expectedState);
+      const appearance = await page.locator('#est-status').evaluate(el => {
+        const context = document.createElement('canvas').getContext('2d');
+        const luminance = color => {
+          context.fillStyle = color;
+          context.fillRect(0, 0, 1, 1);
+          const rgb = [...context.getImageData(0, 0, 1, 1).data].slice(0, 3).map(n => n / 255).map(n => n <= .04045 ? n / 12.92 : ((n + .055) / 1.055) ** 2.4);
+          return rgb[0] * .2126 + rgb[1] * .7152 + rgb[2] * .0722;
+        };
+        const text = luminance(getComputedStyle(el).color);
+        const background = luminance(getComputedStyle(el.closest('.estimate')).backgroundColor);
+        context.fillStyle = getComputedStyle(el).color;
+        context.fillRect(0, 0, 1, 1);
+        return { ratio: (Math.max(text, background) + .05) / (Math.min(text, background) + .05), rgb: [...context.getImageData(0, 0, 1, 1).data].slice(0, 3) };
+      });
+      assert.ok(appearance.ratio >= 4.5, 'Status contrast: ' + appearance.ratio);
+      const [red, green, blue] = appearance.rgb;
+      if (expectedState === 'positive') assert.ok(green > red && green > blue, 'Green status');
+      else if (expectedState === 'balanced') assert.ok(red > blue && green > blue && Math.abs(red - green) < 80, 'Yellow status');
+      else assert.ok(red > green && red > blue, 'Red status');
+      if (rent === '2315.22') await capture('positive-one-cent');
       if (rent === '2315.23' || rent === '2315.24') await capture(rent === '2315.23' ? 'zero' : 'negative');
       await page.locator('.step[data-step="2"] [data-consult]').click();
       assert.match(await text('#consult-text'), /Miete/);
@@ -161,6 +206,7 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'quick-estimate');
       assert.match(await text('#consult-text'), /Vereinfachte Schätzung/);
       assert.ok((await text('#consult-text')).includes(buffer.replace('CHF ', unit === 'fehlen pro Monat' ? 'CHF −' : 'CHF ')));
       assert.match(await text('#consult-text'), /keine Garantie/);
+      assert.ok((await text('#consult-text')).includes(status.replace(' (Schätzung)', ' (grobe Schätzung)')));
     }
     checks.push('Positive, zero, negative and one-cent estimates, Swiss decimal input and signed consultation summary');
 
@@ -169,6 +215,7 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'quick-estimate');
       await go(2, 1);
       await page.locator('#' + id).fill(value);
       assert.equal(await text('#est-frei'), '–');
+      assert.equal(await page.locator('#estimate').getAttribute('data-state'), 'incomplete');
       await go(1, 2);
       await step(1);
       assert.equal(await page.locator('#' + id).getAttribute('aria-invalid'), 'true');
@@ -205,6 +252,18 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'quick-estimate');
     assert.match(await documentsFAQ.textContent(), /Bei Zweifeln.*überprüfen/);
     checks.push('Approximate inputs without uploads; visible KKG assessment boundary, neutral result copy, accessible document and statutory-assessment FAQs');
     checks.push('Invalid inputs clear stale figures and summaries; scoring rules removed and estimate/legal notices retained');
+    checks.push('Tragbar / knapp tragbar / nicht tragbar in colored labels, explanation and summary; green surplus, yellow exactly exhausted, red shortfall at cent boundaries; neutral incomplete state, matching summary and status contrast at least 4.5:1');
+
+    for (const from of [0, 1, 2]) {
+      await page.locator(`.stepper [data-go="${from}"]`).click();
+      const cta = page.locator('#rechner > .tool__consult [data-consult]');
+      await cta.focus();
+      await page.keyboard.press('Enter');
+      assert.equal(await page.evaluate(() => location.hash), '#kontakt');
+      await step(from);
+      assert.match(await text('#consult-text'), /Tragbar \(grobe Schätzung\)/);
+    }
+    await page.locator('.stepper [data-go="2"]').click();
 
     for (const width of [1440, 900, 390, 320]) {
       await page.setViewportSize({ width, height: 1000 });
