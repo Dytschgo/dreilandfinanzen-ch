@@ -699,3 +699,33 @@ Syntaxchecks und `git diff --check` bestanden. Die Chrome-Regression wird vor de
 committeten Stand ausgeführt; Nachweise bleiben lokal unter `dist/qa/evidence/affordability-wording/`.
 Kein Merge oder Deployment ist Teil dieser Freigabe. Die bestehenden Prüf- und Freigabeanforderungen
 vor Veröffentlichung bleiben erhalten.
+
+### Separate Merge-Freigabe für PR #5 und Release-Prüfung
+
+Nach Erstellung von PR #5 hat der Nutzer ausdrücklich «merge» angefordert. Das autorisiert
+den Merge gegen `main` und die automatische Veröffentlichung über Hostinger.
+
+Geprüfter Implementierungsstand: `e7c0e9861b58ab59c2ec590a3379f569562ca2f1`, Basis:
+`6652b80b96f096ce187ea5ac8ac8f2f285fe428e`. Zwei unabhängige, rein lesende Reviews prüften
+Repository-Standards und ursprüngliche Anforderungen getrennt. Standards: keine Befunde.
+Anforderungen: keine Befunde. Der Anforderungsreview prüfte zusätzlich in Chrome bei 320 Pixeln
+die Tastaturbedienung des Einstiegsbuttons, positive/Null/negative Rappengrenzen, übereinstimmende
+Beratungszusammenfassung, fehlenden Überlauf und Entfernen der Farbe bei unvollständigen Angaben.
+Die Reviews bestätigen keine umfassende rechtliche Konformität.
+
+Syntaxchecks für Anwendung und Test, vollständige Chrome-Regression und `git diff --check`
+bestanden erneut am sauberen Implementierungsstand. GitHub meldete PR #5 als offen und konfliktfrei,
+ohne CI-Checks, Reviews oder offene Kommentare. Kein Branchschutz und keine anwendbaren
+Branch-Regeln für `main`. Diese Ergänzung dokumentiert nur die Freigabe und Prüfung;
+Produktcode und Tests bleiben gegenüber dem geprüften Stand unverändert.
+
+Vorher: Im Einstieg fehlt die Beratungsaktion, unter dem Rechner steht ein Textlink und das Ergebnis
+verwendet weisse, neutral formulierte Statuswörter. Nachher: die ausgewählte CTA-Variante A und
+explizite grüne/gelbe/rote Schätzungsbegriffe. Ein lesender öffentlicher HTTP-Abruf vor dem Merge
+bestätigte noch den bisherigen Stand ohne `hero__consult` und ohne «Knapp tragbar».
+Nachweise: `dist/qa/evidence/cta-status-release/`.
+
+Die Änderung lässt sich über einen regulären Revert-PR zurücknehmen. Keine Datenmigration oder
+Änderung gespeicherter Kundendaten. Bestehende Platzhalter und Grenzen der Budgetschätzung
+bleiben dokumentiert. Merge-Ergebnis und tatsächliche Live-Auslieferung werden nach Ausführung
+separat geprüft; diese Freigabenotiz allein behauptet keinen Release-Erfolg.
