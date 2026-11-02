@@ -536,3 +536,33 @@ auf `e924788`. Syntaxchecks und `git diff --check` bestanden; die Chrome-Regress
 committeten Stand ausgeführt. Protokoll und Aufnahmen bleiben lokal unter `dist/qa/evidence/quick-estimate/`.
 Keine Freigabe zum Merge oder Deployment. Frühere Veröffentlichungsfreigaben gelten weiterhin nur
 für die damaligen Änderungen; die gesetzlichen und betrieblichen Grenzen oben bleiben offen.
+
+### Separate Merge-Freigabe und Release-Prüfung
+
+Nach Erstellung von PR #4 hat der Nutzer ausdrücklich «merge» angefordert. Das autorisiert den
+Merge von PR #4 nach `main` und die damit verbundene automatische Veröffentlichung über Hostinger.
+
+Implementierungsstand: `6c78f2e252b2db00523bec401973f6f90c869644`, Basis:
+`e924788ab57afbc618eb523b6ba18c151dbd56c3`. Zwei unabhängige, rein lesende Reviews prüften
+Repository-Standards und ursprüngliche Anforderungen getrennt. Standards: keine Befunde.
+Anforderungen: keine Befunde; zusätzlich unabhängige Chrome-Prüfung mit CHF 5'200 Einkommen
+und CHF 1'800 Wohnkosten. Unverheiratet ohne Kinder: CHF 1'840 vor Rate, CHF 1'355.23 danach.
+Verheiratet mit drei Kindern: CHF 800 vor Rate, CHF 315.23 danach. Beratungszusammenfassung
+und KKG-Abgrenzung stimmten überein. Diese Reviews sind keine rechtliche Gesamtfreigabe.
+
+Syntaxchecks, vollständige Chrome-Regression und `git diff --check` bestanden erneut am sauberen
+Implementierungsstand. GitHub meldete PR #4 als offen und konfliktfrei, keine CI-Checks, Reviews
+oder offenen Kommentare, keinen Branchschutz und keine anwendbaren Branch-Regeln für `main`.
+Die vorliegende Ergänzung dokumentiert nur die Freigabe; Produktcode und Tests bleiben unverändert.
+
+Vorher-/Nachher-Beispiel: CHF 6'000 Einkommen und CHF 1'500 Wohnen ergaben bisher nach der
+48-Monatsrate CHF 484.77 einen Spielraum von CHF 1'615.23. Das neue Modell ergibt für einen
+unverheirateten Erwachsenen ohne Kinder CHF 2'215.23 nach Rate, einschliesslich des separaten
+5-%-Puffers. Es bleibt eine illustrative Schätzung ohne Kreditzusage.
+
+Ein lesender öffentlicher HTTP-Abruf vor dem Merge bestätigte die bisherige Skriptversion
+`2026-10-31-income-expenses` und den 40-%-Ansatz. Nachweise unter
+`dist/qa/evidence/household-release/`. Der Merge und die tatsächliche Live-Auslieferung werden
+nach Ausführung separat geprüft; diese Notiz allein behauptet keinen Release-Erfolg.
+Bei Problemen ist ein regulärer Revert-PR möglich. Keine Datenmigration oder Änderung gespeicherter
+Kundendaten. Unternehmensplatzhalter und die dokumentierten rechtlichen Grenzen bleiben bestehen.
