@@ -116,6 +116,12 @@
   function allowanceNote(b) {
     return `Weitere Ausgaben: ${Math.round(b.share * 100)} % des Netto-Haushaltseinkommens (${chf2(b.allowance)}), plus 5 % Sicherheitspuffer (${chf2(b.headroom)}) pro Monat. Vereinfachte Schätzung für Lebenshaltung, Steuern, Krankenkasse und Verpflichtungen; tatsächliche Kosten können abweichen.`;
   }
+  // Describes the estimate only; no lending decision or extra minimum remainder.
+  function budgetStatus(buffer) {
+    if (buffer < 0) return { state: "negative", label: "Nicht tragbar" };
+    if (buffer === 0) return { state: "balanced", label: "Knapp tragbar" };
+    return { state: "positive", label: "Tragbar" };
+  }
   function budget(rate) {
     const b = readBudget(rate);
     if (!b) {
@@ -128,12 +134,17 @@
       $("#allowance-note").textContent = "Weitere Ausgaben schätzen wir anhand Ihrer Haushaltsangaben.";
       return false;
     }
-    $("#estimate").dataset.state = b.buffer < 0 ? "warn" : "review";
-    $("#est-status").textContent = b.buffer < 0 ? "Geschätzte Budgetlücke" : b.buffer === 0 ? "Kein geschätzter Spielraum" : "Grobe Budgetschätzung";
+    const status = budgetStatus(b.buffer);
+    $("#estimate").dataset.state = status.state;
+    $("#est-status").textContent = `${status.label} (Schätzung)`;
     $("#est-frei").textContent = chf2(Math.abs(b.buffer));
     $("#est-unit").textContent = b.buffer < 0 ? "fehlen pro Monat" : "bleiben pro Monat nach Rate";
     $("#repayment-budget").textContent = `Geschätztes Budget vor Kreditrate: ${chf2(Math.max(0, b.available))} pro Monat nach Sicherheitspuffer.`;
-    $("#est-text").textContent = b.buffer < 0 ? "Die gewählte Rate übersteigt Ihr geschätztes Budget. Besprechen Sie Ihre Möglichkeiten mit uns." : "Kein zusätzlicher Mindestrestbetrag in dieser Schätzung. Ob die Rate tragbar ist, muss separat geprüft werden.";
+    $("#est-text").textContent = b.buffer < 0
+      ? "Die gewählte Rate ist in dieser Budgetschätzung nicht tragbar: Es besteht eine Budgetlücke. Besprechen Sie Ihre Möglichkeiten mit uns."
+      : b.buffer === 0
+        ? "Die gewählte Rate ist in dieser Budgetschätzung knapp tragbar: Das Budget wird vollständig genutzt. Kein zusätzlicher Mindestrestbetrag nötig."
+        : "Die gewählte Rate ist in dieser Budgetschätzung tragbar. Kein zusätzlicher Mindestrestbetrag nötig.";
     $("#allowance-note").textContent = allowanceNote(b);
     return true;
   }
@@ -185,7 +196,7 @@
     const e = estimate(state.amount, state.months);
     let s = `${chf(state.amount)} über ${state.months} Monate, Rate ca. ${chf2(e.monthly)} (Beispiel 7.9 %).`;
     const b = readBudget(e.monthly);
-    if (b) s += ` Grobe Budgetschätzung: Netto-Haushaltseinkommen ${chf2(b.inc)}, Miete oder Hypothek ${chf2(b.rent)}, verheiratet: ${b.married === "yes" ? "Ja" : "Nein"}, unterhaltsberechtigte Kinder: ${b.children}. ${allowanceNote(b)} Geschätztes Budget vor Kreditrate ${chf2(Math.max(0, b.available))} pro Monat. Geschätzter Spielraum nach Rate ${chf2(b.buffer)} pro Monat. Kein zusätzlicher Mindestrestbetrag in dieser Schätzung. Keine Kreditfähigkeitsprüfung nach KKG, keine Kreditzusage und keine Garantie für den gewünschten Betrag; vor Vertragsabschluss prüft die Kreditgeberin Ihre vollständige Situation.`;
+    if (b) s += ` Grobe Budgetschätzung: Netto-Haushaltseinkommen ${chf2(b.inc)}, Miete oder Hypothek ${chf2(b.rent)}, verheiratet: ${b.married === "yes" ? "Ja" : "Nein"}, unterhaltsberechtigte Kinder: ${b.children}. ${allowanceNote(b)} Geschätztes Budget vor Kreditrate ${chf2(Math.max(0, b.available))} pro Monat. Geschätzter Spielraum nach Rate ${chf2(b.buffer)} pro Monat. ${budgetStatus(b.buffer).label} (grobe Schätzung). Kein zusätzlicher Mindestrestbetrag in dieser Schätzung. Keine Kreditfähigkeitsprüfung nach KKG, keine Kreditzusage und keine Garantie für den gewünschten Betrag; vor Vertragsabschluss prüft die Kreditgeberin Ihre vollständige Situation.`;
     return s;
   }
   $$("[data-consult]").forEach(a => a.addEventListener("click", () => {

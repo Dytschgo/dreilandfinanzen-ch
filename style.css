@@ -138,8 +138,10 @@ input[type="range"]:focus-visible::-webkit-slider-runnable-track { box-shadow: 0
 .linkbtn { padding: 0; border: 0; background: none; font: 500 .9rem var(--text); color: var(--blue); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 
 .estimate { padding: 18px 20px; background: var(--ink); border-radius: var(--r); color: var(--light-text); border-left: 4px solid var(--light-blue); }
-.estimate[data-state="warn"] { border-left-color: #AFC0DD; }
-.estimate__status { font: 600 .74rem/1.2 var(--display); letter-spacing: .14em; text-transform: uppercase; color: #fff; }
+.estimate__status { font: 600 .95rem/1.4 var(--display); color: oklch(100% 0 none); }
+.estimate[data-state="positive"] .estimate__status { color: oklch(84% .14 150); }
+.estimate[data-state="balanced"] .estimate__status { color: oklch(90% .14 95); }
+.estimate[data-state="negative"] .estimate__status { color: oklch(80% .14 25); }
 .estimate__amount { margin: .45rem 0 .9rem; }
 .estimate__amount b { font: 700 clamp(1.8rem, 1.4rem + 1.4vw, 2.4rem)/1 var(--display); color: #fff; letter-spacing: -.03em; font-variant-numeric: tabular-nums; }
 .estimate__text { color: #fff; font-size: .95rem; }
@@ -151,8 +153,16 @@ input[type="range"]:focus-visible::-webkit-slider-runnable-track { box-shadow: 0
 .adjust__rate { margin-top: .6rem; display: flex; justify-content: space-between; font-size: .92rem; }
 .adjust__rate b { font: 700 1.1rem var(--display); color: var(--navy); font-variant-numeric: tabular-nums; }
 
-.tool__consult { margin-top: 1rem; font-size: .9rem; }
-.tool__consult a { font-weight: 600; text-underline-offset: 3px; }
+.hero__consult { display: grid; justify-items: start; gap: .55rem; margin-block-start: 1.6rem; }
+.hero__consult small { font-size: .82rem; }
+.tool__consult { display: grid; gap: .6rem; margin-block-start: 1.2rem; padding-block-start: 1.2rem; border-block-start: 1px solid var(--line); }
+.tool__consult strong { font-family: var(--display); color: var(--navy); }
+.consult-cta { min-block-size: 52px; padding-block: .8rem; padding-inline: 1.15rem; line-height: 1.35; background: oklch(29% .105 258); }
+.consult-cta:focus-visible { outline: 3px solid oklch(56% .14 258); outline-offset: 4px; }
+@media (hover: hover) and (pointer: fine) {
+  .consult-cta:hover { background: oklch(38% .12 258); }
+}
+.consult-cta:active { background: oklch(23% .09 258); }
 .legal { margin-top: .5rem; font-size: .8rem; color: var(--slate); }
 .summary { margin-bottom: 1.1rem; padding: .8rem 1rem; background: var(--mist); border-left: 3px solid var(--blue); border-radius: var(--r); }
 .summary__label { font: 600 .72rem/1.3 var(--display); letter-spacing: .1em; text-transform: uppercase; color: var(--slate); margin-bottom: .2rem; }

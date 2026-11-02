@@ -58,6 +58,18 @@ Vertragslaufzeit. Das bildet der Schnellrechner nicht ab. Nachweise können spä
 bei Zweifeln muss die Kreditgeberin die Angaben prüfen (Art. 31 KKG). Diese Änderung ist keine
 rechtliche Freigabe der gesamten Website; die bestehenden Firmen-/Kontaktplatzhalter bleiben offen.
 
+Die gewählte CTA-Variante A ergänzt einen gut sichtbaren Beratungsbutton unter der Hauptaussage
+und einen vollbreiten Beratungsbutton unter dem Rechner. Beide verwenden den vorhandenen
+Kontaktanker und die Beratungszusammenfassung; keine feststehende Beratungsleiste.
+
+Der Status im Ergebnis ist grün bei positivem Spielraum («Tragbar (Schätzung)»), gelb bei
+exakt CHF 0.00 («Knapp tragbar (Schätzung)») und rot bei einer Lücke («Nicht tragbar (Schätzung)»). Massgeblich ist
+der bestehende auf Rappen gerundete Spielraum nach Rate. Keine neue Schwelle für kleine positive
+Beträge; CHF 0.01 bleibt rechnerisch gedeckt. Fehlende Angaben zeigen einen neutralen Status.
+Text und Farbe vermitteln dieselbe Bedeutung; die Beratungszusammenfassung verwendet denselben
+Status. Auch der erklärende Satz nennt explizit «tragbar», «knapp tragbar» oder «nicht tragbar»
+und bezieht dies auf die Budgetschätzung. Die Farben und Begriffe sind keine Kreditentscheidung.
+
 Ergebnisse zeigen einen geschätzten Spielraum oder eine Budgetlücke. Sie garantieren weder einen Kredit
 noch den gewünschten Betrag. Die vollständige Prüfung bleibt separat bei der Kreditgeberin.
 Beispielzins, Pflichthinweis und «Erste Einschätzung, keine Kreditzusage» bleiben sichtbar.
@@ -79,13 +91,13 @@ Der Test lädt die echte `index.html` mit `app.js` und `style.css` lokal in Head
 Er prüft die vier Budgetfelder, fehlende/ungültige Angaben, Haushalts- und Kinderszenarien,
 separaten Sicherheitspuffer, vollständig verfügbares Rückzahlungsbudget, gewählte Rate,
 positive/negative/Null-Ergebnisse, Rappen, Laufzeitgrenzen, beide Laufzeitregler per Tastatur,
-Beratungszusammenfassung und Rücknavigation. Alle drei Schritte werden bei 1440/900/390/320 Pixeln
+Beratungszusammenfassung, Statusfarben inklusive Kontrast, CTA-Tastaturbedienung und Rücknavigation. Alle drei Schritte werden bei 1440/900/390/320 Pixeln
 sowie 200 % Textgrösse auf Überlauf und abgeschnittene Steuerelemente geprüft.
-Protokoll und Screenshots liegen unter `dist/qa/evidence/quick-estimate/`. Die Screenshots des Rechners
+Protokoll und Screenshots liegen unter `dist/qa/evidence/affordability-wording/`. Die Screenshots des Rechners
 blenden nur für die Aufnahme den haftenden Seitenkopf und den Sprunglink aus.
 Es werden keine produktiven Anfragen gestellt.
 
-Die [Feedback-Auswertung](tools/feedback-affordability.md#schnelle-schätzung-und-gesetzliche-prüfung) dokumentiert
+Die [Feedback-Auswertung](tools/feedback-affordability.md#verständliche-tragbarkeitsbegriffe) dokumentiert
 Befund, Umsetzung, Annahmen und offene Freigabepunkte. Frühere Abschnitte sind historischer Kontext;
 ihre Veröffentlichungsfreigabe gilt nicht für diese neue Änderung.
 

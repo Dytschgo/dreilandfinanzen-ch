@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/Montserrat-VF.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="assets/fonts/Inter-VF.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="style.css?v=2026-10-31-simple">
+<link rel="stylesheet" href="style.css?v=2026-11-02-cta-status">
 </head>
 <body>
 <a class="skip" href="#rechner">Zum Kredit &amp; Budgetcheck springen</a>
@@ -42,6 +42,10 @@
         <p class="eyebrow">Kreditberatung · Basel</p>
         <h1 id="hero-title">Fair finanziert.<br>Persönlich begleitet.</h1>
         <p class="lead">Konditionen, die zu Ihrer Situation passen – und eine Ansprechperson, die Sie von Anfang bis Ende begleitet.</p>
+        <div class="hero__consult">
+          <a class="btn btn--primary consult-cta" href="#kontakt" data-consult>Beratung anfragen <span aria-hidden="true">→</span></a>
+          <small>Persönlich und unverbindlich.</small>
+        </div>
       </div>
 
       <form class="tool" id="rechner" aria-labelledby="tool-title" novalidate data-step="0">
@@ -151,7 +155,10 @@
           </div>
         </section>
 
-        <p class="tool__consult">Lieber gleich persönlich? <a href="#kontakt" data-consult>Beratung anfragen</a></p>
+        <div class="tool__consult">
+          <strong>Lieber gleich persönlich?</strong>
+          <a class="btn btn--primary consult-cta" href="#kontakt" data-consult>Beratung anfragen <span aria-hidden="true">→</span></a>
+        </div>
         <p class="fine">Unverbindliches Rechenbeispiel mit 7.9 % effektivem Jahreszins. Ihr tatsächlicher Zins wird individuell festgelegt. Ihre Eingaben bleiben im Browser.</p>
         <p class="legal">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
       </form>
@@ -295,6 +302,6 @@
   </div>
 </footer>
 
-<script src="app.js?v=2026-11-02-quick-estimate"></script>
+<script src="app.js?v=2026-11-02-cta-status"></script>
 </body>
 </html>
