@@ -19,8 +19,8 @@
     defaultAmount: 20000, defaultTerm: 48,
   });
   // Illustrative allowance for the quick estimate, not a lending or scoring rule.
-  // Income share selected in feedback; rent is entered separately. Actual costs may differ.
-  const EXPENSE_ALLOWANCE = Object.freeze({ incomeShare: 0.4 });
+  // Household shares explicitly selected in feedback; housing is entered separately.
+  const EXPENSE_ALLOWANCE = Object.freeze({ single: 0.25, married: 0.30, perChild: 0.05, headroom: 0.05 });
   const maxTermFor = amount => (amount > RULES.longTermMaxAmount ? RULES.standardMaxTerm : RULES.terms.at(-1));
   function estimate(amount, months) {
     const i = Math.pow(1 + RULES.exampleAnnualRate / 100, 1 / 12) - 1;
@@ -95,40 +95,55 @@
   }
 
   /* ---------- Budget ---------- */
-  const budgetFields = [["#ink", "Nettoeinkommen"], ["#miete", "Miete"]];
+  const budgetFields = [["#ink", "Nettoeinkommen"], ["#miete", "Miete oder Hypothek"], ["#married", "Familienstand"], ["#children", "Kinderanzahl (ganze Zahl von 0 bis 99)"]];
+  function budgetValue(id) {
+    if (id === "#married") return ["yes", "no"].includes($(id).value) ? $(id).value : NaN;
+    if (id === "#children") return /^\d{1,2}$/.test($(id).value.trim()) ? Number($(id).value.trim()) : NaN;
+    return parse($(id));
+  }
+  const invalidBudgetValue = value => typeof value === "number" && isNaN(value);
   function readBudget(rate) {
-    const [inc, rent] = budgetFields.map(([id]) => parse($(id)));
-    if (rate === null || [inc, rent].some(isNaN)) return null;
-    const allowance = Math.round(inc * EXPENSE_ALLOWANCE.incomeShare * 100) / 100;
-    const buffer = Math.round((inc - rent - allowance - rate) * 100) / 100;
-    return { inc, rent, allowance, rate, buffer };
+    const values = budgetFields.map(([id]) => budgetValue(id));
+    if (rate === null || values.some(invalidBudgetValue)) return null;
+    const [inc, rent, married, children] = values;
+    const share = (married === "yes" ? EXPENSE_ALLOWANCE.married : EXPENSE_ALLOWANCE.single) + children * EXPENSE_ALLOWANCE.perChild;
+    const allowance = Math.round(inc * share * 100) / 100;
+    const headroom = Math.round(inc * EXPENSE_ALLOWANCE.headroom * 100) / 100;
+    const available = Math.round((inc - rent - allowance - headroom) * 100) / 100;
+    const buffer = Math.round((available - rate) * 100) / 100;
+    return { inc, rent, married, children, share, allowance, headroom, available, rate, buffer };
+  }
+  function allowanceNote(b) {
+    return `Weitere Ausgaben: ${Math.round(b.share * 100)} % des Netto-Haushaltseinkommens (${chf2(b.allowance)}), plus 5 % Sicherheitspuffer (${chf2(b.headroom)}) pro Monat. Vereinfachte Schätzung für Lebenshaltung, Steuern, Krankenkasse und Verpflichtungen; tatsächliche Kosten können abweichen.`;
   }
   function budget(rate) {
     const b = readBudget(rate);
     if (!b) {
       $("#estimate").dataset.state = "incomplete";
       $("#est-status").textContent = "Bitte Eingaben vervollständigen";
-      $("#est-text").textContent = "Bitte Nettoeinkommen und Miete als monatliche Beträge angeben.";
+      $("#est-text").textContent = "Bitte Einkommen, Wohnkosten, Familienstand und Kinderanzahl angeben.";
+      $("#repayment-budget").textContent = "Für Kreditraten verfügbar: –";
       $("#est-frei").textContent = "–";
       $("#est-unit").textContent = "";
-      $("#allowance-note").textContent = "Weitere Ausgaben schätzen wir aus Ihrem Nettoeinkommen.";
+      $("#allowance-note").textContent = "Weitere Ausgaben schätzen wir anhand Ihrer Haushaltsangaben.";
       return false;
     }
     $("#estimate").dataset.state = b.buffer < 0 ? "warn" : "review";
     $("#est-status").textContent = b.buffer < 0 ? "Geschätzte Budgetlücke" : b.buffer === 0 ? "Kein geschätzter Spielraum" : "Grobe Budgetschätzung";
     $("#est-frei").textContent = chf2(Math.abs(b.buffer));
     $("#est-unit").textContent = b.buffer < 0 ? "fehlen pro Monat" : "bleiben pro Monat nach Rate";
-    $("#est-text").textContent = b.buffer <= 0 ? "In dieser Schätzung bleibt kein Puffer. Besprechen Sie Ihre Möglichkeiten mit uns." : "Ein erster Anhaltspunkt für Ihr Budget. Ihre tatsächlichen Ausgaben können abweichen.";
-    $("#allowance-note").textContent = `Weitere Ausgaben neben der Miete: ${EXPENSE_ALLOWANCE.incomeShare * 100} % Ihres Nettoeinkommens (${chf2(b.allowance)} pro Monat), grob geschätzt.`;
+    $("#repayment-budget").textContent = `Geschätztes Budget vor Kreditrate: ${chf2(Math.max(0, b.available))} pro Monat nach Sicherheitspuffer.`;
+    $("#est-text").textContent = b.buffer < 0 ? "Die gewählte Rate übersteigt Ihr geschätztes Budget. Besprechen Sie Ihre Möglichkeiten mit uns." : "Kein zusätzlicher Mindestrestbetrag in dieser Schätzung. Ob die Rate tragbar ist, muss separat geprüft werden.";
+    $("#allowance-note").textContent = allowanceNote(b);
     return true;
   }
   function validateBudget() {
     const missing = budgetFields.filter(([id]) => {
-      const bad = isNaN(parse($(id)));
+      const bad = invalidBudgetValue(budgetValue(id));
       $(id).setAttribute("aria-invalid", String(bad));
       return bad;
     });
-    $("#budget-err").textContent = missing.length ? `Bitte als nicht negative Zahl in CHF mit höchstens zwei Nachkommastellen angeben (0 ist möglich): ${missing.map(m => m[1]).join(", ")}.` : "";
+    $("#budget-err").textContent = missing.length ? `Bitte Angaben prüfen: ${missing.map(([id, label]) => id === "#married" ? "Familienstand (Ja oder Nein wählen)" : id === "#children" ? label : `${label} (nicht negative CHF-Zahl mit höchstens zwei Nachkommastellen; 0 möglich)`).join("; ")}.` : "";
     return !missing.length;
   }
 
@@ -161,7 +176,7 @@
   [termRange, adjLz].forEach(r => r.addEventListener("input", () => { state.months = +r.value; render(); }));
   budgetFields.forEach(([id]) => {
     $(id).addEventListener("input", () => { render(); if ($("#budget-err").textContent) validateBudget(); });
-    $(id).addEventListener("blur", e => { const v = parse(e.target); if (!isNaN(v)) e.target.value = formatInput(v); });
+    if (["#ink", "#miete"].includes(id)) $(id).addEventListener("blur", e => { const v = parse(e.target); if (!isNaN(v)) e.target.value = formatInput(v); });
   });
 
   /* ---------- Beratung anfragen (aus jedem Schritt) ---------- */
@@ -170,7 +185,7 @@
     const e = estimate(state.amount, state.months);
     let s = `${chf(state.amount)} über ${state.months} Monate, Rate ca. ${chf2(e.monthly)} (Beispiel 7.9 %).`;
     const b = readBudget(e.monthly);
-    if (b) s += ` Grobe Budgetschätzung: Nettoeinkommen ${chf2(b.inc)}, Miete ${chf2(b.rent)}, weitere Ausgaben mit ${EXPENSE_ALLOWANCE.incomeShare * 100} % des Nettoeinkommens grob geschätzt: ${chf2(b.allowance)} pro Monat. Geschätzter Spielraum nach Rate ${chf2(b.buffer)} pro Monat. Keine Kreditzusage und keine Garantie für den gewünschten Betrag; die Kreditgeberin prüft Ihre vollständige Situation separat.`;
+    if (b) s += ` Grobe Budgetschätzung: Netto-Haushaltseinkommen ${chf2(b.inc)}, Miete oder Hypothek ${chf2(b.rent)}, verheiratet: ${b.married === "yes" ? "Ja" : "Nein"}, unterhaltsberechtigte Kinder: ${b.children}. ${allowanceNote(b)} Geschätztes Budget vor Kreditrate ${chf2(Math.max(0, b.available))} pro Monat. Geschätzter Spielraum nach Rate ${chf2(b.buffer)} pro Monat. Kein zusätzlicher Mindestrestbetrag in dieser Schätzung. Keine Kreditfähigkeitsprüfung nach KKG, keine Kreditzusage und keine Garantie für den gewünschten Betrag; vor Vertragsabschluss prüft die Kreditgeberin Ihre vollständige Situation.`;
     return s;
   }
   $$("[data-consult]").forEach(a => a.addEventListener("click", () => {

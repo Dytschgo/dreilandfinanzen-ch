@@ -1,6 +1,6 @@
 # Feedback-Auswertung: persönlicher Budgetcheck
 
-Aktuell: [Einkommensabhängige weitere Ausgaben](#einkommensabhängige-weitere-ausgaben).
+Aktuell: [Schnelle Schätzung und gesetzliche Prüfung](#schnelle-schätzung-und-gesetzliche-prüfung).
 Die folgenden früheren Auswertungen und Veröffentlichungsfreigaben sind historisch und gelten
 nicht als Freigabe für die neue Ausgabenschätzung.
 
@@ -375,3 +375,194 @@ für jedes gültige Einkommen den ausgewählten 40 %, während die Miete separat
 Der Release kann mit einem regulären Revert-PR rückgängig gemacht werden. Es gibt keine Migration
 und keine Änderung gespeicherter Kundendaten. Merge-Ergebnis und tatsächliche Live-Auslieferung
 werden nach der Ausführung separat geprüft; diese Notiz allein behauptet keinen Live-Erfolg.
+
+
+## Haushaltsabhängiger Budgetcheck
+
+Stand: 2. November 2026. Kategorie: Verbesserung. Ausgangsstand: `e924788` auf `main`,
+zu Beginn ohne lokale Änderungen. Lokal umgesetzt auf `feedback/household-budget`.
+
+### Vor Änderung geprüft
+
+Keine `AGENTS.md` im ausgewählten Projekt oder den geprüften übergeordneten Verzeichnissen;
+keine `.out-of-scope/`-Einträge. Massgebend sind `CONTRIBUTING.md`, `README.md`, diese Auswertung
+und `tools/verify-budget.cjs`. Das bereitgestellte Referenzbild wurde geöffnet und visuell geprüft.
+Der unveränderte Chrome-Test bestand; die lokale Budgetansicht wurde ebenfalls angesehen.
+Lesende HTTP-Abrufe von öffentlichem HTML und `app.js` bestätigten zwei Fragen (Nettoeinkommen,
+Miete) und den pauschalen Ansatz von 40 % des Nettoeinkommens. Keine Bedienung der Produktionsseite.
+Lokale Ausgangsnachweise und HTTP-Antworten: `dist/qa/evidence/household-before/`.
+
+Die 40 % waren eine zuvor freigegebene illustrative Annahme, kein nachgewiesener Berechnungsfehler.
+Im aktuellen Code gab es bereits keinen Mindestrestbetrag von CHF 50/100. Das Feedback ist daher
+teilweise eine neue Modellvorgabe und teilweise die Bestätigung bestehender Logik. Hypothek,
+Familienstand und Kinder wurden bisher nicht erfragt und beeinflussten die Schätzung nicht.
+
+### Angenommen und umgesetzt
+
+- Netto-Haushaltseinkommen und monatliche Wohnkosten für denselben Haushalt; Miete oder Hypothek,
+  inklusive Nebenkosten, bei Eigentum auch Zins, Amortisation und Unterhalt.
+- Verheiratet Ja/Nein und unterhaltsberechtigte Kinder als Pflichtangaben. Keine stillen Vorgaben.
+  Sichtbare vereinfachte Erwachsenenannahme: verheiratet zwei, sonst einer.
+- Auf konkrete Rückfrage wählte der Nutzer ausdrücklich das vorgeschlagene illustrative Modell:
+  25 % des Netto-Haushaltseinkommens für einen Erwachsenen, 30 % bei Ehe, plus 5 Prozentpunkte
+  pro Kind, zusätzlich separat 5 % des Einkommens als Sicherheitspuffer. Keine feste Mindestpauschale.
+  Die frühere 40-%-Vorgabe wird damit ersetzt. Für grössere Familien kann die Gesamtquote 40 %
+  übersteigen; sie wird nicht künstlich gedeckelt, um ein positives Ergebnis zu erzwingen.
+- Gesamtes positives Budget nach Wohnkosten, geschätzten Ausgaben und Sicherheitspuffer wird für
+  Kreditraten ausgewiesen. Kein weiterer Mindestrestbetrag. Die gewählte Rate bleibt separat;
+  eine vollständige Ausschöpfung löst keine zusätzliche Pufferforderung aus. Negative Werte bleiben sichtbar.
+- Ergebnis, FAQ und Beratungszusammenfassung nennen dieselben Annahmen. Änderungen aktualisieren
+  die Zahlen unmittelbar, unvollständige Angaben löschen alte Zahlen und die Budgetzusammenfassung.
+  Kinderanzahl wird als ganze Zahl 0–99 geprüft; leere, negative und gebrochene Werte sind ungültig.
+- Bestehende Kreditformel, Laufzeitgrenzen, Markenstil, Rechts- und Schätzhinweise bleiben bestehen.
+
+Beispiel: CHF 6'000 Einkommen − CHF 1'500 Wohnen − CHF 1'500 weitere Ausgaben − CHF 300 Puffer
+= CHF 2'700 für Kreditraten. Nach der Beispielrate CHF 484.77 bleiben CHF 2'215.23.
+Verheiratet mit zwei Kindern sind weitere Ausgaben CHF 2'400; verfügbar CHF 1'800,
+nach derselben Rate CHF 1'315.23. Es wird kein Kreditbetrag automatisch zugesagt oder maximiert.
+
+### Nicht übernommen und Grenzen
+
+Keine inhaltliche Verbesserungsanforderung abgelehnt. Eine höhere Genauigkeit oder tatsächliche
+Tragbarkeit wird jedoch nicht behauptet. Das Modell ist eine gewählte Projektannahme, keine
+validierte Bankenregel. Die Beispiele und Anleitung von
+[Budgetberatung Schweiz](https://budgetberatung.ch/budgetrechner/new) erfassen detaillierte
+Kosten und Jahresanteile. Das stützt den Hinweis auf individuelle Abweichungen, nicht die gewählten
+Prozentsätze. Zivilstand allein bildet Haushaltsformen nicht vollständig ab; tatsächliche Steuern,
+Krankenkasse und Verpflichtungen bleiben unbekannt. Die vollständige Kreditprüfung bleibt separat.
+
+### Rückfrage und Antwort
+
+Gefragt wurde nach der konkreten Formel statt pauschal «weniger als 40 %», mit 25/30 %,
+5 Prozentpunkten pro Kind und 5 % separatem Puffer als Option. Antwort: «Use this illustrative model».
+Damit keine offene blockierende Produktfrage. Diese Modellwahl autorisiert keinen Merge oder Release.
+
+### Verifikation und Freigabegrenze
+
+Syntaxprüfungen für `app.js` und `tools/verify-budget.cjs`, die erweiterte Chrome-Regression sowie
+`git diff --check` bestanden. Geprüft: Kreditgrenzen, Laufzeitregler, Ehe- und Kinderszenarien,
+Einkommensänderungen, separater Wohnkostenabzug, separater Puffer, Null-/Negativwerte, Rappenfälle,
+vollständige Budgetnutzung ohne Mindestrest, fehlerhafte/leere Angaben, identische Zusammenfassung,
+Rücknavigation und Tastaturfokus. Alle Schritte bei 1440/900/390/320 Pixeln und 200 % Textgrösse
+ohne Überlauf oder abgeschnittene Steuerelemente. Keine Browser-Laufzeitfehler oder externen Anfragen.
+Budgetansicht auf Desktop, Ergebnis bei 320 Pixeln und Budget mit 200 % Textgrösse visuell geprüft.
+Nachweise: `dist/qa/evidence/household-budget/`. Keine Prüfung mit Screenreader oder physischen Geräten.
+
+Änderungen bleiben lokal zur Prüfung. Kein Push, Merge oder Deployment. `CONTRIBUTING.md` verlangt
+weiterhin einen Pull Request gegen `main`; jeder Merge veröffentlicht sofort. Frühere Freigaben
+und Reviews gelten ausschliesslich für ihre damaligen Änderungen.
+
+
+## Schnelle Schätzung und gesetzliche Prüfung
+
+Stand: 2. November 2026. Kategorie: Verbesserung. Fortsetzung auf `feedback/household-budget`.
+Die fünf bereits lokal geänderten Dateien des vorherigen Feedbacks wurden beibehalten.
+Weiterhin keine `AGENTS.md` im Projekt. Massgebend bleiben `CONTRIBUTING.md`, `README.md`
+und der vorhandene Chrome-Prüfablauf. Kein neuer Veröffentlichungsauftrag.
+
+### Vor Änderung geprüft
+
+Die echte lokale Website wurde vor Änderung mit der bestehenden Chrome-Regression geprüft.
+Alle Tests bestanden. Vier Pflichtfragen, keine Dateiuploads. Der Hilfetext verlangte jedoch
+scheinbar genaue Hypothekar-, Amortisations- und Unterhaltskosten. Es fehlte der ausdrückliche
+Hinweis, dass ungefähre Monatsbeträge für diese erste Schätzung genügen. Die Ergebnisaufforderung,
+das gesamte Budget für Kreditraten einzusetzen, war stärker als die rein illustrative Berechnung
+rechtfertigt. Eine automatische Zusage oder formelle KKG-Prüfung existiert nicht.
+Der öffentliche Stand mit zwei Fragen wurde im vorherigen Durchgang per HTTP gelesen;
+diese Fortsetzung prüft den aktuellen lokalen Stand, nicht eine neue Produktionsversion.
+
+### Angenommen und umgesetzt
+
+- Vier kurze Fragen bleiben; keine zusätzlichen Kostenaufstellungen, Dokumente oder Uploads.
+  Klarer Einstieg: «Ungefähre Monatsbeträge genügen» und keine Unterlagen für diese erste Schätzung.
+  Kürzere Einkommens- und Wohnkostenhinweise. Eigentumsdetails bleiben kurz separat und sind
+  dem Eingabefeld barrierefrei zugeordnet. Keine unbelegte Zeitangabe wie «in 30 Sekunden».
+- Ergebnis beschreibt ein geschätztes Budget vor Rate; keine Aufforderung mehr, es auszuschöpfen.
+  Kein zusätzlicher Mindestrestbetrag, keine Änderung der zuvor ausgewählten Formel.
+- Sichtbar im Ergebnis: keine Kreditfähigkeitsprüfung nach KKG. Persönliche Prüfung vor
+  Vertragsabschluss bleibt ausdrücklich erforderlich. Pflichtwarnung und Beispielzins bleiben sichtbar.
+- Zwei FAQ erklären Unterlagen im späteren Antrag und den Unterschied zur gesetzlichen Prüfung.
+  Kein neuer Upload- oder Antragsprozess; Kontaktformular bleibt Demo.
+- Beratungszusammenfassung übernimmt dieselbe neutrale Sprache und Abgrenzung.
+
+### Rechtliche Grundlage und nicht übernommene Auslegung
+
+Geprüfte Primärquellen:
+
+- [KKG bei Fedlex, insbesondere Art. 27a, 28, 31 und 36a](https://www.fedlex.admin.ch/filestore/fedlex.data.admin.ch/eli/cc/2002/593/20230901/de/pdf-a/fedlex-data-admin-ch-eli-cc-2002-593-20230901-de-pdf-a.pdf).
+  Das amtliche PDF nennt Stand 1. September 2023; die HTML-Ansicht liefert im Webabruf nur eine
+  JavaScript-Hinweisseite. Keine darüber hinausgehende Aktualitäts- oder Rechtsfreigabe behauptet.
+- [Bundesamt für Justiz: Konsumkreditgesetz](https://www.bj.admin.ch/de/konsumkreditgesetz).
+- [SECO: Preisbekanntgabe-Wegleitung 2025](https://www.seco.admin.ch/dam/de/sd-web/37az5I4TCZV7/PBV-Brosch%C3%BCren-Wegleitung-SECO-2025-DE.pdf),
+  ergänzend zu bestehenden Preis- und Warnhinweisen; kein vollständiger Werberechtsaudit.
+
+Eine schnelle unverbindliche Schätzung wird klar von der vor Vertragsabschluss notwendigen
+Prüfung getrennt. Art. 28 schützt das kantonale Existenzminimum und berücksichtigt insbesondere
+tatsächliche Miete, Steuern und gemeldete Verpflichtungen; die Prüfung geht von 36 Monaten aus,
+auch bei längerer Vertragslaufzeit. Art. 31 erlaubt das Einfordern von Nachweisen und verlangt
+bei Zweifeln eine Überprüfung. Deshalb wird «keine Unterlagen» ausdrücklich auf diesen Rechner
+begrenzt und nicht als Versprechen für Antrag oder Kreditvergabe verwendet.
+
+Keine UX-Verbesserung abgelehnt. Nicht vertretbar wäre die Auslegung, vier Angaben und eine
+25/30-%-Pauschale könnten gesetzliche Kreditfähigkeit belegen. Die Formel bleibt eine Projektannahme.
+Keine Bestätigung der umfassenden Schweizer Rechtskonformität: tatsächlicher Kreditgeberprozess,
+Bewilligungen, Firmen-/Kontaktplatzhalter und rechtliche Freigabe liegen ausserhalb dieser lokalen
+Rechneränderung. Der vorgefundene Werbe-/Pflichttext wird nicht ersatzlos entfernt.
+
+### Fragen und Verifikation
+
+Keine blockierende Rückfrage zur lokalen Verbesserung. Vor echtem kommerziellem Einsatz sind
+Unternehmensangaben und der verantwortliche Kreditprüfungsprozess weiterhin zu klären; das
+bereits bestehende Platzhalterproblem wird durch diese Änderung nicht gelöst.
+
+Syntaxchecks für Anwendung und Test, erweiterte Chrome-Regression sowie `git diff --check` bestanden.
+Zusätzlich geprüft: Schätzwert-/Unterlagenhinweis, kein Upload, sichtbare KKG-Abgrenzung, neutrale
+Ergebnis- und Zusammenfassungstexte, bedienbare FAQ mit Dokumentenhinweis und 36-Monats-Erklärung.
+Bestehende Formel-, Rappen-, Fehler-, Tastatur- und Navigationstests sowie alle drei Schritte bei
+1440/900/390/320 Pixeln und 200 % Textgrösse bleiben abgedeckt. Keine Browserfehler oder externen
+HTTP-Anfragen im lokalen Test. Aufnahmen und Protokoll: `dist/qa/evidence/quick-estimate/`.
+Desktop-Budget und schmales Ergebnis wurden visuell geprüft. Keine Screenreader-/Geräteprüfung.
+
+Kein Push, Merge oder Deployment. PR-Weg und separate Veröffentlichungsfreigabe bleiben erforderlich.
+
+### Separate Push-Freigabe
+
+Nach Abschluss der lokalen Änderungen hat der Nutzer ausdrücklich «push» angefordert. Dieser Auftrag
+autorisiert Commit und Push des geprüften Feedback-Branches und die Vorlage als Pull Request gegen
+`main`. Er umfasst beide zusammenhängenden lokalen Feedbackänderungen: Haushaltsparameter und
+ausgewähltes Schätzmodell sowie vereinfachte Hinweise mit Abgrenzung zur gesetzlichen Prüfung.
+Die fünf geänderten Dateien wurden vor dem Commit erneut geprüft; `origin/main` steht unverändert
+auf `e924788`. Syntaxchecks und `git diff --check` bestanden; die Chrome-Regression wird auch am
+committeten Stand ausgeführt. Protokoll und Aufnahmen bleiben lokal unter `dist/qa/evidence/quick-estimate/`.
+Keine Freigabe zum Merge oder Deployment. Frühere Veröffentlichungsfreigaben gelten weiterhin nur
+für die damaligen Änderungen; die gesetzlichen und betrieblichen Grenzen oben bleiben offen.
+
+### Separate Merge-Freigabe und Release-Prüfung
+
+Nach Erstellung von PR #4 hat der Nutzer ausdrücklich «merge» angefordert. Das autorisiert den
+Merge von PR #4 nach `main` und die damit verbundene automatische Veröffentlichung über Hostinger.
+
+Implementierungsstand: `6c78f2e252b2db00523bec401973f6f90c869644`, Basis:
+`e924788ab57afbc618eb523b6ba18c151dbd56c3`. Zwei unabhängige, rein lesende Reviews prüften
+Repository-Standards und ursprüngliche Anforderungen getrennt. Standards: keine Befunde.
+Anforderungen: keine Befunde; zusätzlich unabhängige Chrome-Prüfung mit CHF 5'200 Einkommen
+und CHF 1'800 Wohnkosten. Unverheiratet ohne Kinder: CHF 1'840 vor Rate, CHF 1'355.23 danach.
+Verheiratet mit drei Kindern: CHF 800 vor Rate, CHF 315.23 danach. Beratungszusammenfassung
+und KKG-Abgrenzung stimmten überein. Diese Reviews sind keine rechtliche Gesamtfreigabe.
+
+Syntaxchecks, vollständige Chrome-Regression und `git diff --check` bestanden erneut am sauberen
+Implementierungsstand. GitHub meldete PR #4 als offen und konfliktfrei, keine CI-Checks, Reviews
+oder offenen Kommentare, keinen Branchschutz und keine anwendbaren Branch-Regeln für `main`.
+Die vorliegende Ergänzung dokumentiert nur die Freigabe; Produktcode und Tests bleiben unverändert.
+
+Vorher-/Nachher-Beispiel: CHF 6'000 Einkommen und CHF 1'500 Wohnen ergaben bisher nach der
+48-Monatsrate CHF 484.77 einen Spielraum von CHF 1'615.23. Das neue Modell ergibt für einen
+unverheirateten Erwachsenen ohne Kinder CHF 2'215.23 nach Rate, einschliesslich des separaten
+5-%-Puffers. Es bleibt eine illustrative Schätzung ohne Kreditzusage.
+
+Ein lesender öffentlicher HTTP-Abruf vor dem Merge bestätigte die bisherige Skriptversion
+`2026-10-31-income-expenses` und den 40-%-Ansatz. Nachweise unter
+`dist/qa/evidence/household-release/`. Der Merge und die tatsächliche Live-Auslieferung werden
+nach Ausführung separat geprüft; diese Notiz allein behauptet keinen Release-Erfolg.
+Bei Problemen ist ein regulärer Revert-PR möglich. Keine Datenmigration oder Änderung gespeicherter
+Kundendaten. Unternehmensplatzhalter und die dokumentierten rechtlichen Grenzen bleiben bestehen.
