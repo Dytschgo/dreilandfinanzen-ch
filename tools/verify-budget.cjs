@@ -6,7 +6,7 @@ const { pathToFileURL } = require('node:url');
 const { execFileSync } = require('node:child_process');
 const { chromium } = require('../dist/qa/node_modules/playwright');
 const root = path.resolve(__dirname, '..');
-const output = path.join(root, 'dist', 'qa', 'evidence', 'income-expenses');
+const output = path.join(root, 'dist', 'qa', 'evidence', 'quick-estimate');
 
 (async () => {
   await fs.mkdir(output, { recursive: true });
@@ -25,10 +25,12 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'income-expenses');
       el.value = value;
       el.dispatchEvent(new Event('input', { bubbles: true }));
     }, String(value));
-    const setBudget = async (income = '6000', rent = '1500') => {
+    const setBudget = async (income = '6000', rent = '1500', married = 'no', children = '0') => {
       await page.locator('.stepper [data-go="1"]').click();
       await page.locator('#ink').fill(income);
       await page.locator('#miete').fill(rent);
+      await page.locator('#married').selectOption(married);
+      await page.locator('#children').fill(children);
       await go(1, 2);
     };
     const noOverflow = async label => {
@@ -62,33 +64,33 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'income-expenses');
     checks.push('Credit pricing, amount limits, keyboard duration slider and term cap above CHF 80,000');
 
     await go(0, 1);
-    assert.equal(await page.locator('.step[data-step="1"] input').count(), 2);
-    assert.equal(await page.locator('.step[data-step="1"] select').count(), 0);
+    assert.equal(await page.locator('.step[data-step="1"] input').count(), 3);
+    assert.equal(await page.locator('.step[data-step="1"] select').count(), 1);
     await go(1, 2);
     await step(1);
     assert.equal(await page.evaluate(() => document.activeElement.id), 'ink');
-    assert.match(await text('#budget-err'), /Nettoeinkommen, Miete/);
+    assert.match(await text('#budget-err'), /Nettoeinkommen.*Miete/);
     await page.locator('#ink').fill('6000');
     await go(1, 2);
     assert.equal(await page.evaluate(() => document.activeElement.id), 'miete');
-    for (const id of ['ink', 'miete', 'laufzeit', 'adj-lz']) {
+    for (const id of ['ink', 'miete', 'married', 'children', 'laufzeit', 'adj-lz']) {
       assert.equal(await page.locator('#' + id).evaluate(el => el.labels.length > 0 && (el.getAttribute('aria-describedby') || '').split(' ').filter(Boolean).every(id => document.getElementById(id))), true);
     }
-    checks.push('Only income and rent are asked; missing entries block progression with labelled errors and focus');
+    checks.push('Income, housing, marital status and children are asked; missing entries block progression with labelled errors and focus');
 
     await setBudget();
-    assert.equal(await text('#est-frei'), "CHF 1'615.23");
-    assert.match(await text('#allowance-note'), /40 % Ihres Nettoeinkommens/);
-    assert.match(await text('#allowance-note'), /CHF 2'400.00/);
+    assert.equal(await text('#est-frei'), "CHF 2'215.23");
+    assert.match(await text('#allowance-note'), /25 % des Netto-Haushaltseinkommens/);
+    assert.match(await text('#allowance-note'), /CHF 1'500.00/);
     assert.match(await text('#est-unit'), /nach Rate/);
     await page.locator('#adj-lz').focus();
     await page.keyboard.press('End');
     assert.equal(await text('#adj-rate'), 'CHF 238.74');
-    assert.equal(await text('#est-frei'), "CHF 1'861.26");
+    assert.equal(await text('#est-frei'), "CHF 2'461.26");
     assert.equal(await page.locator('#laufzeit').inputValue(), '120');
     await page.keyboard.press('Home');
     assert.equal(await text('#adj-rate'), "CHF 1'736.33");
-    assert.equal(await text('#est-frei'), 'CHF 363.67');
+    assert.equal(await text('#est-frei'), 'CHF 963.67');
     await page.keyboard.press('ArrowRight');
     assert.equal(await text('#adj-lz-out'), '24 Monate');
     assert.equal(await page.locator('#adj-lz').getAttribute('aria-valuetext'), '24 Monate');
@@ -100,56 +102,69 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'income-expenses');
     await go(1, 0);
     await page.locator('#betrag').fill('20000');
     await slider('#laufzeit', 48);
-    for (const [income, allowance, buffer] of [
-      ['3000', "CHF 1'200.00", 'CHF 184.77'],
-      ['4000', "CHF 1'600.00", 'CHF 415.23'],
-      ['6000', "CHF 2'400.00", "CHF 1'615.23"],
-      ['6249', "CHF 2'499.60", "CHF 1'764.63"],
-      ['6250', "CHF 2'500.00", "CHF 1'765.23"],
-      ['6251', "CHF 2'500.40", "CHF 1'765.83"],
-      ['10000', "CHF 4'000.00", "CHF 4'015.23"],
+    for (const [married, children, expenses, available, remaining] of [
+      ['no', '0', "CHF 1'500.00", "CHF 2'700.00", "CHF 2'215.23"],
+      ['yes', '0', "CHF 1'800.00", "CHF 2'400.00", "CHF 1'915.23"],
+      ['no', '2', "CHF 2'100.00", "CHF 2'100.00", "CHF 1'615.23"],
+      ['yes', '2', "CHF 2'400.00", "CHF 1'800.00", "CHF 1'315.23"],
+      ['yes', '14', "CHF 6'000.00", 'CHF 0.00', "CHF 2'284.77"],
     ]) {
-      await setBudget(income, '1500');
-      assert.ok((await text('#allowance-note')).includes(allowance));
-      assert.match(await text('#allowance-note'), /40 % Ihres Nettoeinkommens/);
-      assert.equal(await text('#est-frei'), buffer);
+      await setBudget('6000', '1500', married, children);
+      assert.ok((await text('#allowance-note')).includes(expenses));
+      assert.ok((await text('#allowance-note')).includes('CHF 300.00'));
+      assert.ok((await text('#repayment-budget')).includes(available));
+      assert.equal(await text('#est-frei'), remaining);
       await page.locator('.step[data-step="2"] [data-consult]').click();
-      assert.ok((await text('#consult-text')).includes(allowance));
-      assert.match(await text('#consult-text'), /40 % des Nettoeinkommens/);
+      const summary = await text('#consult-text');
+      assert.ok(summary.includes(expenses) && summary.includes(available));
+      assert.ok(summary.includes('unterhaltsberechtigte Kinder: ' + children));
+      assert.ok(summary.includes('verheiratet: ' + (married === 'yes' ? 'Ja' : 'Nein')));
     }
+    await setBudget();
     await go(2, 1);
+    await page.locator('#married').selectOption('yes');
+    assert.match(await text('#est-frei'), /1'915.23/);
+    await page.locator('#children').fill('2');
+    assert.match(await text('#est-frei'), /1'315.23/);
     await page.locator('#ink').fill('5000');
     assert.match(await text('#allowance-note'), /CHF 2'000.00/);
     await page.locator('#miete').fill('2000');
     assert.match(await text('#allowance-note'), /CHF 2'000.00/);
     await go(1, 2);
-    assert.equal(await text('#est-frei'), 'CHF 515.23');
-    checks.push('Expenses follow 40% of net income without a fixed floor, including both sides of the old CHF 6,250 boundary; income edits update immediately and rent stays separate');
-    checks.push('Selected-term rate, sliders and estimate stay in sync; consultation uses the same expense amount and percentage');
+    assert.equal(await text('#est-frei'), 'CHF 265.23');
+    checks.push('Household scenarios, married and children input changes, separate 5% headroom, full repayment budget and identical consultation summary');
+    checks.push('Selected-term rate, sliders and estimate stay in sync; housing stays separate');
 
     for (const [income, rent, buffer, unit, status] of [
-      ['4000', '1915.23', 'CHF 0.00', 'bleiben pro Monat nach Rate', 'Kein geschätzter Spielraum'],
-      ['4000', '1915.24', 'CHF 0.01', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
+      ['3000', '1500', 'CHF 115.23', 'bleiben pro Monat nach Rate', 'Grobe Budgetschätzung'],
+      ['10000', '1500', "CHF 5'015.23", 'bleiben pro Monat nach Rate', 'Grobe Budgetschätzung'],
+      ['4000', '2265.23', 'CHF 50.00', 'bleiben pro Monat nach Rate', 'Grobe Budgetschätzung'],
+      ['4000', '2315.23', 'CHF 0.00', 'bleiben pro Monat nach Rate', 'Kein geschätzter Spielraum'],
+      ['4000', '2315.24', 'CHF 0.01', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
       ['0', '0', 'CHF 484.77', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
       ['0.01', '0', 'CHF 484.76', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
-      ['0.04', '0', 'CHF 484.75', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
-      ["6'000,50", '1500,25', "CHF 1'615.28", 'bleiben pro Monat nach Rate', 'Grobe Budgetschätzung'],
+      ['0.04', '0', 'CHF 484.74', 'fehlen pro Monat', 'Geschätzte Budgetlücke'],
+      ["6'000,50", '1500,25', "CHF 2'215.32", 'bleiben pro Monat nach Rate', 'Grobe Budgetschätzung'],
     ]) {
       await setBudget(income, rent);
       assert.equal(await text('#est-frei'), buffer);
+      if (buffer === 'CHF 0.00' || buffer === 'CHF 50.00') {
+        assert.match(await text('#est-text'), /Kein zusätzlicher Mindestrestbetrag/);
+        assert.doesNotMatch(await text('#est-text'), /kein Puffer/);
+      }
       assert.equal(await text('#est-unit'), unit);
       assert.equal(await text('#est-status'), status);
-      if (rent === '1915.23' || rent === '1915.24') await capture(rent === '1915.23' ? 'zero' : 'negative');
+      if (rent === '2315.23' || rent === '2315.24') await capture(rent === '2315.23' ? 'zero' : 'negative');
       await page.locator('.step[data-step="2"] [data-consult]').click();
       assert.match(await text('#consult-text'), /Miete/);
-      assert.match(await text('#consult-text'), /40 % des Nettoeinkommens/);
-      assert.match(await text('#consult-text'), /grob geschätzt/);
+      assert.match(await text('#consult-text'), /25 % des Netto-Haushaltseinkommens/);
+      assert.match(await text('#consult-text'), /Vereinfachte Schätzung/);
       assert.ok((await text('#consult-text')).includes(buffer.replace('CHF ', unit === 'fehlen pro Monat' ? 'CHF −' : 'CHF ')));
       assert.match(await text('#consult-text'), /keine Garantie/);
     }
     checks.push('Positive, zero, negative and one-cent estimates, Swiss decimal input and signed consultation summary');
 
-    for (const [id, value] of [['ink', ''], ['miete', '-1'], ['ink', 'abc'], ['miete', '100.123'], ['ink', 'Infinity'], ['miete', '1e3']]) {
+    for (const [id, value] of [['ink', ''], ['miete', '-1'], ['ink', 'abc'], ['miete', '100.123'], ['ink', 'Infinity'], ['miete', '1e3'], ['children', ''], ['children', '-1'], ['children', '1.5'], ['children', '100']]) {
       await setBudget();
       await go(2, 1);
       await page.locator('#' + id).fill(value);
@@ -162,10 +177,33 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'income-expenses');
       assert.doesNotMatch(await text('#consult-text'), /Grobe Budgetschätzung:/);
     }
     await setBudget();
+    await go(2, 1);
+    await page.locator('#married').selectOption('');
+    assert.equal(await text('#est-frei'), '–');
+    await go(1, 2);
+    await step(1);
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'married');
+    await setBudget();
     const customerText = await page.locator('#rechner').textContent();
     assert.doesNotMatch(customerText, /Prüfrate|30 Zahlungen|31–36|Dreiland-Budgetregel|Optimierung nötig|Tragbar im Budgetcheck/);
     assert.match(customerText, /keine Garantie für den gewünschten Betrag/);
     assert.match(customerText, /Die Kreditvergabe ist verboten/);
+    assert.match(await text('#budget-intro'), /Ungefähre Monatsbeträge genügen/);
+    assert.match(await text('#budget-intro'), /keine Unterlagen/);
+    assert.equal(await page.locator('#rechner input[type="file"]').count(), 0);
+    assert.match(await text('#assessment-note'), /keine Kreditfähigkeitsprüfung nach KKG/);
+    assert.doesNotMatch(await text('#est-text'), /kann vollständig.*eingesetzt werden/);
+    await page.locator('.step[data-step="2"] [data-consult]').click();
+    assert.match(await text('#consult-text'), /Keine Kreditfähigkeitsprüfung nach KKG/);
+    const formalFAQ = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Wie unterscheidet sich die gesetzliche Kreditfähigkeitsprüfung?' }) });
+    await formalFAQ.locator('summary').click();
+    assert.equal(await formalFAQ.locator('p').isVisible(), true);
+    assert.match(await formalFAQ.textContent(), /36 Monaten/);
+    assert.match(await formalFAQ.textContent(), /Existenzminimum/);
+    const documentsFAQ = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Brauche ich Unterlagen für den Budgetcheck?' }) });
+    await documentsFAQ.locator('summary').click();
+    assert.match(await documentsFAQ.textContent(), /Bei Zweifeln.*überprüfen/);
+    checks.push('Approximate inputs without uploads; visible KKG assessment boundary, neutral result copy, accessible document and statutory-assessment FAQs');
     checks.push('Invalid inputs clear stale figures and summaries; scoring rules removed and estimate/legal notices retained');
 
     for (const width of [1440, 900, 390, 320]) {
@@ -174,9 +212,11 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'income-expenses');
       await capture('result-' + width);
       await go(2, 1);
       assert.equal(await page.locator('#miete').inputValue(), "1'500");
+      assert.equal(await page.locator('#married').inputValue(), 'no');
+      assert.equal(await page.locator('#children').inputValue(), '0');
       await noOverflow(width + ': budget');
       await capture('budget-' + width);
-      await page.locator('#miete').focus();
+      await page.locator('#children').focus();
       await page.keyboard.press('Tab');
       assert.equal(await page.evaluate(() => document.activeElement.textContent), 'Meinen Spielraum ansehen');
       await page.keyboard.press('Enter');

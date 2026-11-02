@@ -91,16 +91,29 @@
         <section class="step" data-step="1" aria-labelledby="s2-title" hidden>
           <h3 class="step__title" id="s2-title" tabindex="-1">Ihr Budget</h3>
           <p class="carry"><span id="carry">CHF 20'000.– · 48 Monate · Rate CHF 484.77</span> <button type="button" class="linkbtn" data-go="0">Ändern</button></p>
-          <p class="muted">Zwei Angaben für eine grobe Schätzung. Weitere Ausgaben neben der Miete schätzen wir mit 40 % Ihres Nettoeinkommens.</p>
+          <p class="muted" id="budget-intro">Vier kurze Angaben. Ungefähre Monatsbeträge genügen – für diese erste Schätzung brauchen Sie keine Unterlagen.</p>
           <div class="field">
-            <label for="ink">Nettoeinkommen pro Monat <span>CHF</span></label>
+            <label for="ink">Netto-Haushaltseinkommen pro Monat <span>CHF</span></label>
             <input id="ink" inputmode="decimal" autocomplete="off" placeholder="z. B. 6'000" aria-describedby="ink-hint budget-err">
-            <small id="ink-hint">Ihr regelmässiges Einkommen nach Abzügen.</small>
+            <small id="ink-hint">Was kommt im Haushalt regelmässig netto an? Ohne unsichere Boni.</small>
           </div>
           <div class="field">
-            <label for="miete">Miete pro Monat <span>CHF</span></label>
-            <input id="miete" inputmode="decimal" autocomplete="off" placeholder="z. B. 1'500" aria-describedby="miete-hint budget-err">
-            <small id="miete-hint">Ihr Mietanteil inklusive Nebenkosten. Ohne Mietkosten: 0.</small>
+            <label for="miete">Miete oder Hypothek pro Monat <span>CHF</span></label>
+            <input id="miete" inputmode="decimal" autocomplete="off" placeholder="z. B. 1'500" aria-describedby="miete-hint eigentum-hint budget-err">
+            <small id="miete-hint">Ungefähre Wohnkosten des ganzen Haushalts inklusive Nebenkosten. Ohne Wohnkosten: 0.</small>
+            <small id="eigentum-hint">Bei Eigentum: Zins, Amortisation und laufenden Unterhalt grob zusammenzählen.</small>
+          </div>
+          <div class="field">
+            <label for="married">Sind Sie verheiratet?</label>
+            <select id="married" aria-describedby="married-hint budget-err">
+              <option value="">Bitte wählen</option><option value="no">Nein</option><option value="yes">Ja</option>
+            </select>
+            <small id="married-hint">Für die grobe Schätzung rechnen wir bei «Ja» mit zwei Erwachsenen, sonst mit einem.</small>
+          </div>
+          <div class="field">
+            <label for="children">Unterhaltsberechtigte Kinder</label>
+            <input id="children" inputmode="numeric" autocomplete="off" placeholder="0" aria-describedby="children-hint budget-err">
+            <small id="children-hint">Anzahl Kinder, deren Kosten Ihr Haushalt trägt. Ohne Kinder: 0.</small>
           </div>
           <p class="err" id="budget-err" role="alert"></p>
           <div class="actions">
@@ -113,12 +126,13 @@
         <section class="step" data-step="2" aria-labelledby="s3-title" hidden>
           <h3 class="step__title" id="s3-title" tabindex="-1">Ihr Spielraum</h3>
           <div class="estimate" id="estimate" data-state="incomplete" aria-live="polite">
+            <p class="estimate__text" id="repayment-budget">Für Kreditraten verfügbar: –</p>
             <p class="estimate__status" id="est-status">Grobe Budgetschätzung</p>
             <p class="estimate__amount"><b id="est-frei">–</b> <span id="est-unit">bleiben pro Monat nach Rate</span></p>
             <p class="estimate__text" id="est-text"></p>
           </div>
-          <p class="fine" id="allowance-note">Weitere Ausgaben schätzen wir aus Ihrem Nettoeinkommen.</p>
-          <p class="fine">Keine Kreditzusage und keine Garantie für den gewünschten Betrag. Die Kreditgeberin prüft Ihre vollständige Situation separat.</p>
+          <p class="fine" id="allowance-note">Weitere Ausgaben schätzen wir anhand Ihrer Haushaltsangaben.</p>
+          <p class="fine" id="assessment-note">Unverbindliche Schätzung, keine Kreditfähigkeitsprüfung nach KKG. Keine Kreditzusage und keine Garantie für den gewünschten Betrag. Vor Vertragsabschluss prüft die Kreditgeberin Ihre vollständige Situation.</p>
           <div class="adjust">
             <p class="adjust__title">Betrag oder Laufzeit anpassen</p>
             <div class="adjust__row">
@@ -227,8 +241,10 @@
       <h2 id="faq-title">Gut zu wissen.</h2>
       <div class="faq">
         <details><summary>Kann eine tiefere Monatsrate insgesamt mehr kosten?</summary><p>Ja. Eine längere Laufzeit senkt die Rate, erhöht aber die Zinskosten. Der Rechner zeigt beides.</p></details>
-        <details><summary>Bedeutet ein positives Budgetcheck-Ergebnis eine Kreditzusage?</summary><p>Nein. Der Rechner schätzt weitere Ausgaben neben der Miete mit 40 % Ihres Nettoeinkommens. Ihre tatsächlichen Ausgaben können abweichen. Ein positives Ergebnis garantiert weder einen Kredit noch den gewünschten Betrag. Die Kreditgeberin prüft Ihre vollständige Situation separat.</p></details>
+        <details><summary>Bedeutet ein positives Budgetcheck-Ergebnis eine Kreditzusage?</summary><p>Nein. Neben Miete oder Hypothek schätzen wir weitere Ausgaben mit 25 % des Netto-Haushaltseinkommens, bei Verheirateten mit 30 %, plus 5 Prozentpunkten je unterhaltsberechtigtem Kind. Zusätzlich ziehen wir 5 % des Einkommens als Sicherheitspuffer ab. Das restliche Budget steht rechnerisch vollständig für Kreditraten zur Verfügung; ein zusätzlicher Mindestrestbetrag ist nicht nötig. Diese vereinfachten Annahmen berücksichtigen Steuern, Krankenkasse, Lebenshaltung und Verpflichtungen nur pauschal. Tatsächliche Kosten und Haushaltsformen können abweichen. Ein positives Ergebnis garantiert weder einen Kredit noch den gewünschten Betrag. Die Kreditgeberin prüft Ihre vollständige Situation separat.</p></details>
         <details><summary>Entsteht durch den Rechner eine Verpflichtung?</summary><p>Nein. Ihre Eingaben bleiben im Browser und werden nicht gesendet.</p></details>
+        <details><summary>Brauche ich Unterlagen für den Budgetcheck?</summary><p>Für diese erste Schätzung nicht: Ungefähre Monatsbeträge genügen. Für einen späteren Kreditantrag kann die Kreditgeberin Nachweise verlangen. Bei Zweifeln an den Angaben muss sie diese überprüfen. Der Rechner ersetzt diese Prüfung nicht.</p></details>
+        <details><summary>Wie unterscheidet sich die gesetzliche Kreditfähigkeitsprüfung?</summary><p>Bei Konsumkrediten, die dem KKG unterstehen, prüft die Kreditgeberin vor Vertragsabschluss unter anderem Einkommen, tatsächliche Wohnkosten, Steuern und gemeldete Verpflichtungen. Das kantonale Existenzminimum muss geschützt bleiben. Für die Prüfung nach Art. 28 KKG wird eine Rückzahlung innerhalb von 36 Monaten angenommen, auch bei längerer Vertragslaufzeit. Unsere vereinfachte Haushaltsschätzung und die gewählte Beispielrate bilden diese Prüfung nicht ab.</p></details>
         <details><summary>Was kostet die Beratung?</summary><p>Das Erstgespräch ist unverbindlich. <span class="ph">(Konditionen: Platzhalter)</span></p></details>
       </div>
     </div>
@@ -279,6 +295,6 @@
   </div>
 </footer>
 
-<script src="app.js?v=2026-10-31-income-expenses"></script>
+<script src="app.js?v=2026-11-02-quick-estimate"></script>
 </body>
 </html>

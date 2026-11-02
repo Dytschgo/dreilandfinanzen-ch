@@ -22,27 +22,41 @@ Dann http://127.0.0.1:5180/ öffnen.
 
 ## Kredit & Budgetcheck
 
-Drei kurze Schritte: Ihr Kredit → Ihr Budget → Ihr Spielraum. Im Budget werden nur Nettoeinkommen
-und Miete inklusive Nebenkosten erfragt. Betrag und Laufzeit lassen sich per Schieberegler ändern;
-die Laufzeit ist in 12-Monats-Schritten wählbar. Kein Verwendungszweck, keine weiteren Budgetfragen.
+Drei kurze Schritte: Ihr Kredit → Ihr Budget → Ihr Spielraum. Das Budget erfragt monatliches
+Netto-Haushaltseinkommen, Miete oder Hypothek inklusive Nebenkosten, verheiratet Ja/Nein und
+Anzahl unterhaltsberechtigter Kinder (ganze Zahl 0–99). Einkommen und Wohnkosten müssen denselben
+Haushalt abdecken. Eigentümer erfassen auch Amortisation und Unterhalt. Die vereinfachte
+Haushaltsannahme ist sichtbar: verheiratet = zwei Erwachsene, sonst einer.
 
 Kreditregeln und Zinsformel entsprechen weiterhin `credit-core` v0.2: Beispielzins 7.9 % effektiv,
 ab CHF 5'000, Start CHF 20'000 / 48 Monate, Laufzeiten 12–120 Monate, über CHF 80'000 höchstens
-84 Monate. Antragsformular und Zustellung sind noch nicht angebunden; das Kontaktformular ist eine Demo.
+84 Monate. Betrag und Laufzeit lassen sich per Schieberegler ändern. Das Kontaktformular bleibt eine Demo.
 
-Die grobe Schätzung rechnet: Nettoeinkommen − Miete − geschätzte weitere Ausgaben − gewählte
-Monatsrate. Die früheren 30/36-Zahlungsbänder und Tragbarkeitseinstufungen sind aus dem Rechner
-entfernt. Eine längere Laufzeit verändert nur das Rechenbeispiel, nicht eine Kreditentscheidung.
+Die vom Nutzer ausgewählte illustrative Ausgabenschätzung ist zentral in `EXPENSE_ALLOWANCE` definiert:
+25 % des Netto-Haushaltseinkommens ohne Ehe, 30 % mit Ehe, plus 5 Prozentpunkte je Kind.
+Zusätzlich werden separat 5 % des Einkommens als Sicherheitspuffer abgezogen. Prozentbeträge werden
+jeweils auf Rappen gerundet. Wohnkosten werden separat abgezogen; die Prozentschätzung umfasst
+Lebenshaltung, Steuern, Krankenkasse und bestehende Verpflichtungen nur grob. Sie ist keine validierte
+Bankvorgabe oder gesetzliche Pauschale und bildet tatsächliche Kosten und andere Haushaltsformen
+nicht zuverlässig ab. Bei 0 Einkommen entstehen rechnerisch 0 geschätzte weitere Ausgaben, was keine
+Aussage über tatsächliche Kosten ist.
 
-Weitere Ausgaben werden mit `40 % des Nettoeinkommens` pro Monat geschätzt, auf Rappen gerundet,
-ohne festen Mindestbetrag. Die Miete wird separat abgezogen. Der Nutzer hat auf Rückfrage die
-bestehenden 40 % ausdrücklich ausgewählt; der frühere Mindestbetrag von CHF 2'500 entfällt.
-Prozentsatz und errechneter Betrag werden im Ergebnis und in der Beratungszusammenfassung genannt.
-Dies bleibt eine illustrative Projektannahme, keine Bankvorgabe oder gesetzliche Pauschale.
-Haushaltsgrösse, Steuern, Verpflichtungen und tatsächliche Ausgaben sind unbekannt; das Einkommen
-allein bestimmt die tatsächlichen Kosten nicht. Auch bei 0 Einkommen entfällt der feste Mindestbetrag:
-0 geschätzte weitere Ausgaben sind eine Folge der Formel, keine Aussage über tatsächliche Kosten.
-Die Auswahl der Formel autorisiert keinen Merge und keine Veröffentlichung dieser Änderung.
+Nettoeinkommen minus Wohnkosten, weitere Ausgaben und Sicherheitspuffer ergibt das freie Budget.
+Der positive Anteil wird vollständig als für Kreditraten verfügbar ausgewiesen. Die gewählte Rate
+wird davon abgezogen; negative Beträge bleiben als Budgetlücke sichtbar. Es gibt keinen zusätzlichen
+Mindestrestbetrag von CHF 50 oder CHF 100 und keine automatische Kreditzusage. Die früheren
+30/36-Zahlungsbänder bleiben entfernt. Eine längere Laufzeit verändert nur das Rechenbeispiel.
+Ergebnis, FAQ und Beratungszusammenfassung verwenden dieselben Annahmen. Der Rechner bittet ausdrücklich
+nur um ungefähre Monatsbeträge, ohne Unterlagen oder Uploads. Er verspricht keine Bearbeitungszeit.
+Der Ergebnistext beschreibt das rechnerische Budget neutral und empfiehlt nicht, es auszuschöpfen.
+Die vier Fragen und die ausgewählte Prozentformel bleiben erhalten.
+
+Die sichtbare Abgrenzung und die FAQ trennen diese Schätzung von der gesetzlichen Kreditfähigkeitsprüfung.
+Für die von Art. 28 KKG erfasste Prüfung gelten unter anderem das kantonale Existenzminimum,
+tatsächliche Miete, Steuern, gemeldete Verpflichtungen und die 36-Monats-Annahme, auch bei längerer
+Vertragslaufzeit. Das bildet der Schnellrechner nicht ab. Nachweise können später verlangt werden;
+bei Zweifeln muss die Kreditgeberin die Angaben prüfen (Art. 31 KKG). Diese Änderung ist keine
+rechtliche Freigabe der gesamten Website; die bestehenden Firmen-/Kontaktplatzhalter bleiben offen.
 
 Ergebnisse zeigen einen geschätzten Spielraum oder eine Budgetlücke. Sie garantieren weder einen Kredit
 noch den gewünschten Betrag. Die vollständige Prüfung bleibt separat bei der Kreditgeberin.
@@ -62,15 +76,16 @@ git diff --check
 ```
 
 Der Test lädt die echte `index.html` mit `app.js` und `style.css` lokal in Headless Chrome.
-Er prüft die zwei Budgetfelder, fehlende/ungültige Angaben, einkommensabhängige Ausgabenschätzung, gewählte Rate,
+Er prüft die vier Budgetfelder, fehlende/ungültige Angaben, Haushalts- und Kinderszenarien,
+separaten Sicherheitspuffer, vollständig verfügbares Rückzahlungsbudget, gewählte Rate,
 positive/negative/Null-Ergebnisse, Rappen, Laufzeitgrenzen, beide Laufzeitregler per Tastatur,
 Beratungszusammenfassung und Rücknavigation. Alle drei Schritte werden bei 1440/900/390/320 Pixeln
 sowie 200 % Textgrösse auf Überlauf und abgeschnittene Steuerelemente geprüft.
-Protokoll und Screenshots liegen unter `dist/qa/evidence/income-expenses/`. Die Screenshots des Rechners
+Protokoll und Screenshots liegen unter `dist/qa/evidence/quick-estimate/`. Die Screenshots des Rechners
 blenden nur für die Aufnahme den haftenden Seitenkopf und den Sprunglink aus.
 Es werden keine produktiven Anfragen gestellt.
 
-Die [Feedback-Auswertung](tools/feedback-affordability.md#einkommensabhängige-weitere-ausgaben) dokumentiert
+Die [Feedback-Auswertung](tools/feedback-affordability.md#schnelle-schätzung-und-gesetzliche-prüfung) dokumentiert
 Befund, Umsetzung, Annahmen und offene Freigabepunkte. Frühere Abschnitte sind historischer Kontext;
 ihre Veröffentlichungsfreigabe gilt nicht für diese neue Änderung.
 
