@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/Montserrat-VF.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="assets/fonts/Inter-VF.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="style.css?v=2026-11-04-pages">
+<link rel="stylesheet" href="style.css?v=2026-11-04-journey">
 </head>
 <body>
 <a class="skip" href="#rechner">Zum Kredit &amp; Budgetcheck springen</a>
@@ -146,6 +146,25 @@
             </div>
             <p class="adjust__rate">Monatliche Rate <b id="adj-rate">–</b></p>
           </div>
+          <details class="term-comparison" id="term-comparison">
+            <summary>Laufzeiten vergleichen <span>optional</span></summary>
+            <div class="comparison-content">
+              <p class="fine" id="comparison-note">Gleicher Kreditbetrag, zwei Laufzeiten: unverbindliche Beispiele mit 7.9 % effektivem Jahreszins. Der Vergleich ändert Ihre Auswahl nicht.</p>
+              <div class="field"><label for="compare-months">Andere Laufzeit zum Vergleich</label><select id="compare-months" aria-describedby="comparison-note"></select></div>
+              <p class="fine" id="comparison-status" role="status" hidden></p>
+              <div class="comparison-grid" id="comparison-values" aria-live="polite" aria-atomic="true">
+                <section class="comparison-card" aria-labelledby="compare-selected-heading">
+                  <h4 id="compare-selected-heading">Ihre Auswahl</h4><p id="compare-selected-months"></p>
+                  <dl><div><dt>Monatliche Rate</dt><dd id="compare-selected-monthly">–</dd></div><div><dt>Zinskosten</dt><dd id="compare-selected-interest">–</dd></div><div><dt>Gesamtrückzahlung</dt><dd id="compare-selected-total">–</dd></div></dl>
+                </section>
+                <section class="comparison-card" aria-labelledby="compare-other-heading">
+                  <h4 id="compare-other-heading">Zum Vergleich</h4><p id="compare-other-months"></p>
+                  <dl><div><dt>Monatliche Rate</dt><dd id="compare-other-monthly">–</dd></div><div><dt>Zinskosten</dt><dd id="compare-other-interest">–</dd></div><div><dt>Gesamtrückzahlung</dt><dd id="compare-other-total">–</dd></div></dl>
+                </section>
+              </div>
+              <p class="fine">Eine längere Laufzeit senkt die Monatsrate, erhöht aber die gesamten Zinskosten. Der tatsächliche Zins wird individuell festgelegt. Keine Kreditzusage.</p>
+            </div>
+          </details>
           <div class="actions">
             <a class="btn btn--primary" id="credit-apply" href="antrag.html">Kredit beantragen</a>
             <button class="btn btn--ghost" type="button" data-go="1">Zurück</button>
@@ -189,11 +208,12 @@
         </ul>
       </div>
       <div>
-        <h2>So läuft es ab.</h2>
-        <ol class="steps">
-          <li><h3>Gespräch</h3><p>Sie erzählen, was Sie vorhaben.</p></li>
-          <li><h3>Budgetcheck</h3><p>Wir rechnen gemeinsam, was tragbar ist.</p></li>
-          <li><h3>Entscheidung</h3><p>Sie entscheiden in Ruhe.</p></li>
+        <h2 id="journey-title">Ihr Weg zum Kredit.</h2>
+        <p class="muted">Geplanter Ablauf. Aktueller Entwicklungsstand: Anträge werden nur vorbereitet und noch nicht übermittelt.</p>
+        <ol class="steps" id="credit-journey" aria-labelledby="journey-title">
+          <li><h3>Budget einschätzen</h3><p>Ungefähre Monatsbeträge genügen, Unterlagen sind nicht nötig. Der Budgetcheck zeigt eine erste Schätzung. Danach können Sie Beratung anfragen oder Ihren Antrag vorbereiten.</p></li>
+          <li><h3>Antrag vorbereiten</h3><p>Ergänzen Sie Ihre Angaben im Antragsformular. Derzeit bleiben sie als Entwurf in Ihrem Browser. Es werden keine Daten gesendet.</p></li>
+          <li><h3>Prüfung durch die Kreditgeberin</h3><p>Nach Freischaltung der Übermittlung prüft die Kreditgeberin Ihre vollständigen Angaben und allfällige Nachweise. Eine Zusage ist nicht garantiert.</p></li>
         </ol>
       </div>
     </div>
@@ -296,6 +316,6 @@
 </footer>
 
 <script src="header.js?v=2026-11-04"></script>
-<script src="app.js?v=2026-11-04-application"></script>
+<script src="app.js?v=2026-11-04-comparison"></script>
 </body>
 </html>

@@ -60,7 +60,12 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applic
     await page.setViewportSize({width:1440,height:1000});
     const wordGap = await page.locator('.header__consult').evaluate(el => el.children[1].getBoundingClientRect().left - el.children[0].getBoundingClientRect().right);
     assert.ok(wordGap >= 2,'Desktop consultation words have visible spacing');
+    assert.deepEqual(await page.locator('#credit-journey li h3').allTextContents(),['Budget einschätzen','Antrag vorbereiten','Prüfung durch die Kreditgeberin']);
+    assert.match(await page.locator('#credit-journey').textContent(),/Nach Freischaltung der Übermittlung/);
+    assert.match(await page.locator('#credit-journey').textContent(),/keine Daten gesendet/);
+    await page.locator('#credit-journey').screenshot({path:path.join(evidence,'journey-1440.png')});
     await page.setViewportSize({width:390,height:1000});
+    await page.locator('#credit-journey').screenshot({path:path.join(evidence,'journey-390.png')});
     await page.locator('[data-go="1"]').first().click();
     await page.locator('#ink').fill('6000'); await page.locator('#miete').fill('1500');
     await page.locator('#married').selectOption('no'); await page.locator('#children').fill('0');
@@ -210,6 +215,18 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applic
       await page.evaluate(()=>document.fonts.ready);
       assert.match(await page.locator('.development-note').textContent(),/Platzhalter/);
       assert.equal(await page.locator('h1').count(),1);
+      if(name==='ueber-uns') {
+        assert.match(await page.locator('#application-operator').textContent(),/Best-Finance GmbH als Betreiber/);
+        assert.equal(await page.locator('.role-placeholders dd').count(),2);
+        for(const value of await page.locator('.role-placeholders dd').allTextContents())assert.match(value,/Platzhalter/);
+        await page.locator('#application-operator').screenshot({path:path.join(evidence,'operator-section.png')});
+      } else {
+        assert.equal(await page.locator('#hiring-process li').count(),3);
+        assert.match(await page.locator('#hiring-process').textContent(),/Platzhalter/);
+        assert.match(await page.locator('#hiring-process').textContent(),/kein Bewerbungsversand/);
+        assert.equal(await page.locator('#hiring-process a, #hiring-process button, #hiring-process input').count(),0,'Hiring placeholders create no false working application channel');
+        await page.locator('#hiring-process').screenshot({path:path.join(evidence,'hiring-section.png')});
+      }
       assert.equal(await page.locator('.nav [aria-current="page"]').getAttribute('href'),name+'.html');
       assert.match(await page.locator('.nav [aria-current="page"]').evaluate(el=>getComputedStyle(el).textDecorationLine),/underline/);
       for (const [width,zoom] of [[1440,'100%'],[900,'100%'],[390,'100%'],[320,'100%'],[320,'200%']]) {
@@ -252,6 +269,7 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applic
     await page.waitForURL('**/karriere.html');
     assert.equal(await page.locator('.burger').getAttribute('aria-expanded'),'false');
     checks.push('Separate About/Careers pages reachable from desktop/mobile navigation and homepage cards; explicit placeholders, active page, keyboard job disclosure and consultation return verified; no overflow through 320px/200% text');
+    checks.push('Customer journey distinguishes estimate, preparation and future bank assessment; confirmed form operator is named with relationship placeholders; hiring process is explicitly a placeholder without sending');
     assert.deepEqual(requests,[],'No external or non-GET requests');
     assert.deepEqual(errors,[],'Browser runtime errors');
     const sourceRevision=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();

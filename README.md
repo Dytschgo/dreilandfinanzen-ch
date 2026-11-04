@@ -68,6 +68,16 @@ Der letzte Rechner-Schritt führt mit «Kredit beantragen» zu `antrag.html`; nu
 werden als `amount` und `months` übergeben. Budget- und Personendaten stehen nicht in der URL.
 Die Beratungszusammenfassung bleibt über den Kopfzeilenbutton aus allen Schritten erreichbar.
 
+Im Ergebnis lässt sich «Laufzeiten vergleichen» optional aufklappen. Für denselben Betrag stehen
+die gewählte Laufzeit und eine andere erlaubte Laufzeit mit Monatsrate, Zinskosten und
+Gesamtrückzahlung gegenüber. Beide Beispiele verwenden dieselbe vorhandene 7.9-%-Formel.
+Der Vergleich ändert weder Kreditwunsch, Budgetstatus, Beratungszusammenfassung noch Antragslink.
+Die Alternative startet bei 60 Monaten; fällt sie mit der Auswahl zusammen oder ausserhalb der
+zulässigen Grenze, wird die nächste längere erlaubte Laufzeit verwendet, sonst die längste kürzere.
+Über CHF 80'000 gilt auch im Vergleich die Grenze von 84 Monaten. Ungültige Kreditbeträge leeren
+die Vergleichszahlen und sperren die Vergleichsauswahl. Längere Laufzeiten werden ausdrücklich
+mit höheren gesamten Zinskosten eingeordnet; es gibt keine automatische Empfehlung.
+
 Der Status im Ergebnis ist grün bei positivem Spielraum («Tragbar (Schätzung)»), gelb bei
 exakt CHF 0.00 («Knapp tragbar (Schätzung)») und rot bei einer Lücke («Nicht tragbar (Schätzung)»). Massgeblich ist
 der bestehende auf Rappen gerundete Spielraum nach Rate. Keine neue Schwelle für kleine positive
@@ -103,7 +113,7 @@ Protokoll und Screenshots liegen unter `dist/qa/evidence/single-consultation/`. 
 blenden nur für die Aufnahme den haftenden Seitenkopf und den Sprunglink aus.
 Es werden keine produktiven Anfragen gestellt.
 
-Die [Feedback-Auswertung](tools/feedback-affordability.md#eigene-inhaltsseiten-und-kompakter-antrag) dokumentiert
+Die [Feedback-Auswertung](tools/feedback-affordability.md#kundenweg-zuständigkeiten-bewerbung-und-laufzeitvergleich) dokumentiert
 Befund, Umsetzung, Annahmen und offene Freigabepunkte. Frühere Abschnitte sind historischer Kontext;
 ihre Veröffentlichungsfreigabe gilt nicht für diese neue Änderung.
 
@@ -114,6 +124,13 @@ Bildkacheln auf der Startseite. Unternehmensgeschichte, Arbeitsweise, Teamprofil
 sind ausdrücklich als Platzhalter gekennzeichnet. Es werden keine realen Personen, Qualifikationen
 oder offenen Stellen behauptet. Das Stellenbeispiel lässt sich per Tastatur aufklappen; es gibt noch
 keinen Bewerbungsversand. Die bestehende Beratung bleibt in der Kopfzeile erreichbar.
+
+Der bestehende Abschnitt zum Kundenweg erklärt Budgetschätzung, lokale Antragsvorbereitung und
+die spätere Prüfung durch die Kreditgeberin. Er kennzeichnet den Ablauf als geplant und die
+Übermittlung als noch nicht freigeschaltet. «Über uns» benennt den bestätigten Best-Finance-
+Formularbetreiber; konkrete Rollen in der Zusammenarbeit mit Dreiland bleiben gekennzeichnete
+Platzhalter. «So bewerben Sie sich» auf der Karriereseite zeigt einen Beispielablauf mit Platzhaltern
+für Kontakt, Bewerbungsweg, Interviewstufen und Rückmeldefristen, ohne aktiven Bewerbungsversand.
 
 ## Kreditantrag mit credit-core
 

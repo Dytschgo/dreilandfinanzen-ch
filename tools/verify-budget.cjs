@@ -34,7 +34,8 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'single-consultation');
       await go(1, 2);
     };
     const noOverflow = async label => {
-      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true, label + ': page overflow');
+      const layout=await page.evaluate(()=>({fits:document.documentElement.scrollWidth<=innerWidth,overflow:[...document.querySelectorAll('body *')].filter(el=>el.getBoundingClientRect().right>innerWidth+1).slice(0,10).map(el=>({tag:el.tagName,id:el.id,cls:el.className,width:el.getBoundingClientRect().width}))}));
+      assert.equal(layout.fits,true,label+': page overflow '+JSON.stringify(layout.overflow));
       assert.equal(await page.locator('#rechner').evaluate(el => el.scrollWidth <= el.clientWidth), true, label + ': calculator overflow');
       const clipped = await page.locator('#rechner .btn:visible, #rechner label:visible, #rechner output:visible').evaluateAll(els => els.filter(el => el.scrollWidth > el.clientWidth + 1 || el.scrollHeight > el.clientHeight + 1).map(el => el.textContent));
       assert.deepEqual(clipped, [], label + ': clipped controls');
@@ -277,6 +278,78 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'single-consultation');
       assert.match(await text('#consult-text'), /Tragbar \(grobe Schätzung\)/);
     }
     await page.locator('.stepper [data-go="2"]').click();
+
+    // Fixed reference figures independently calculated for CHF 20,000 at 7.9% effective annual interest.
+    await page.locator('.stepper [data-go="0"]').click();
+    await page.locator('#betrag').fill('20000');
+    await slider('#laufzeit',48);
+    await page.locator('.stepper [data-go="2"]').click();
+    assert.equal(await page.locator('#term-comparison').evaluate(el=>el.open),false,'Comparison starts optional and collapsed');
+    await page.locator('#term-comparison summary').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#comparison-values').isVisible(),true);
+    const selectedBefore = await page.evaluate(()=>({rate:document.querySelector('#adj-rate').textContent,status:document.querySelector('#est-status').textContent,budget:document.querySelector('#est-frei').textContent,application:document.querySelector('#credit-apply').getAttribute('href')}));
+    assert.equal(await text('#compare-selected-monthly'),'CHF 484.77');
+    assert.equal(await text('#compare-selected-interest'),"CHF 3'268.96");
+    assert.equal(await text('#compare-selected-total'),"CHF 23'268.96");
+    await page.locator('#compare-months').selectOption('60');
+    assert.equal(await text('#compare-other-monthly'),'CHF 401.97');
+    assert.equal(await text('#compare-other-interest'),"CHF 4'118.37");
+    assert.equal(await text('#compare-other-total'),"CHF 24'118.37");
+    await page.locator('#compare-months').focus();
+    await page.keyboard.press('Home');
+    await page.keyboard.press('ArrowDown');
+    assert.equal(await page.locator('#compare-months').inputValue(),'24','Native term select works by keyboard');
+    await page.locator('#compare-months').selectOption('36');
+    assert.equal(await text('#compare-other-monthly'),'CHF 623.30');
+    assert.equal(await text('#compare-other-interest'),"CHF 2'438.70");
+    assert.equal(await text('#compare-other-total'),"CHF 22'438.70");
+    assert.deepEqual(await page.evaluate(()=>({rate:document.querySelector('#adj-rate').textContent,status:document.querySelector('#est-status').textContent,budget:document.querySelector('#est-frei').textContent,application:document.querySelector('#credit-apply').getAttribute('href')})),selectedBefore,'Comparing another term changes neither selected loan nor budget');
+    await page.locator('.stepper [data-go="0"]').click();
+    await page.locator('#betrag').fill('4999');
+    assert.equal(await page.locator('#compare-months').isDisabled(),true);
+    assert.equal(await page.locator('#comparison-values').evaluate(el=>el.hidden),true);
+    assert.deepEqual(await page.locator('#comparison-values dd').allTextContents(),Array(6).fill('–'),'Invalid credit clears stale comparison figures');
+    await page.locator('#betrag').fill('80000');
+    await slider('#laufzeit',120);
+    await page.locator('.stepper [data-go="2"]').click();
+    assert.equal(await page.locator('#compare-months option[value="120"]').count(),0,'Selected term is excluded from alternative choices');
+    await page.locator('#compare-months').selectOption('108');
+    await page.locator('.stepper [data-go="0"]').click();
+    await page.locator('#betrag').fill('81000');
+    assert.equal(await page.locator('#compare-months option').evaluateAll(els=>els.every(el=>Number(el.value)<=84)),true,'Comparison shares the CHF 80,000 term boundary');
+    assert.equal(await page.locator('#compare-months').inputValue(),'72','Out-of-range alternative repairs to a distinct allowed term');
+    await page.locator('#betrag').fill('20000');
+    await slider('#laufzeit',48);
+    await page.locator('.stepper [data-go="2"]').click();
+    await page.locator('#compare-months').selectOption('60');
+    assert.match(await text('#compare-other-months'),/CHF 20'000/);
+    assert.equal(await text('#compare-other-monthly'),'CHF 401.97','Comparison follows updated amount');
+    for(const [width,zoom] of [[1440,'100%'],[900,'100%'],[390,'100%'],[320,'100%'],[320,'200%']]) {
+      await page.setViewportSize({width,height:1000});
+      await page.evaluate(value=>{document.documentElement.style.fontSize=value;},zoom);
+      await noOverflow('Open comparison '+width+'/'+zoom);
+      assert.equal(await page.locator('#adj-rate').evaluate(el=>{const range=document.createRange();range.selectNodeContents(el);return range.getClientRects().length;}),1,'Monthly payment remains one complete unit at '+width+'/'+zoom);
+      await capture('comparison-'+width+'-'+zoom.replace('%',''));
+    }
+    await page.locator('.stepper [data-go="0"]').click();
+    await page.locator('#betrag').fill('300000');
+    await slider('#laufzeit',12);
+    await page.locator('.stepper [data-go="2"]').click();
+    await noOverflow('Maximum payment at 320px/200% text');
+    const paymentLayout=await page.locator('#adj-rate').evaluate(el=>{const range=document.createRange();range.selectNodeContents(el);return{lines:range.getClientRects().length,fits:el.getBoundingClientRect().width<=el.parentElement.getBoundingClientRect().width};});
+    assert.deepEqual(paymentLayout,{lines:1,fits:true},'Maximum payment stays whole and within the rate row');
+    await capture('comparison-maximum-320-200');
+    await page.evaluate(()=>{document.documentElement.style.fontSize='100%';});
+    await page.locator('.stepper [data-go="0"]').click();
+    await page.locator('#betrag').fill('20000');
+    await slider('#laufzeit',48);
+    await page.locator('.stepper [data-go="2"]').click();
+    await page.locator('#term-comparison summary').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#term-comparison').evaluate(el=>el.open),false);
+    assert.equal(await page.locator('#term-comparison summary').evaluate(el=>el===document.activeElement),true,'Closing comparison retains trigger focus');
+    checks.push('Optional keyboard-operated comparison: fixed monthly/interest/total reference figures, independent loan/budget state, shared term cap, invalid reset and open panel through 320px/200% text; normal and maximum payments stay whole');
 
     for (const width of [1440, 900, 390, 320]) {
       await page.setViewportSize({ width, height: 1000 });
