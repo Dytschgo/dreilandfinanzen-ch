@@ -1019,3 +1019,44 @@ Vor dem Push werden Rechner-/Header-Regression und konfigurierte Antragsprüfung
 erzeugten öffentlichen Release-Paket auf dem committeten Stand ausgeführt. Der Core bleibt sauber.
 Der Push-Auftrag autorisiert keinen Merge, kein Deployment und keine Freischaltung echter
 Übermittlung. Ein späterer Release braucht weiterhin das vollständige geprüfte öffentliche Paket.
+
+### Merge-Freigabe und Review für PR #7
+
+Der Nutzer hat danach ausdrücklich «merge» angefordert. Nach dem dokumentierten Projektablauf
+umfasst dies den regulären PR-Merge nach `main` und die Veröffentlichung des geprüften öffentlichen
+Pakets für `dreilandfinanzen.ch`. Die Freigabe ändert weder den Umfang noch die gesperrte Zustellung.
+
+Ein begrenztes Single-Agent-Review nach Dytschgo Review prüfte alle zwölf geänderten Dateien:
+Basis `22dad0aab544afeedce58c1eaeebf108bf5764a5`, Head
+`1b9f4c071c57085c89391b433baeca6fae20601d`. Es ist kein unabhängiges Review.
+
+**Standards:** keine Befunde. Logo, Farben und Schriften bleiben erhalten; neue Inhalte sind als
+Platzhalter erkennbar. Navigation und Disclosure sind semantisch und tastaturbedienbar. Kein Core-
+oder Kreditregel-Diff, keine neuen externen Laufzeitabhängigkeiten. Wiederholte Header-/Footer-
+Strukturen entsprechen dem bestehenden statischen Aufbau; keine zusätzliche Abstraktion nötig.
+
+**Anforderungen:** keine Befunde. Die zwei gewünschten Inhaltsseiten und ihre Einstiege sind
+vorhanden. Der mobile Antrag zeigt das Betragsfeld im initialen Viewport, behält Fortschritt und
+Validierung. Weitere Auditpunkte bleiben ausgeschlossen. Die begleitende Sprunglinkkorrektur
+behebt den in der vergrösserten Darstellung der neuen Seiten nachgewiesenen Navigationsfehler.
+
+Vorher/Nachher: Über-uns-/Karriere-Kacheln führten zum Kontakt, jetzt zu eigenen Seiten.
+Betragsfeld-Oberkante bei 390×844 von rund 1'166 auf 717 Pixel reduziert. Bereits auf dem sauberen
+Head bestanden Rechner-/Header- und vollständige konfigurierte Antragsregression am frischen
+öffentlichen Paket. Diese Ergänzung ändert nur das Prüfprotokoll, keine Produktdateien.
+
+GitHub meldet keine Branchschutzregeln, anwendbaren Branch-Regeln, CI-Checks, Reviews oder offenen
+Reviewthreads. Die Benutzerfreigabe ersetzt keine künftig hinzugefügten Anforderungen; vor dem
+Merge werden Head und Mergefähigkeit erneut geprüft.
+
+Reversibilität: statische Dateiänderungen ohne Migration oder echte Datenübermittlung. Die
+Hostinger-Zielinventur zeigt nur die erwarteten fünfzehn öffentlichen Dateien/Verzeichnisse.
+Ein vollständiges Rollback-Paket der vorherigen Veröffentlichung wurde aus dem aufbewahrten
+öffentlichen Paket erstellt. Alle lokalen Paket-Hashes, der Live-Manifestinhalt und zentrale
+Live-Datei-Hashes stimmen überein. Archiv und SHA-256-Beleg liegen unter
+`dist/qa/evidence/pr7-release/`. Damit ist die Veröffentlichung durch Wiederherstellung dieses
+Pakets umkehrbar. Private Core-Quellen, API und Konfiguration sind nicht im öffentlichen Paket.
+
+Nach dem Merge werden ein neues Paket am sauberen Merge-Commit gebaut, dessen Konfiguration,
+Navigation und Formularverhalten geprüft und die Live-Dateien separat verifiziert. Diese Notiz
+behauptet noch keinen erfolgreichen Merge oder ein erfolgreiches Deployment.
