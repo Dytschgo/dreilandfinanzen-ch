@@ -1135,3 +1135,42 @@ Branches verstanden. Autorisiert sind Commit, Push von `feedback/journey-term-co
 ein Pull Request gegen `main`. Alle vier Ergänzungen und ihre Platzhalter bleiben im beschriebenen
 Umfang. Die Prüfung wird am committeten Stand mit einem frisch gebauten öffentlichen Paket
 ausgeführt. Kein Push zum privaten Core, kein Merge, Deployment oder Freischalten der Zustellung.
+
+### Merge-Freigabe und Reviews für PR #8
+
+Der Nutzer hat danach ausdrücklich «merge» angefordert. Der dokumentierte Ablauf umfasst den
+regulären Merge nach `main` und die Veröffentlichung des geprüften öffentlichen Pakets für diese
+Website. Keine Freigabe weiterer Produktfunktionen oder echter Datenübermittlung.
+
+Unabhängige Standards- und Anforderungsreviews prüften alle zehn Dateien von Basis
+`2df8219b06033015960e55e66ee4d1ac067cab21` zu Head
+`63c5cf4d2fecd03b1a5f45355aea4ec14ec6980d`.
+
+**Standards:** ein P3-Befund, keine Blocker. Das seitenweite `overflow-wrap: anywhere` liess die
+Monatsrate bei 320 Pixeln/200 % Text in «CHF», «484.7», «7» zerfallen. Korrigiert: normale
+Umbruchregel am Seitenkörper, `anywhere` nur an den betroffenen Layout-/Textbereichen. Die
+Ratenzeile kann als Zeile umbrechen; der Geldbetrag bleibt als vollständige Einheit erhalten.
+Adaptive Schriftgrösse hält auch die grösste Rate innerhalb der Zeile. Vergleichsbeträge erhalten
+keinen beliebigen Umbruch zwischen Ziffern. Keine weiteren Standards- oder Fowler-Befunde.
+
+**Anforderungen:** keine Befunde. Ein unabhängiger Browserdurchlauf prüfte 34 Betrags-/Laufzeit-
+Szenarien und 264 Alternativauswahlen, einschliesslich CHF 80'000/80'001 und Betragsgrenzen.
+Gewählte Rate, Laufzeit, Budgetresultat und Antragslink blieben erhalten. Alle vier Ergänzungen,
+Platzhalter und die Vorbereitung ohne Übermittlung entsprechen dem Auftrag.
+
+Die Korrektur wurde durch den Hauptagenten geprüft; keine behauptete erneute unabhängige
+Abnahme eines späteren Heads. Die Rechnerregression kontrolliert jetzt zusätzlich eine einzeilige
+Geldbetragseinheit bei allen Vergleichsbreiten und die grösste Rate (CHF 300'000/12 Monate) bei
+320 Pixeln/200 % Text. Der fokussierte Repro zeigte drei Textzeilen vor und eine danach; die
+vollständige Rechnerprüfung bestand ohne Überlauf. Die Inhalts- und Antragsregression wird am
+korrigierten Stand ebenfalls ausgeführt; das Release-Paket wird frisch am Merge-Commit geprüft.
+
+Vorher/Nachher-Befunde und Screenshots stehen im vorherigen Abschnitt und der PR-Beschreibung.
+Reversibilität: statische Dateien ohne Migration oder aktivierte Zustellung. Die Hostinger-Inventur
+bestätigt nur die erwarteten achtzehn öffentlichen Dateien/Verzeichnisse. Der aufbewahrte frühere
+Release wurde mit allen lokalen Datei-Hashes, dem Live-Manifest und wichtigen Live-Datei-Hashes
+abgeglichen. Vollständiges Rollback-ZIP und SHA-256-Beleg: `dist/qa/evidence/pr8-release/`.
+
+GitHub meldet keine Branchschutzregeln, anwendbaren Branch-Regeln, CI-Checks, Reviews oder
+offenen Reviewthreads. Head und Mergefähigkeit werden unmittelbar vor dem Merge geprüft.
+Diese Notiz behauptet noch keinen erfolgreichen Merge oder eine erfolgreiche Veröffentlichung.

@@ -329,14 +329,27 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'single-consultation');
       await page.setViewportSize({width,height:1000});
       await page.evaluate(value=>{document.documentElement.style.fontSize=value;},zoom);
       await noOverflow('Open comparison '+width+'/'+zoom);
+      assert.equal(await page.locator('#adj-rate').evaluate(el=>{const range=document.createRange();range.selectNodeContents(el);return range.getClientRects().length;}),1,'Monthly payment remains one complete unit at '+width+'/'+zoom);
       await capture('comparison-'+width+'-'+zoom.replace('%',''));
     }
+    await page.locator('.stepper [data-go="0"]').click();
+    await page.locator('#betrag').fill('300000');
+    await slider('#laufzeit',12);
+    await page.locator('.stepper [data-go="2"]').click();
+    await noOverflow('Maximum payment at 320px/200% text');
+    const paymentLayout=await page.locator('#adj-rate').evaluate(el=>{const range=document.createRange();range.selectNodeContents(el);return{lines:range.getClientRects().length,fits:el.getBoundingClientRect().width<=el.parentElement.getBoundingClientRect().width};});
+    assert.deepEqual(paymentLayout,{lines:1,fits:true},'Maximum payment stays whole and within the rate row');
+    await capture('comparison-maximum-320-200');
     await page.evaluate(()=>{document.documentElement.style.fontSize='100%';});
+    await page.locator('.stepper [data-go="0"]').click();
+    await page.locator('#betrag').fill('20000');
+    await slider('#laufzeit',48);
+    await page.locator('.stepper [data-go="2"]').click();
     await page.locator('#term-comparison summary').focus();
     await page.keyboard.press('Enter');
     assert.equal(await page.locator('#term-comparison').evaluate(el=>el.open),false);
     assert.equal(await page.locator('#term-comparison summary').evaluate(el=>el===document.activeElement),true,'Closing comparison retains trigger focus');
-    checks.push('Optional keyboard-operated comparison: fixed monthly/interest/total reference figures, independent loan/budget state, shared term cap, invalid reset and open panel through 320px/200% text');
+    checks.push('Optional keyboard-operated comparison: fixed monthly/interest/total reference figures, independent loan/budget state, shared term cap, invalid reset and open panel through 320px/200% text; normal and maximum payments stay whole');
 
     for (const width of [1440, 900, 390, 320]) {
       await page.setViewportSize({ width, height: 1000 });
