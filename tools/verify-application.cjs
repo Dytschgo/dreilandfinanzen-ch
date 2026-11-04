@@ -38,7 +38,7 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applic
   const requests = [], errors = [], checks = [];
   const server = http.createServer(async (req,res) => {
     const name = decodeURIComponent(new URL(req.url, 'http://localhost').pathname).replace(/^\//,'') || 'index.html';
-    if (req.method !== 'GET' || name.includes('..') || name.includes('/api/') || !(name.startsWith('credit-runtime/') || name.startsWith('assets/') || ['index.html','app.js','style.css','header.js','antrag.html','application.js','application.css'].includes(name))) {res.writeHead(403).end();return;}
+    if (req.method !== 'GET' || name.includes('..') || name.includes('/api/') || !(name.startsWith('credit-runtime/') || name.startsWith('assets/') || ['index.html','ueber-uns.html','karriere.html','app.js','style.css','header.js','antrag.html','application.js','application-layout.js','application.css'].includes(name))) {res.writeHead(403).end();return;}
     const helper = name.startsWith('credit-runtime/dev-tools/');
     const source = helper || (name.startsWith('credit-runtime/') && !configured) ? fixture : site;
     try {
@@ -68,6 +68,22 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applic
     await page.locator('#credit-apply').click();
     await page.waitForSelector('#request-form');
     await page.waitForFunction(()=>document.querySelector('#application-form').getAttribute('aria-busy')==='false');
+    await page.evaluate(()=>document.fonts.ready);
+    await page.setViewportSize({width:390,height:844});
+    const mobileStart = await page.locator('#request-amount').evaluate(el=>({firstInputTop:el.getBoundingClientRect().top+scrollY,firstInputBottom:el.getBoundingClientRect().bottom+scrollY}));
+    assert.ok(mobileStart.firstInputBottom <= 844,'First amount input fits in initial 390x844 viewport: '+JSON.stringify(mobileStart));
+    await page.screenshot({path:path.join(evidence,'application-mobile-start.png'),fullPage:true});
+    assert.equal(await page.locator('.application__steps').getAttribute('open'),null);
+    await page.locator('.application__steps summary').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('#request-steps').isVisible(),true);
+    assert.equal(await page.locator('[data-request-goto="1"]').isDisabled(),true,'Unreached steps stay disabled');
+    await page.locator('#request-next').click();
+    assert.equal(await page.locator('[data-request-step="0"]').isVisible(),true);
+    assert.equal(await page.locator('#request-errors').isVisible(),true);
+    assert.notEqual(await page.locator('.application__steps').getAttribute('open'),null);
+    await page.locator('.application__steps summary').click();
+    checks.push('Compact intro puts the full first input in the initial mobile viewport; step disclosure works by keyboard and retains validation failures');
     assert.equal(new URL(page.url()).pathname, '/antrag.html');
     assert.equal(new URL(page.url()).search,'?amount=20000&months=48');
     assert.equal(await page.locator('#request-amount').inputValue(), '20’000');
@@ -92,6 +108,8 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applic
       host.replaceChildren(); host.id='anfrage';
       const {mountCreditRequest}=await import(runtime.entrypoints.bootstrap);
       const api=await mountCreditRequest(host,runtime,{locale:'de-CH',onBackToCalculator:()=>{host.hidden=true;}});
+      const {compactStepNavigation}=await import('/application-layout.js?v=2026-11-04-compact');
+      compactStepNavigation(host);
       const trigger=document.createElement('a');trigger.id='calc-cta';trigger.href='#anfrage';trigger.textContent='Synthetic fixture';
       trigger.addEventListener('click',()=>{host.hidden=false;api.setCredit();});
       document.body.append(trigger);
@@ -101,12 +119,24 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applic
     assert.equal(await page.evaluate(()=>window.__bkTestmodus.run('without-docs')),true,await page.locator('.dev-fill').textContent());
     assert.equal(await page.locator('[data-request-step="review"]').isVisible(),true);
     await page.screenshot({path:path.join(evidence,'review-synthetic.png'),fullPage:true});
+    await page.locator('.application__steps summary').click();
+    await page.locator('[data-request-goto="0"]').click();
+    const validAmount=await page.locator('#request-amount').inputValue();
+    await page.locator('#request-amount').fill('');
+    await page.locator('.application__steps summary').click();
+    await page.locator('[data-request-goto="1"]').click();
+    assert.equal(await page.locator('[data-request-step="0"]').isVisible(),true,'Forward step selection cannot bypass validation');
+    assert.equal(await page.locator('.application__steps').evaluate(el=>el.open),true,'Rejected step selection keeps navigation open');
+    assert.equal(await page.locator('#request-errors').isVisible(),true);
+    await page.locator('#request-amount').fill(validAmount);
     await page.setViewportSize({width:320,height:1000});
     for (const zoom of ['100%', '200%']) {
       await page.evaluate(value=>{document.documentElement.style.fontSize=value;},zoom);
       for (let step=0;step<6;step++) {
+        if (!await page.locator('.application__steps').evaluate(el=>el.open)) await page.locator('.application__steps summary').click();
         await page.locator(`[data-request-goto="${step}"]`).click();
         assert.equal(await page.locator(`[data-request-step="${step}"]`).isVisible(),true);
+        assert.equal(await page.locator('.application__steps').evaluate(el=>el.open),false,'Successful step navigation collapses the disclosure');
         const layout = await page.evaluate(()=>({ok:document.documentElement.scrollWidth<=innerWidth,overflow:[...document.querySelectorAll('body *')].filter(el=>el.getBoundingClientRect().right>innerWidth+1&&el.getBoundingClientRect().width>0).slice(0,12).map(el=>({tag:el.tagName,cls:el.className,id:el.id,right:el.getBoundingClientRect().right}))}));
         assert.equal(layout.ok,true,`Step ${step} at ${zoom}: ${JSON.stringify(layout.overflow)}`);
         await page.screenshot({path:path.join(evidence,`step-${step}-${zoom.replace('%','')}.png`),fullPage:true});
@@ -167,9 +197,66 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applic
     await page.locator('.header__consult').click();
     await page.waitForURL('**/#kontakt');
     checks.push('Missing runtime fails visibly and retains the consultation route');
+    await page.unroute('**/credit-runtime/shared/runtime.json');
+    await page.goto(origin);
+    await page.setViewportSize({width:1440,height:1000});
+    await page.locator('.nav a[href="ueber-uns.html"]').click();
+    await page.waitForURL('**/ueber-uns.html');
+    for (const name of ['ueber-uns','karriere']) {
+      if (name === 'karriere') {
+        await page.locator('.nav a[href="karriere.html"]').click();
+        await page.waitForURL('**/karriere.html');
+      }
+      await page.evaluate(()=>document.fonts.ready);
+      assert.match(await page.locator('.development-note').textContent(),/Platzhalter/);
+      assert.equal(await page.locator('h1').count(),1);
+      assert.equal(await page.locator('.nav [aria-current="page"]').getAttribute('href'),name+'.html');
+      assert.match(await page.locator('.nav [aria-current="page"]').evaluate(el=>getComputedStyle(el).textDecorationLine),/underline/);
+      for (const [width,zoom] of [[1440,'100%'],[900,'100%'],[390,'100%'],[320,'100%'],[320,'200%']]) {
+        await page.setViewportSize({width,height:1000});
+        await page.evaluate(value=>{document.documentElement.style.fontSize=value;},zoom);
+        assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,`${name} overflow ${width}/${zoom}`);
+        assert.equal(await page.locator('.header__consult').isVisible(),true);
+        assert.equal(await page.locator('.skip').evaluate(el=>el.getBoundingClientRect().bottom<=0),true,'Unfocused skip link stays fully offscreen at enlarged text');
+        if (await page.locator('.burger').isVisible()) {
+          await page.locator('.burger').click();
+          assert.equal(await page.locator('.nav [aria-current="page"]').isVisible(),true);
+          assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'Expanded mobile menu stays within viewport');
+          await page.keyboard.press('Escape');
+          assert.equal(await page.locator('.burger').getAttribute('aria-expanded'),'false');
+          assert.equal(await page.locator('.burger').evaluate(el=>el===document.activeElement),true);
+          await page.locator('.burger').blur();
+        }
+        await page.screenshot({path:path.join(evidence,`${name}-${width}-${zoom.replace('%','')}.png`),fullPage:true});
+      }
+      await page.evaluate(()=>{document.documentElement.style.fontSize='100%';});
+      await page.setViewportSize({width:1440,height:1000});
+      await page.locator('.skip').focus();
+      assert.equal(await page.locator('.skip').evaluate(el=>el.getBoundingClientRect().top>=0),true,'Skip link appears on keyboard focus');
+      await page.locator('.skip').blur();
+    }
+    assert.match(await page.locator('.development-note').textContent(),/keine aktuellen Stellenausschreibungen/);
+    await page.locator('.job-placeholder summary').focus();
+    await page.keyboard.press('Enter');
+    assert.equal(await page.locator('.job-placeholder details').evaluate(el=>el.open),true);
+    await page.locator('.header__consult').click();
+    await page.waitForURL('**/#kontakt');
+    for (const name of ['ueber-uns','karriere']) {
+      await page.locator(`.photo[href="${name}.html"]`).click();
+      await page.waitForURL(`**/${name}.html`);
+      await page.goto(origin);
+    }
+    await page.setViewportSize({width:390,height:1000});
+    await page.locator('.burger').click();
+    await page.locator('.nav a[href="karriere.html"]').click();
+    await page.waitForURL('**/karriere.html');
+    assert.equal(await page.locator('.burger').getAttribute('aria-expanded'),'false');
+    checks.push('Separate About/Careers pages reachable from desktop/mobile navigation and homepage cards; explicit placeholders, active page, keyboard job disclosure and consultation return verified; no overflow through 320px/200% text');
     assert.deepEqual(requests,[],'No external or non-GET requests');
     assert.deepEqual(errors,[],'Browser runtime errors');
-    const report={operator:configured?'Confirmed Best-Finance default, branch AA; synthetic applicants':'Synthetic operator TEST, not production configuration',site,core:'eeb52f8b29191627867059833b146391046d889a',checks,requests,errors};
+    const sourceRevision=execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim();
+    const sourceHasTrackedChanges=Boolean(execFileSync('git',['status','--porcelain','--untracked-files=normal'],{cwd:root,encoding:'utf8'}).trim());
+    const report={sourceRevision,sourceHasTrackedChanges,operator:configured?'Confirmed Best-Finance default, branch AA; synthetic applicants':'Synthetic operator TEST, not production configuration',site,mobileStart,core:'eeb52f8b29191627867059833b146391046d889a',checks,requests,errors};
     await fs.writeFile(path.join(evidence,'checks.json'),JSON.stringify(report,null,2));
     console.log(JSON.stringify(report,null,2));
   } finally {await browser.close();await new Promise(resolve=>server.close(resolve));}

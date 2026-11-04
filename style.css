@@ -24,8 +24,8 @@ img { display: block; max-width: 100%; height: auto; }
 :focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 .wrap { width: min(1200px, 100% - 2 * clamp(20px, 5vw, 56px)); margin-inline: auto; }
 .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-.skip { position: fixed; left: 12px; top: -60px; z-index: 100; padding: 10px 16px; background: var(--navy); color: #fff; border-radius: var(--r); }
-.skip:focus { top: 12px; }
+.skip { position: fixed; inset-inline-start: 12px; inset-block-end: 100%; z-index: 100; padding: 10px 16px; background: var(--navy); color: #fff; border-radius: var(--r); }
+.skip:focus { inset-block-start: 12px; inset-block-end: auto; }
 .ph { font-size: .8em; font-style: italic; color: var(--slate); }
 .muted { margin-bottom: 1.5rem; }
 .eyebrow { margin-bottom: .9rem; font: 600 .78rem/1.2 var(--display); letter-spacing: .14em; text-transform: uppercase; color: var(--slate); }
@@ -53,6 +53,7 @@ img { display: block; max-width: 100%; height: auto; }
 .header__consult:active { background: oklch(23% .09 258); }
 .nav { display: flex; align-items: center; gap: 1.75rem; }
 .nav a:not(.btn) { font: 500 .95rem/1 var(--text); color: var(--navy); text-decoration: none; }
+.nav a[aria-current="page"] { text-decoration: underline; text-underline-offset: 6px; }
 .nav a:not(.btn):hover { color: var(--blue); text-decoration: underline; text-underline-offset: 6px; }
 .burger { display: none; width: 44px; height: 44px; padding: 0; border: 1px solid var(--line-strong); border-radius: var(--r); background: #fff; cursor: pointer; place-content: center; gap: 6px; }
 .burger span { display: block; width: 18px; height: 2px; background: var(--navy); transition: transform .2s; }
@@ -252,6 +253,20 @@ input[type="range"]:focus-visible::-webkit-slider-runnable-track { box-shadow: 0
 .footer a { color: var(--light-text); }
 .footer .ph { color: var(--light-text); }
 
+/* ---------- Inhaltsseiten im Entwicklungsstand ---------- */
+.content-page { display: grid; gap: clamp(2rem, 4vw, 3.5rem); padding-block: clamp(2rem, 5vw, 4.5rem); overflow-wrap: anywhere; }
+.page-intro { display: grid; gap: 1rem; max-inline-size: 50rem; }
+.page-intro .eyebrow, .page-intro .lead { margin-block: 0; }
+.development-note { padding: 1rem; background: var(--mist); border-inline-start: 3px solid var(--blue); color: var(--navy); }
+.page-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: clamp(1.5rem, 3vw, 2.5rem); }
+.page-block, .page-section, .team-placeholder, .job-placeholder { display: grid; align-content: start; gap: .85rem; min-inline-size: 0; }
+.page-block, .job-placeholder { border-block-start: 1px solid var(--line-strong); padding-block-start: 1.5rem; }
+.content-page h2 { margin-block: 0; }
+.placeholder-label { color: var(--slate); font: 600 .8rem/1.4 var(--display); }
+.portrait-placeholder { display: grid; place-items: center; min-block-size: 12rem; background: var(--mist); border: 1px dashed var(--line-strong); color: var(--navy); }
+.job-placeholder summary { min-block-size: 44px; padding-block: .75rem; cursor: pointer; color: var(--navy); }
+.job-placeholder summary:active, .page-text-link:active { color: var(--blue); }
+.page-text-link { justify-self: start; min-block-size: 44px; padding-block: .6rem; }
 /* ---------- Responsive ---------- */
 @media (max-width: 1000px) {
   .header__consult-extra { display: none; }
