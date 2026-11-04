@@ -9,7 +9,7 @@
 <link rel="icon" href="assets/logo/favicon.svg" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/Montserrat-VF.ttf" as="font" type="font/ttf" crossorigin>
 <link rel="preload" href="assets/fonts/Inter-VF.ttf" as="font" type="font/ttf" crossorigin>
-<link rel="stylesheet" href="style.css?v=2026-11-02-cta-status">
+<link rel="stylesheet" href="style.css?v=2026-11-04-header">
 </head>
 <body>
 <a class="skip" href="#rechner">Zum Kredit &amp; Budgetcheck springen</a>
@@ -17,13 +17,13 @@
 <header class="header">
   <div class="wrap header__in">
     <a class="header__logo" href="#top"><img src="assets/logo/dreiland-finanzen_horizontal_farbig.svg" alt="Dreiland Finanzen" width="170" height="44"></a>
-    <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menü öffnen"><span></span><span></span></button>
     <nav class="nav" id="nav" aria-label="Hauptnavigation">
       <a href="#rechner">Kredit &amp; Budgetcheck</a>
       <a href="#ueber-uns">Über uns</a>
       <a href="#fragen">Fragen</a>
-      <a class="btn btn--primary btn--sm" href="#kontakt" data-consult>Beratung anfragen</a>
     </nav>
+    <a class="btn btn--primary btn--sm header__consult" href="#kontakt" data-consult aria-label="Beratung anfragen"><span>Beratung</span><span class="header__consult-extra"> anfragen</span></a>
+    <button class="burger" type="button" aria-expanded="false" aria-controls="nav" aria-label="Menü öffnen"><span></span><span></span></button>
   </div>
 </header>
 
@@ -42,10 +42,6 @@
         <p class="eyebrow">Kreditberatung · Basel</p>
         <h1 id="hero-title">Fair finanziert.<br>Persönlich begleitet.</h1>
         <p class="lead">Konditionen, die zu Ihrer Situation passen – und eine Ansprechperson, die Sie von Anfang bis Ende begleitet.</p>
-        <div class="hero__consult">
-          <a class="btn btn--primary consult-cta" href="#kontakt" data-consult>Beratung anfragen <span aria-hidden="true">→</span></a>
-          <small>Persönlich und unverbindlich.</small>
-        </div>
       </div>
 
       <form class="tool" id="rechner" aria-labelledby="tool-title" novalidate data-step="0">
@@ -150,15 +146,11 @@
             <p class="adjust__rate">Monatliche Rate <b id="adj-rate">–</b></p>
           </div>
           <div class="actions">
-            <a class="btn btn--primary" href="#kontakt" data-consult>Persönliche Beratung anfragen</a>
+            <a class="btn btn--primary" id="credit-apply" href="antrag.html">Kredit beantragen</a>
             <button class="btn btn--ghost" type="button" data-go="1">Zurück</button>
           </div>
         </section>
 
-        <div class="tool__consult">
-          <strong>Lieber gleich persönlich?</strong>
-          <a class="btn btn--primary consult-cta" href="#kontakt" data-consult>Beratung anfragen <span aria-hidden="true">→</span></a>
-        </div>
         <p class="fine">Unverbindliches Rechenbeispiel mit 7.9 % effektivem Jahreszins. Ihr tatsächlicher Zins wird individuell festgelegt. Ihre Eingaben bleiben im Browser.</p>
         <p class="legal">Die Kreditvergabe ist verboten, falls sie zur Überschuldung führt (Art. 3 UWG).</p>
       </form>
@@ -302,6 +294,7 @@
   </div>
 </footer>
 
-<script src="app.js?v=2026-11-02-cta-status"></script>
+<script src="header.js?v=2026-11-04"></script>
+<script src="app.js?v=2026-11-04-application"></script>
 </body>
 </html>

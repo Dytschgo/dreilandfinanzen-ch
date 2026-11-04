@@ -91,6 +91,10 @@
     $("#adj-rate").textContent = e ? chf2(e.monthly) : "–";
     $("#adj-betrag-out").textContent = ok ? chf(state.amount) : "–";
     $("#carry").textContent = e ? `${chf(state.amount)} · ${state.months} Monate · Rate ${chf2(e.monthly)}` : "Bitte zuerst einen gültigen Kreditbetrag wählen.";
+    const application = $("#credit-apply");
+    if (ok) application.href = `antrag.html?amount=${state.amount}&months=${state.months}`;
+    else application.removeAttribute("href");
+    application.setAttribute("aria-disabled", String(!ok));
     budget(e ? e.monthly : null);
   }
 
@@ -258,16 +262,6 @@
   }
 
   /* ---------- Menü ---------- */
-  const burger = $(".burger"), nav = $("#nav");
-  const setMenu = open => {
-    burger.setAttribute("aria-expanded", String(open));
-    burger.setAttribute("aria-label", open ? "Menü schliessen" : "Menü öffnen");
-    nav.classList.toggle("is-open", open);
-  };
-  burger.addEventListener("click", () => setMenu(burger.getAttribute("aria-expanded") !== "true"));
-  $$("a", nav).forEach(a => a.addEventListener("click", () => setMenu(false)));
-  document.addEventListener("keydown", e => { if (e.key === "Escape" && nav.classList.contains("is-open")) { setMenu(false); burger.focus(); } });
-
   /* ---------- Beratungsformular (Demo, sendet nichts) ---------- */
   const cf = $("#contact-form"), msg = $("#form-msg");
   cf.addEventListener("submit", e => {
@@ -287,6 +281,14 @@
   });
 
   window.__dfEstimate = estimate; // für Prüfungen
+  const query = new URLSearchParams(location.search);
+  const amount = Number(query.get('amount')), months = Number(query.get('months'));
+  if (['amount', 'months'].every(key => query.getAll(key).length === 1 && /^\d+$/.test(query.get(key)))
+      && Number.isSafeInteger(amount) && amount >= RULES.minAmount
+      && RULES.terms.includes(months) && months <= maxTermFor(amount)) {
+    state.amount = amount; state.months = months;
+    amountIn.value = group(amount);
+  }
   show(0);
   render();
 })();

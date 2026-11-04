@@ -1,0 +1,12 @@
+{
+  "schema": 1,
+  "profile": "runtime",
+  "outputPrefix": "credit-runtime/",
+  "runtimeBase": "/credit-runtime/",
+  "namespace": "dreilandfinanzen",
+  "brandFile": "credit-core.brand.json",
+  "locales": ["de-CH"],
+  "mode": "prepare",
+  "templates": [{"path": "credit-core-templates", "target": "fragments"}],
+  "routes": {"calculator": "/#rechner", "privacy": "/antrag.html#application-privacy", "legal": "/antrag.html#application-privacy"}
+}

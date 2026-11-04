@@ -1,6 +1,6 @@
 # Feedback-Auswertung: persönlicher Budgetcheck
 
-Aktuell: [Verständliche Tragbarkeitsbegriffe](#verständliche-tragbarkeitsbegriffe).
+Aktuell: [Ein Beratungseinstieg und eigene Antragsseite](#ein-beratungseinstieg-und-eigene-antragsseite).
 Die folgenden früheren Auswertungen und Veröffentlichungsfreigaben sind historisch und gelten
 nicht als Freigabe für die neue Ausgabenschätzung.
 
@@ -729,3 +729,221 @@ Die Änderung lässt sich über einen regulären Revert-PR zurücknehmen. Keine 
 Änderung gespeicherter Kundendaten. Bestehende Platzhalter und Grenzen der Budgetschätzung
 bleiben dokumentiert. Merge-Ergebnis und tatsächliche Live-Auslieferung werden nach Ausführung
 separat geprüft; diese Freigabenotiz allein behauptet keinen Release-Erfolg.
+
+
+## Getrennte Wege für Kreditantrag und Beratung
+
+Stand: 2. November 2026. Kategorie: Verbesserung. Basis `723ef6f` auf `main`, zu Beginn ohne
+lokale Änderungen. Arbeitsbranch: `feedback/credit-application-route`. Keine `AGENTS.md` im
+Projekt; bestehende CONTRIBUTING-/README-Regeln und Chrome-Prüfablauf weiterverwendet.
+
+### Vor Änderung geprüft
+
+Das bereitgestellte Referenzbild wurde geöffnet und visuell geprüft. Es zeigt im Ergebnisbereich
+oben «Persönliche Beratung anfragen» und darunter «Beratung anfragen». Beide verwenden im Code
+`href="#kontakt"` und `data-consult`. Die öffentliche HTML-Antwort stimmte mit dem lokalen Stand
+überein und enthielt dieselben Kontaktziele. Die bestehende Chrome-Regression bestand unverändert;
+beide Kontaktwege sind darin abgedeckt.
+
+### Angenommen, offene Zieladresse und Grenze
+
+Angenommen: Der obere Ergebnisbutton soll «Kredit beantragen» heissen und zur vollständigen
+Kreditantragsseite führen. Der untere Beratungsbutton soll weiterhin das bestehende Kontaktformular
+öffnen und die vorhandene Beratungszusammenfassung erhalten. Keine Anforderung abgelehnt.
+
+Im ausgewählten Projekt wurde keine Kreditantragsseite oder konfigurierte Ziel-URL gefunden,
+auch nicht in README, Anwendungscode und relevanter Git-Historie. Deshalb wurde gezielt nach der
+Adresse der Antragsseite gefragt. Die Zieladresse ist für die Umsetzung erforderlich; es wird
+kein Pfad erfunden und kein weiterhin zur Beratung führender Button nur umbeschriftet.
+Keine neue Antragsmaske, Datenerfassung oder Übertragung von Budgetdaten wird stillschweigend ergänzt.
+
+Bis zur Antwort bleibt der Anwendungscode unverändert. Umsetzung und Prüfung der getrennten
+Ziele sind noch offen; die bestandene Ausgangsregression beweist keine neue Antragsnavigation.
+Kein Push, Merge oder Deployment. Frühere Freigaben gelten für die damaligen PRs.
+
+
+## Ein Beratungseinstieg und eigene Antragsseite
+
+Stand: 4. November 2026. Kategorie: Verbesserung. Branch `feedback/credit-application-route`,
+Basis `723ef6f`. Die vorherige lokale Auswertung zur fehlenden Antragsadresse bleibt erhalten.
+Im ausgewählten Projekt weiterhin keine `AGENTS.md`; CONTRIBUTING, README und vorhandene
+Chrome-Verifikation verwendet. Core-Anweisungen wurden nach dem ausdrücklich gewünschten
+GitHub-Nachschlagen ebenfalls gelesen. Der Core bleibt unverändert.
+
+### Befund und Entscheidungen
+
+Das neue Referenzbild wurde tatsächlich geöffnet und visuell geprüft. Im ersten Rechnerschritt
+stehen drei Beratungsaktionen: Desktop-Kopfzeile, Einleitung und Rechnerfuss. Die Live-Dateien
+HTML/CSS stimmten mit dem lokalen Stand überein. Eine Browserprüfung bestätigte: bei 1440 Pixeln
+sind alle drei vorhanden; bei 390 Pixeln verschwindet die Kopfzeilenaktion im Menü. Die Empfehlung,
+nur einen ständig erreichbaren Kopfzeilenbutton zu behalten, wurde mit «build it» angenommen.
+Die vorige unveränderte Chrome-Regression bestand.
+
+Der Nutzer verwies für den Antragsweg ausdrücklich auf `Dytschgo/credit-core`. Dort gibt es keine
+gehostete Antrags-URL, sondern eine wiederverwendbare Form und einen Consumer-Vertrag. Auf die
+gezielte Frage nach Integration oder externer Verlinkung wurde «Add the credit-core form to Dreiland»
+gewählt. Das autorisiert die lokale Integration, keinen Merge, Release oder echte Zustellung.
+
+### Lokal umgesetzt
+
+- Nur ein Beratungseinstieg in der haftenden Kopfzeile. Auf Desktop «Beratung anfragen», mobil
+  «Beratung» mit demselben vollständigen zugänglichen Namen. Der Button liegt ausserhalb des
+  aufklappbaren Menüs. Einleitungs- und Rechnerfussaktionen entfernt; Formular-Absenden bleibt.
+- Gemeinsame Kopfzeilenlogik in `header.js`; gemessene Kopfzeilenhöhe berücksichtigt Umbruch bei
+  grosser Schrift. Menü schliesst bei Navigation oder Escape; Escape gibt den Fokus zurück.
+- Rechneraktion «Kredit beantragen» führt nach `antrag.html` mit ausschliesslich Betrag/Laufzeit.
+  Sie löst keinen Kontaktformular-Übertrag aus. Ungültige Kreditbeträge entfernen das Linkziel.
+- Eigene Dreiland-Antragsseite mit dem unverändert gepinnten privaten Core-Release `v0.2.0`,
+  SHA `eeb52f8b29191627867059833b146391046d889a`. Gitlink und canonical HTTPS-Submodul-URL,
+  keine getrackte Kopie des Core-Quelltexts. Namespace `dreilandfinanzen`, deutsch und formeller Ton.
+- Bootstrap lädt einen kohärent versionierten Modulgraphen und die geteilte Formularstruktur.
+  Übergebene Kreditwerte werden validiert, Zinsparameter ignoriert. Rückkehr zum Rechner erhält
+  den Kreditwunsch; ausdrücklicher neuer Kreditwunsch überschreibt nur den Kreditteil eines Entwurfs.
+- Vorbereitung ohne Übertragung; klarer sichtbarer Hinweis. API-Pfad per Apache gesperrt und aus
+  dem öffentlichen Release-Paket ausgeschlossen. Core-Quellverzeichnis und Consumer-JSON gesperrt.
+- Ladefehler zeigen eine verständliche Rückfallebene mit weiter erreichbarer Beratung.
+  Erforderliche swisstopo-Quellenangabe wird aus dem Core gerendert und angezeigt.
+- Reproduzierbarer Runtime-Build und Paketgenerator; generierte Assets bleiben ignoriert.
+  Der normale Build verlangt eine bestätigte Betreiberkonfiguration und verweigert derzeit die
+  Erstellung. Es wird kein fremder Betreiber als Dreiland-Standard angenommen.
+
+### Noch erforderliche Betreiberentscheidung
+
+Der Core bindet Firma, Kontakte, Datenschutzhinweise, Empfänger und Filiale an eine explizite
+Betreiberwahl. Deshalb wurde gefragt, ob der vorhandene Best-Finance-Betreiber mit seiner Filiale
+verwendet werden soll oder ein eigener Dreiland-Betreiber. Bei eigenem Betreiber braucht es den
+vollständigen Kontaktdatensatz und den tatsächlich zugeteilten Filialcode. Diese Antwort fehlt noch.
+`credit-core.brand.json` wird deshalb nicht mit erfundenen Werten angelegt. Das ist fehlende
+Geschäftskonfiguration, keine zusätzlich erfundene Freigabehürde.
+
+Keine gestalterische Anforderung abgelehnt. Der frühere Vorschlag A ist durch die nun ausdrücklich
+gewählte einzelne Kopfzeilenaktion ersetzt. Nicht übernommen wird eine unbestätigte Betreiber- oder
+Zustellungskonfiguration. Produktive Formularbereitstellung ist daher noch nicht abgeschlossen.
+Die synthetische Testkonfiguration ist ausdrücklich keine Ersatz-Konfiguration für Dreiland.
+
+### Prüfung und Grenzen
+
+Die bestehende Chrome-Regression wurde auf die neue Kopfzeilenaktion umgestellt. Bestanden:
+Sichtbarkeit bei 1440/900/390/320 Pixeln, mindestens 44 Pixel Zielhöhe, Tastatur, Menü/Escape,
+Beratungszusammenfassung aus allen drei Schritten, Rechnungs-/Status-/Rappenfälle, Regler,
+Rücknavigation und 200 % Schrift. Belege: `dist/qa/evidence/single-consultation/`.
+
+`node tools/verify-application.cjs` bestand gegen die echten Dreiland-Seiten und einen ausdrücklich
+synthetischen Core-Betreiber mit Filiale TEST. Geprüft: tatsächlicher Rechner-Antragswechsel,
+Core-Mount, Quellenangabe, Pflichtfeldfehler, sechs Formularschritte bis zum Überblick, blockierte
+Übermittlung, keine POST-/externen Requests, warme Entwürfe, kontrollierte Kreditübergabe,
+ignorierte Zinsparameter, ungültige Kreditlinks, Rückweg und Rückfallebene bei fehlendem Runtime.
+Erste Ansicht bei 1440/900/390/320 Pixeln; alle sechs Schritte bei 320 Pixeln und 200 % Textgrösse.
+Ein gefundener Überlauf bei grosser Schrift wurde durch begrenzte Gridspalten und Textumbruch
+behoben. Quellen-/Währungskennungen bleiben zusammen. Belege: `dist/qa/evidence/application/`.
+Formular und Überblick wurden visuell geprüft; die Testdaten sind synthetisch.
+
+`python credit-core/tools/check.py` bestand am sauberen Release: 19 kanonische Offline-Suites,
+unter anderem Consumer-/Asset-/Text-/Operator-Verträge, Formularvalidierung, Dokumentenlogik
+und synthetische Übertragungstests. Kein Zugriff auf echte Datenbank, SMTP oder Hosting.
+Anwendungs-/Header-/Modulsyntax und `git diff --check` wurden geprüft. Die normal konfigurierte
+Dreiland-Runtime und das Release-Paket sind wegen der noch offenen Betreiberwahl nicht erstellt
+oder abgenommen. Kein Nachweis realer E-Mail-Zustellung, Bankanbindung, Screenreader- oder Gerätetest.
+
+### Veröffentlichungsgrenze
+
+Der aktuelle Hostinger-Git-Ablauf erzeugt keine ignorierten Core-Assets. Vor Veröffentlichung muss
+der private Submodulzugriff und Build eingerichtet oder ein geprüftes Paket über einen separat
+freigegebenen Veröffentlichungsweg bereitgestellt werden. Diese Änderung ist noch nicht releasebereit.
+Die Vorbereitung schaltet keine echte Zustellung frei. Kein Push, Merge oder Deployment erfolgt;
+frühere Freigaben beziehen sich ausschliesslich auf die früheren PRs.
+
+
+### Bestätigte Betreiberwahl und abgeschlossene lokale Einrichtung
+
+Ergänzung am 4. November 2026: Der Nutzer hat ausdrücklich «Use credit-core’s existing Best-Finance
+operator and branch» gewählt. Die zuvor offene Betreiberfrage ist damit geklärt. Keine weitere
+Betreiberentscheidung erforderlich und keine Anforderung abgelehnt.
+
+`credit-core.brand.json` verwendet jetzt explizit `operator: default`, `filiale: AA` und Dreilands
+Marke mit formeller deutscher Ansprache. Die Betreiberkontakte und Empfänger werden vollständig
+vom gepinnten Best-Finance-Default übernommen. Kein Überschreiben einzelner Kontaktdaten und
+keine Übernahme einer unbestätigten anderen Filiale. Der Core-Checkout bleibt sauber und unverändert.
+
+Der normale Build und die Inventarprüfung bestanden mit 66 deterministischen Ausgaben. Der
+Consumer-Doctor meldet `readyToBuild: true`, Namespace `dreilandfinanzen`, `mode: prepare` und
+weiterhin `deliveryVerified: false`. Ein vollständiges öffentliches Release-Paket wurde lokal erzeugt;
+Core-Checkout, Consumer-Konfiguration, API und Dev-Tools sind daraus ausgeschlossen. SHA-256-
+Inventar und Kennzeichnung des lokalen Änderungsstands verhindern eine irreführende Zuordnung
+uncommittierter Dateien zu einem sauberen Commit.
+
+Der erweiterte Chrome-Test bestand mit `--configured` sowohl am echten Dreiland-Runtime als auch
+am erzeugten Release-Paket. Die Betreiberkontakte entsprechen dem gepinnten Original; die Form nennt
+Best-Finance. Synthetische Antragsteller erreichen alle sechs Schritte und den Überblick. Keine POST-
+oder externen Requests, blockierte finale Übermittlung, korrekte Kreditübergabe/Rückkehr, warme
+Entwürfe, ungültige Links und Rückfallebene bei fehlendem Runtime wurden bestätigt. Alle Schritte
+bei 320 Pixeln und 200 % Textgrösse ohne Überlauf. Paket-Hashinventar und Ausschluss interner
+Assets wurden ebenfalls geprüft. Belege: `dist/qa/evidence/application-configured/`.
+
+Die vorhandene Rechner-/Header-Regression bestand erneut. Antragsansicht bei 390 Pixeln visuell
+geprüft. Syntaxprüfungen und `git diff --check` bestanden. Die anfänglich offene lokale Einrichtung
+ist damit abgeschlossen; die oben genannten früheren Hinweise auf eine fehlende Betreiberdatei
+beschreiben den damaligen Zwischenstand.
+
+Es bleibt ausdrücklich eine Vorbereitung ohne echte Zustellung. Die Betreiberwahl allein installiert
+keine SMTP-/Datenbank-Konfiguration und autorisiert weder Push, Merge noch Deployment. Vor einer
+Veröffentlichung muss der beschriebene Build-/Paketweg in den Hostinger-Ablauf eingebunden werden;
+ein reiner Git-Push liefert die generierten Assets weiterhin nicht aus. Keine Behauptung realer
+Bankzustellung oder einer rechtlichen Gesamtfreigabe.
+
+### Separate Push-Freigabe für Antragsseite und Kopfzeile
+
+Nach Abschluss der lokalen Einrichtung hat der Nutzer ausdrücklich «push» angefordert. Das
+autorisiert Commit und Push von `feedback/credit-application-route` und die Vorlage eines Pull
+Requests gegen `main`. Enthalten sind der einzelne Beratungseinstieg, die eigene Antragsseite,
+der private Core-Pin, die bestätigte Best-Finance-/AA-Konfiguration, Build-/Paketwerkzeuge und Tests.
+Der Core wird unverändert referenziert; es erfolgt kein Push in das Core-Repository.
+
+`origin/main` steht vor dem Push unverändert auf `723ef6f`. Syntaxchecks und `git diff --check`
+bestanden. Build, Inventarprüfung, öffentliche Paketbildung und konfigurierte Browserprüfungen
+werden am committeten Stand ausgeführt. Der Pull Request wird als Entwurf vorgelegt, weil der
+vorhandene Git-only-Deploymentweg die ignorierten Laufzeitdateien noch nicht erzeugt. Diese
+konkrete Veröffentlichungsvoraussetzung wird im PR ausdrücklich genannt. Keine zusätzliche
+Freigabe wird aus der bestätigten Betreiberwahl abgeleitet; Merge, Hosting-Umstellung, Deployment
+und echte Zustellung bleiben ausserhalb dieses Push-Auftrags.
+
+
+### Merge-Freigabe für PR #6, Reviewkorrekturen und Paketveröffentlichung
+
+Stand: 4. November 2026. Nach dem Push hat der Nutzer ausdrücklich «merge» angefordert. Das
+umfasst den Merge nach `main` und die Veröffentlichung des geprüften Dreiland-Standes. Die
+Vorbereitung wird nicht zur echten Zustellung umgeschaltet.
+
+Unabhängige Standards- und Anforderungsreviews prüften die 21-Dateien-Implementierung auf
+`d7300d56f6a4ff3c377abfd3ef2a67e2397f8616` gegen `723ef6fb188d51def132c023783159ba0ceeff54`.
+Standards: ein P2-Befund zur zweiten Runtime-Descriptor-Abfrage (Prepare-/Namespace-Wechsel konnte
+vor dem Mount übersehen werden), ein P3-Befund zum fehlenden Abstand zwischen «Beratung» und
+«anfragen». Anforderungen: ein P2-Befund, weil ein gültiger Antrag über CHF 350'000 beim Rückweg
+zum begrenzten Rechner stillschweigend auf CHF 20'000 zurückfiel.
+
+Alle drei Befunde wurden vor dem Merge korrigiert und gezielt nachgeprüft: Der tatsächlich gemountete
+Runtime muss weiterhin zum Namespace, Prepare-Modus, Asset-Version und Revision der ersten Abfrage
+passen. Prepare→Live- und Namespace-Wechsel zeigen einen Fehler ohne gemountetes Formular.
+Der Desktop-Button erhält einen echten Wortabstand. Ein Antrag über der Rechnergrenze bleibt beim
+Rückweg sichtbar und löst die vorhandene Höchstbetragsvalidierung ohne Rechenergebnis aus;
+die Grenze selbst bleibt CHF 300'000. Regressionen prüfen diese Fälle ausdrücklich. Das öffentliche
+Paket enthält ausserdem die bestehende MIT-Lizenzdatei.
+
+Die Korrekturen wurden vom Hauptagenten geprüft; sie sind keine behauptete erneute unabhängige
+Abnahme eines späteren Heads. Die vollständige lokale Rechner-/Header- und konfigurierte
+Antragsregression bestand nach den Korrekturen. Vor dem Merge werden Paket und Tests nochmals
+am committeten Stand geprüft. Keine offenen Reviewbefunde bleiben aus diesen Reproduktionen.
+
+Der verbundene Hostinger-Zugang bietet einen vollständigen Static-Archive-Release für genau
+`dreilandfinanzen.ch`. Die Zielinventur zeigte ausschliesslich die erwarteten statischen Projektdateien
+und Verzeichnisse; keine Antrags-API oder Kundendatenablage wird ersetzt. Ein Rollback-ZIP des
+bisherigen öffentlichen Git-Stands wurde unter `dist/qa/evidence/application-release/` erstellt.
+Nach dem regulären PR-Merge wird das vollständige geprüfte öffentliche Paket veröffentlicht.
+Es enthält Runtime-Assets, aber weder Core-Checkout noch API, Dev-Tools oder private Konfiguration.
+Dieser Paketweg löst die konkret dokumentierte Voraussetzung für diese Veröffentlichung; spätere
+Releases müssen denselben Weg verwenden, bis ein Hosting-/CI-Build eingerichtet ist.
+
+GitHub meldete vor den Änderungen keine Branchschutzregeln, keine anwendbaren Branch-Regeln,
+keine CI-Checks und keine offenen Review-Kommentare. Der bisherige PR war lediglich wegen der
+Runtime-Veröffentlichung ein Entwurf. Merge und tatsächliche Live-Auslieferung werden nach der
+Ausführung separat bestätigt; diese Notiz allein behauptet keinen Veröffentlichungserfolg.
