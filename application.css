@@ -1,0 +1,44 @@
+.application { max-inline-size: 54rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; padding-block: clamp(24px, 4vw, 48px); overflow-wrap: anywhere; }
+.application h1 { font-size: clamp(1.8rem, 1.3rem + 2vw, 2.6rem); }
+.application__notice { padding: 1rem; background: var(--mist); border-inline-start: 3px solid var(--blue); color: var(--navy); }
+.application .request-card { padding: clamp(16px, 3vw, 32px); background: oklch(100% 0 none); border: 1px solid var(--line); border-radius: var(--r); }
+.application .rq-head, .application .request-step { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+.application .rq-title { font-size: 1.3rem; }
+.application .rq-credit, .application .rq-trust { color: var(--navy); }
+.application .rq-steps { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr)); padding: 0; gap: .5rem; }
+.application button { min-block-size: 44px; max-inline-size: 100%; white-space: normal; font: inherit; border: 1px solid var(--line-strong); border-radius: var(--r); background: var(--mist); color: var(--navy); padding-block: .6rem; padding-inline: .8rem; }
+.application button:active { background: color-mix(in oklch, var(--mist), var(--navy) 15%); }
+@media (hover: hover) and (pointer: fine) { .application button:hover { border-color: var(--navy); } }
+.application .rq-steps button { inline-size: 100%; text-align: start; }
+.application .rq-steps button[aria-current="step"], .application #request-next { background: var(--navy); color: oklch(100% 0 none); }
+.application .field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1rem; }
+.application .field, .application fieldset { min-inline-size: 0; }
+.application input, .application select, .application textarea { font: inherit; }
+.application input:not([type="radio"]):not([type="checkbox"]):not([type="range"]), .application select, .application textarea { inline-size: 100%; min-block-size: 44px; padding-block: .65rem; padding-inline: .7rem; border: 1px solid var(--line-strong); border-radius: var(--r); background: oklch(100% 0 none); color: var(--ink); }
+.application input[type="radio"], .application input[type="checkbox"] { inline-size: 1.2rem; block-size: 1.2rem; flex-shrink: 0; }
+.application .rq-option, .application .check { display: flex; align-items: center; gap: .6rem; min-block-size: 44px; }
+.application .input-affix { display: flex; align-items: center; gap: .5rem; }
+.application .rq-actions, .application .rq-stepper { display: flex; flex-wrap: wrap; gap: .6rem; margin-block-start: 1.25rem; }
+.application svg { inline-size: 1.1rem; block-size: 1.1rem; fill: none; stroke: currentColor; stroke-width: 1.7; }
+.application .rq-draft__dot { fill: currentColor; stroke: none; }
+.application .rq-print-only { display: none; }
+.application .rq-review-card { border-block-end: 1px solid var(--line); padding-block: 1rem; }
+.application .rq-review-card dt { font-weight: 600; }
+.application .rq-review-card dd { margin-inline-start: 0; overflow-wrap: anywhere; }
+.application .error-summary, .application .rq-send-error, .application [aria-invalid="true"] { color: var(--red); }
+.application .sr-only { position: absolute; inline-size: 1px; block-size: 1px; overflow: clip; clip-path: inset(50%); }
+.application .sm__pop[hidden] { display: none; }
+.application .sm { position: relative; }
+.application .sm__native { display: none; }
+.application .sm__trigger, .application .sm__face { display: flex; align-items: center; gap: .5rem; inline-size: 100%; text-align: start; }
+.application .sm__pop { position: absolute; inset-block-start: 100%; inset-inline: 0; z-index: 20; max-block-size: 20rem; overflow-y: auto; background: oklch(100% 0 none); border: 1px solid var(--line-strong); border-radius: var(--r); }
+.application .sm__list { list-style: none; padding: .3rem; margin: 0; }
+.application .sm__option { display: flex; gap: .5rem; align-items: center; padding: .6rem; min-block-size: 44px; }
+.application .sm__option.is-active, .application .sm__option[aria-selected="true"] { background: var(--mist); }
+.application .sm__option:active { background: color-mix(in oklch, var(--mist), var(--navy) 15%); }
+.application fieldset { padding: 0; margin: 0; border: 0; }
+.application legend { font-weight: 600; color: var(--navy); padding-block-end: .5rem; }
+.application .field-error { color: var(--red); font-size: .85rem; }
+.application .rq-date__parts { grid-template-columns: repeat(auto-fit, minmax(min(100%, 6rem), 1fr)); }
+.application .affix, .application .sm__lead, .application .sm__badge { flex-shrink: 0; white-space: nowrap; }
+.application .rq-term__head, .application .range-scale { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem; }

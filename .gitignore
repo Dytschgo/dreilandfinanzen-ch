@@ -1,6 +1,8 @@
 # Generiert
 dist/
 site/
+credit-runtime/
+credit-core.generated.json
 __pycache__/
 *.pyc
 # Zwischenbilder der WebGPU-Prüfung

@@ -6,7 +6,7 @@ const { pathToFileURL } = require('node:url');
 const { execFileSync } = require('node:child_process');
 const { chromium } = require('../dist/qa/node_modules/playwright');
 const root = path.resolve(__dirname, '..');
-const output = path.join(root, 'dist', 'qa', 'evidence', 'affordability-wording');
+const output = path.join(root, 'dist', 'qa', 'evidence', 'single-consultation');
 
 (async () => {
   await fs.mkdir(output, { recursive: true });
@@ -43,19 +43,31 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'affordability-wording'
 
     for (const width of [1440, 900, 390, 320]) {
       await page.setViewportSize({ width, height: 1000 });
-      const cta = page.locator('.hero__consult [data-consult]');
+      const cta = page.locator('.header__consult');
       const bounds = await cta.boundingBox();
       assert.ok(bounds.height >= 44 && bounds.x >= 0 && bounds.x + bounds.width <= width);
       await cta.focus();
       await page.keyboard.press('Enter');
       assert.equal(await page.evaluate(() => location.hash), '#kontakt');
       assert.match(await text('#consult-text'), /CHF 20'000/);
+      if (width <= 1000) {
+        await page.locator('.burger').click();
+        assert.equal(await page.locator('.burger').getAttribute('aria-expanded'), 'true');
+        await cta.click();
+        assert.equal(await page.locator('.burger').getAttribute('aria-expanded'), 'false');
+        await page.locator('.burger').click();
+        await page.keyboard.press('Escape');
+        assert.equal(await page.evaluate(() => document.activeElement.className), 'burger');
+      }
       await step(0);
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({ path: path.join(output, 'hero-' + width + '.png') });
     }
     await page.setViewportSize({ width: 1440, height: 1000 });
-    checks.push('Option A hero CTA and full-width calculator CTA; hero contact navigation works by keyboard at 1440/900/390/320px');
+    assert.equal(await page.locator('[data-consult]').count(), 1);
+    assert.equal(await page.locator('.hero__consult, .tool__consult').count(), 0);
+    assert.equal(await page.locator('#credit-apply').getAttribute('data-consult'), null);
+    checks.push('Single consultation entry in sticky header, visible and keyboard accessible at 1440/900/390/320px; calculator action is separate');
 
     assert.equal(await text('#rate'), 'CHF 484.77');
     assert.equal(await page.locator('#zweck').count(), 0);
@@ -95,6 +107,7 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'affordability-wording'
     checks.push('Income, housing, marital status and children are asked; missing entries block progression with labelled errors and focus');
 
     await setBudget();
+    assert.equal(await page.locator('#credit-apply').getAttribute('href'), 'antrag.html?amount=20000&months=48');
     assert.equal(await text('#est-frei'), "CHF 2'215.23");
     assert.match(await text('#allowance-note'), /25 % des Netto-Haushaltseinkommens/);
     assert.match(await text('#allowance-note'), /CHF 1'500.00/);
@@ -131,7 +144,7 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'affordability-wording'
       assert.ok((await text('#allowance-note')).includes('CHF 300.00'));
       assert.ok((await text('#repayment-budget')).includes(available));
       assert.equal(await text('#est-frei'), remaining);
-      await page.locator('.step[data-step="2"] [data-consult]').click();
+      await page.locator('.header__consult').click();
       const summary = await text('#consult-text');
       assert.ok(summary.includes(expenses) && summary.includes(available));
       assert.ok(summary.includes('unterhaltsberechtigte Kinder: ' + children));
@@ -200,7 +213,7 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'affordability-wording'
       else assert.ok(red > green && red > blue, 'Red status');
       if (rent === '2315.22') await capture('positive-one-cent');
       if (rent === '2315.23' || rent === '2315.24') await capture(rent === '2315.23' ? 'zero' : 'negative');
-      await page.locator('.step[data-step="2"] [data-consult]').click();
+      await page.locator('.header__consult').click();
       assert.match(await text('#consult-text'), /Miete/);
       assert.match(await text('#consult-text'), /25 % des Netto-Haushaltseinkommens/);
       assert.match(await text('#consult-text'), /Vereinfachte Schätzung/);
@@ -220,7 +233,7 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'affordability-wording'
       await step(1);
       assert.equal(await page.locator('#' + id).getAttribute('aria-invalid'), 'true');
       assert.equal(await page.evaluate(() => document.activeElement.id), id);
-      await page.locator('#rechner > .tool__consult [data-consult]').click();
+      await page.locator('.header__consult').click();
       assert.doesNotMatch(await text('#consult-text'), /Grobe Budgetschätzung:/);
     }
     await setBudget();
@@ -240,7 +253,7 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'affordability-wording'
     assert.equal(await page.locator('#rechner input[type="file"]').count(), 0);
     assert.match(await text('#assessment-note'), /keine Kreditfähigkeitsprüfung nach KKG/);
     assert.doesNotMatch(await text('#est-text'), /kann vollständig.*eingesetzt werden/);
-    await page.locator('.step[data-step="2"] [data-consult]').click();
+    await page.locator('.header__consult').click();
     assert.match(await text('#consult-text'), /Keine Kreditfähigkeitsprüfung nach KKG/);
     const formalFAQ = page.locator('details').filter({ has: page.locator('summary', { hasText: 'Wie unterscheidet sich die gesetzliche Kreditfähigkeitsprüfung?' }) });
     await formalFAQ.locator('summary').click();
@@ -256,7 +269,7 @@ const output = path.join(root, 'dist', 'qa', 'evidence', 'affordability-wording'
 
     for (const from of [0, 1, 2]) {
       await page.locator(`.stepper [data-go="${from}"]`).click();
-      const cta = page.locator('#rechner > .tool__consult [data-consult]');
+      const cta = page.locator('.header__consult');
       await cta.focus();
       await page.keyboard.press('Enter');
       assert.equal(await page.evaluate(() => location.hash), '#kontakt');

@@ -6,7 +6,9 @@ Website und Brand Kit für **Dreiland Finanzen** – Kreditberatung in Basel.
 
 | Pfad | Inhalt |
 |---|---|
-| `index.html`, `style.css`, `app.js` | Die Website (statisch, ohne Build-Schritt) |
+| `index.html`, `style.css`, `app.js`, `header.js` | Website und Budgetcheck |
+| `antrag.html`, `application.js`, `application.css` | Dreiland-Antragsseite mit vorbereitetem credit-core-Anschluss |
+| `credit-core/` | Privates Submodul, unverändert auf Release v0.2.0 gepinnt |
 | `assets/` | Schriften (Montserrat, Inter – SIL OFL) und Logo-Dateien der Website |
 | `img/` | Bilder der Website (derzeit ein gekennzeichnetes KI-Symbolbild) |
 | `brand-kit/` | Fertiges Brand Kit (Logos, Guidelines-PDF, Mockups, ZIP), online unter `/brand-kit/` |
@@ -58,9 +60,12 @@ Vertragslaufzeit. Das bildet der Schnellrechner nicht ab. Nachweise können spä
 bei Zweifeln muss die Kreditgeberin die Angaben prüfen (Art. 31 KKG). Diese Änderung ist keine
 rechtliche Freigabe der gesamten Website; die bestehenden Firmen-/Kontaktplatzhalter bleiben offen.
 
-Die gewählte CTA-Variante A ergänzt einen gut sichtbaren Beratungsbutton unter der Hauptaussage
-und einen vollbreiten Beratungsbutton unter dem Rechner. Beide verwenden den vorhandenen
-Kontaktanker und die Beratungszusammenfassung; keine feststehende Beratungsleiste.
+Es gibt einen Beratungs-Einstieg in der haftenden Kopfzeile: «Beratung anfragen» auf Desktop,
+«Beratung» neben dem Menü auf schmalen Bildschirmen. Die doppelten Buttons im Einstieg und unter
+dem Rechner sind entfernt. Der Absende-Button im Kontaktformular bleibt bestehen.
+Der letzte Rechner-Schritt führt mit «Kredit beantragen» zu `antrag.html`; nur Betrag und Laufzeit
+werden als `amount` und `months` übergeben. Budget- und Personendaten stehen nicht in der URL.
+Die Beratungszusammenfassung bleibt über den Kopfzeilenbutton aus allen Schritten erreichbar.
 
 Der Status im Ergebnis ist grün bei positivem Spielraum («Tragbar (Schätzung)»), gelb bei
 exakt CHF 0.00 («Knapp tragbar (Schätzung)») und rot bei einer Lücke («Nicht tragbar (Schätzung)»). Massgeblich ist
@@ -93,13 +98,81 @@ separaten Sicherheitspuffer, vollständig verfügbares Rückzahlungsbudget, gew�
 positive/negative/Null-Ergebnisse, Rappen, Laufzeitgrenzen, beide Laufzeitregler per Tastatur,
 Beratungszusammenfassung, Statusfarben inklusive Kontrast, CTA-Tastaturbedienung und Rücknavigation. Alle drei Schritte werden bei 1440/900/390/320 Pixeln
 sowie 200 % Textgrösse auf Überlauf und abgeschnittene Steuerelemente geprüft.
-Protokoll und Screenshots liegen unter `dist/qa/evidence/affordability-wording/`. Die Screenshots des Rechners
+Protokoll und Screenshots liegen unter `dist/qa/evidence/single-consultation/`. Die Screenshots des Rechners
 blenden nur für die Aufnahme den haftenden Seitenkopf und den Sprunglink aus.
 Es werden keine produktiven Anfragen gestellt.
 
-Die [Feedback-Auswertung](tools/feedback-affordability.md#verständliche-tragbarkeitsbegriffe) dokumentiert
+Die [Feedback-Auswertung](tools/feedback-affordability.md#ein-beratungseinstieg-und-eigene-antragsseite) dokumentiert
 Befund, Umsetzung, Annahmen und offene Freigabepunkte. Frühere Abschnitte sind historischer Kontext;
 ihre Veröffentlichungsfreigabe gilt nicht für diese neue Änderung.
+
+## Kreditantrag mit credit-core
+
+Die Antragsseite verwendet den unterstützten Consumer-Vertrag von `credit-core`, Release `v0.2.0`
+auf `eeb52f8b29191627867059833b146391046d889a`. Das private Submodul wird nicht als öffentliche
+Quelle oder kopierte Bibliothek ausgeliefert. Anmeldung bei GitHub mit privatem Lesezugriff ist erforderlich:
+
+```powershell
+git submodule update --init credit-core
+```
+
+Der Nutzer hat den vorhandenen **Best-Finance-Betreiber mit Filiale AA** ausdrücklich bestätigt.
+`credit-core.brand.json` setzt diese Auswahl und Dreilands Marke explizit; Kontakte, Empfänger und
+zugehörige Core-Texte stammen unverändert aus dem gepinnten Default-Betreiber. Es gibt keine
+zusätzliche Teil-Konfiguration mit überschriebenen Kontaktdaten. Die Markenwerte sind
+«Dreiland Finanzen», `dreilandfinanzen.ch` und `germanTone: formal`.
+
+Build und Inventarprüfung:
+
+```powershell
+python tools/build_application.py
+python credit-core/tools/consumer.py doctor --consumer .
+python tools/package_site.py
+```
+
+Der Build generiert ausschliesslich ignorierte Ausgaben unter `credit-runtime/` und eine ignorierte
+Inventardatei. Der Namespace `dreilandfinanzen` hält Entwürfe von anderen Websites getrennt.
+Die Seite prüft übergebene Kreditangaben mit dem Core, übernimmt nur Betrag und Laufzeit und lässt
+willkürliche Zinsparameter nicht zu. Ein ausdrücklicher neuer Kreditwunsch ersetzt den Kreditteil
+eines alten Entwurfs; Personendaten bleiben erhalten. Beim Rückweg wird der Kreditwunsch wieder
+im Rechner angezeigt. Ladefehler zeigen eine verständliche Meldung mit weiter erreichbarer Beratung.
+
+Die Integration ist ausdrücklich **Vorbereitung** (`mode: prepare`). Ausfüllen, lokale Unterlagen und
+Überblick sind möglich, die letzte Übermittlung wird vor PDF-Erstellung oder POST gestoppt. Zusätzlich
+sperrt `.htaccess` den gesamten API-Pfad; das Release-Paket enthält keine PHP-API. Der Betreiber,
+seine Datenschutzhinweise und Zustellung müssen separat geprüft werden, bevor echte Einsendungen
+freigeschaltet werden. Das ist keine fertige Bankanbindung oder rechtliche Gesamtfreigabe.
+
+### Antragsseite prüfen
+
+```powershell
+node tools/verify-application.cjs
+node tools/verify-application.cjs --configured
+# Optional: denselben Ablauf am erzeugten Release-Paket prüfen
+node tools/verify-application.cjs --configured --package dist/releases/<Paketverzeichnis>
+```
+
+Der Browser-Test erzeugt einen ausdrücklich **synthetischen** Betreiber mit Filiale `TEST` unter
+`dist/qa/application-fixture/`; er ersetzt keine bestätigte Betreiberkonfiguration. Er bedient die echten
+Dreiland-Seiten und den gepinnten Core über einen lokalen Testserver. Geprüft werden Übergabe und
+Rückweg, Pflichtfeldfehler, vollständige synthetische Eingaben bis zum Überblick, keine Übertragung,
+warme Entwürfe, ignorierte Zinsparameter, ungültige Links und die Rückfallebene bei fehlendem Runtime.
+Alle Formularschritte werden bei 320 Pixeln und 200 % Textgrösse geprüft; die erste Ansicht zusätzlich
+bei 1440/900/390 Pixeln. Protokoll und Screenshots: `dist/qa/evidence/application/`.
+Mit `--configured` wird derselbe Ablauf gegen den tatsächlich gebauten Best-Finance-/AA-Runtime
+geprüft. Nur die Antragstellerdaten und die lokalen Ausfüllhilfen bleiben synthetisch. Der Test vergleicht
+die Betreiberkontakte mit dem gepinnten Original, prüft die sichtbare Betreiberangabe und bestätigt,
+dass die Vorbereitung keine Daten sendet. Belege: `dist/qa/evidence/application-configured/`.
+Bei einem Release-Paket prüft er zusätzlich Hashinventar und Ausschluss von Core-Checkout,
+Consumer-Konfiguration, API und Dev-Tools. Das Paket benennt ausdrücklich den lokalen Änderungsstand;
+ein Paket aus uncommittierten Quellen wird nicht als saubere Commit-Ausgabe ausgegeben.
+Zusätzlich wurde `python credit-core/tools/check.py` am unveränderten Release ausgeführt.
+
+**Veröffentlichungsvoraussetzung:** Der bisherige Hostinger-Ablauf liefert `main` direkt aus. Die neue
+Antragsseite benötigt jedoch generierte, ignorierte Dateien. Vor einem Merge muss der Hostinger-Build
+mit privatem Submodulzugriff eingerichtet sein oder das geprüfte Paket aus `dist/releases/` über einen
+separat freigegebenen Veröffentlichungsweg bereitgestellt werden. Ein reiner Git-Push erzeugt diese
+Assets nicht. Kein Build, Paket oder Test installiert Zugangsdaten oder veröffentlicht die Seite.
 
 ## Veröffentlichen
 

@@ -1,0 +1,3 @@
+[submodule "credit-core"]
+	path = credit-core
+	url = https://github.com/Dytschgo/credit-core.git
