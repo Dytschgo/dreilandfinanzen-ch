@@ -52,10 +52,11 @@
 
   /* ---------- Zustand ---------- */
   const tool = $("#rechner");
-  const state = { amount: RULES.defaultAmount, months: RULES.defaultTerm, step: 0 };
+  const state = { amount: RULES.defaultAmount, months: RULES.defaultTerm, comparisonMonths: 60, step: 0 };
   const amountIn = $("#betrag"), amountRange = $("#betrag-range"), adjRange = $("#adj-betrag"), adjLz = $("#adj-lz");
 
   const termRange = $("#laufzeit");
+  const comparisonTerm = $("#compare-months");
 
   const valid = () => Number.isInteger(state.amount) && state.amount >= RULES.minAmount && state.amount <= RULES.sliderMaxAmount;
   const fill = r => r.style.setProperty("--fill", `${((r.value - r.min) / (r.max - r.min)) * 100}%`);
@@ -95,8 +96,40 @@
     if (ok) application.href = `antrag.html?amount=${state.amount}&months=${state.months}`;
     else application.removeAttribute("href");
     application.setAttribute("aria-disabled", String(!ok));
+    renderComparison(e);
     budget(e ? e.monthly : null);
   }
+
+  /* Optional view only: it never changes the selected loan or budget result. */
+  function renderComparison(selected) {
+    comparisonTerm.disabled = !selected;
+    $("#comparison-status").hidden = Boolean(selected);
+    $("#comparison-status").textContent = selected ? "" : "Bitte zuerst einen gültigen Kreditbetrag wählen.";
+    $("#comparison-values").hidden = !selected;
+    if (!selected) {
+      $$("#comparison-values dd, #compare-selected-months, #compare-other-months").forEach(el => { el.textContent = "–"; });
+      return;
+    }
+    const choices = RULES.terms.filter(term => term <= maxTermFor(state.amount) && term !== state.months);
+    if (!choices.includes(state.comparisonMonths)) {
+      state.comparisonMonths = choices.find(term => term > state.months) ?? choices.at(-1);
+    }
+    const key = choices.join(",");
+    if (comparisonTerm.dataset.terms !== key) {
+      comparisonTerm.replaceChildren(...choices.map(term => new Option(`${term} Monate`, String(term))));
+      comparisonTerm.dataset.terms = key;
+    }
+    comparisonTerm.value = state.comparisonMonths;
+    const other = estimate(state.amount, state.comparisonMonths);
+    for (const [name, months, result] of [["selected", state.months, selected], ["other", state.comparisonMonths, other]]) {
+      $(`#compare-${name}-months`).textContent = `${months} Monate · ${chf(state.amount)}`;
+      for (const metric of ["monthly", "interest", "total"]) $(`#compare-${name}-${metric}`).textContent = chf2(result[metric]);
+    }
+  }
+  comparisonTerm.addEventListener("change", () => {
+    state.comparisonMonths = Number(comparisonTerm.value);
+    renderComparison(valid() ? estimate(state.amount, state.months) : null);
+  });
 
   /* ---------- Budget ---------- */
   const budgetFields = [["#ink", "Nettoeinkommen"], ["#miete", "Miete oder Hypothek"], ["#married", "Familienstand"], ["#children", "Kinderanzahl (ganze Zahl von 0 bis 99)"]];

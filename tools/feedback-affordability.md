@@ -1,6 +1,6 @@
 # Feedback-Auswertung: persönlicher Budgetcheck
 
-Aktuell: [Eigene Inhaltsseiten und kompakter Antrag](#eigene-inhaltsseiten-und-kompakter-antrag).
+Aktuell: [Kundenweg, Zuständigkeiten, Bewerbung und Laufzeitvergleich](#kundenweg-zuständigkeiten-bewerbung-und-laufzeitvergleich).
 Die folgenden früheren Auswertungen und Veröffentlichungsfreigaben sind historisch und gelten
 nicht als Freigabe für neue Änderungen.
 
@@ -1060,3 +1060,78 @@ Pakets umkehrbar. Private Core-Quellen, API und Konfiguration sind nicht im öff
 Nach dem Merge werden ein neues Paket am sauberen Merge-Commit gebaut, dessen Konfiguration,
 Navigation und Formularverhalten geprüft und die Live-Dateien separat verifiziert. Diese Notiz
 behauptet noch keinen erfolgreichen Merge oder ein erfolgreiches Deployment.
+
+## Kundenweg, Zuständigkeiten, Bewerbung und Laufzeitvergleich
+
+Stand: 4. November 2026. Ausgangsstand `2df8219b06033015960e55e66ee4d1ac067cab21`,
+sauberes `main`. Arbeit auf `feedback/journey-term-comparison`. Der Nutzer hat alle vier
+vorher empfohlenen Ergänzungen mit Platzhaltern beauftragt. Keine Veröffentlichung beauftragt.
+
+### Befund und Entscheidungen
+
+Live-Seiten und lokaler Quelltext wurden vor dem Auftrag geprüft: Startseite, Über uns, Karriere
+und Antrag waren per HTTP erreichbar und bytegleich zum lokalen Stand. Es gab einen sehr kurzen
+Ablauf «Gespräch → Budgetcheck → Entscheidung», einen allgemeinen Organisationsplatzhalter,
+ein Stellenbeispiel ohne Bewerbungsablauf und nur eine einzelne Laufzeitansicht im Rechner.
+Der bestätigte Best-Finance-/AA-Betreiber steht bereits in der Formularkonfiguration; eine konkrete
+geschäftliche Rollenbeschreibung zwischen den Marken ist dadurch noch nicht belegt.
+
+Alle vier Punkte angenommen:
+
+1. Bestehenden Kundenweg zu «Budget einschätzen → Antrag vorbereiten → Prüfung durch die
+   Kreditgeberin» erweitert. Nächste Schritte und Grenze zur ersten Schätzung sind erklärt.
+   Der spätere Ablauf ist ausdrücklich geplant; die gegenwärtige Vorbereitung sendet nichts.
+2. Organisationsabschnitt auf Über uns benennt den bestätigten Best-Finance-Formularbetreiber.
+   Rollen, Zusammenarbeit und Ansprechpersonen stehen als Platzhalter im Text. Keine erfundene
+   Bankbeziehung, rechtliche Zuordnung oder Zustellfreigabe.
+3. Karriere erhält «So bewerben Sie sich»: Bewerbung, Kennenlernen, Rückmeldung als ausdrücklich
+   gekennzeichneter Beispielablauf. Kontakt, Bewerbungsweg, Interviewstufen und Fristen sind
+   Platzhalter. Keine falschen Mail-/Absendeaktionen und keine behauptete aktuelle Vakanz.
+4. Optionaler Laufzeitvergleich im Rechner-Ergebnis, anfangs geschlossen. Native Details und
+   Select sind tastaturbedienbar. Gewählte und alternative Laufzeit zeigen für denselben Betrag
+   Monatsrate, Zinskosten und Gesamtrückzahlung mit der unveränderten Beispielzinsformel.
+   Vergleich verändert keine Kreditauswahl, Budgetwerte oder Antragsübergabe. Die Vergleichs-
+   zahlen sind berechnete Beispiele, keine erfundenen Platzhalterangebote.
+
+Keine Anforderung verworfen; keine Rückfrage für diesen Entwicklungsumfang nötig. Fehlende
+Unternehmens- und Personalangaben sind absichtlich Platzhalter. Der private Core, bestätigter
+Betreiber, Versandmodus und bestehende Freigabeanforderungen bleiben unverändert.
+
+### Prüfung und Ergebnis
+
+Erweiterte Rechnerprüfung: unabhängige feste Referenzwerte bei CHF 20'000 und 7.9 % für
+36/48/60 Monate; beispielsweise 48 Monate CHF 484.77 monatlich, CHF 3'268.96 Zinsen und
+CHF 23'268.96 insgesamt, gegenüber 60 Monaten CHF 401.97, CHF 4'118.37 und CHF 24'118.37.
+Alternativauswahl per Tastatur, unveränderte gewählte Rate/Budget/Antragslink, gemeinsames
+84-Monats-Limit oberhalb CHF 80'000, Reparatur unzulässiger Alternativen und Leeren ungültiger
+Beträge geprüft. Geöffneter Vergleich bei 1440/900/390/320 Pixeln und 320 Pixeln mit 200 % Text.
+
+Die neue engere Vergrösserungsprüfung zeigte Überlauf durch intrinsische Mindestbreiten der
+bestehenden einspaltigen Grids und lange Wörter, auch ausserhalb des Rechners. Ein fokussierter
+Chrome-Repro zeigte, dass blosse Änderungen am Select oder Summary den Fehler nicht lösen.
+Begrenzte Grid-Tracks (`minmax(0, 1fr)`) und erlaubter Textumbruch senken die Dokumentbreite in
+diesem Fall von 509 auf 320 Pixel, ohne Inhalte abzuschneiden. Die vollständige Regression ist
+danach grün. Dies erweitert die bisherige 200-%-Prüfung am 1280-Pixel-Viewport um den engen Fall.
+
+Die konfigurierte Antragsprüfung kontrolliert zusätzlich Kundenweg, Betreiber-/Rollenplatzhalter
+und den dreistufigen Bewerbungsplatzhalter. Seiten bei 1440/900/390/320 Pixeln und 320 Pixeln
+mit 200 % Text ohne horizontalen Überlauf. Vergleich, Kundenweg und die beiden Inhaltsabschnitte
+wurden anhand gerenderter Screenshots visuell geprüft. Belege unter
+`dist/qa/evidence/single-consultation/` und `dist/qa/evidence/application-configured/`.
+
+Bestehende Rechner-, Navigations- und Antragsregressionen bestehen, einschliesslich synthetischem
+Antrag bis zum Überblick, blockierter Übermittlung, Entwürfen und Runtime-Guards. Frisches
+öffentliches Paket bestand dieselben konfigurierten Browserprüfungen, Hashinventar und Ausschluss
+privater/API-Dateien. Syntaxprüfungen und `git diff --check` bestanden; der Core bleibt sauber.
+Keine Aussage über echte Zustellung oder einen Screenreader-Gerätetest.
+
+Kein Push, Merge oder Deployment in diesem Auftrag. Die Freigaben für PR #7 gelten nicht für
+diese neue Änderung. Vor echten Firmen-/Personalinhalten bleiben die markierten Angaben offen.
+
+### Separate Push-Freigabe für die vier Ergänzungen
+
+Der Nutzer hat anschliessend «pusch» angefordert, im Kontext als Push des fertiggestellten
+Branches verstanden. Autorisiert sind Commit, Push von `feedback/journey-term-comparison` und
+ein Pull Request gegen `main`. Alle vier Ergänzungen und ihre Platzhalter bleiben im beschriebenen
+Umfang. Die Prüfung wird am committeten Stand mit einem frisch gebauten öffentlichen Paket
+ausgeführt. Kein Push zum privaten Core, kein Merge, Deployment oder Freischalten der Zustellung.
