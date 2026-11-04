@@ -48,7 +48,7 @@ img { display: block; max-width: 100%; height: auto; }
 .header__in { min-block-size: var(--header); display: flex; flex-wrap: wrap; align-items: center; gap: .5rem clamp(.5rem, 1.5vw, 1.75rem); padding-block: .5rem; }
 .header__logo { margin-inline-end: auto; }
 .header__logo img { inline-size: clamp(100px, 11vw, 150px); block-size: auto; }
-.header__consult { min-block-size: 44px; flex-shrink: 0; gap: 0; white-space: nowrap; }
+.header__consult { min-block-size: 44px; flex-shrink: 0; gap: .25em; white-space: nowrap; }
 .header__consult:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
 .header__consult:active { background: oklch(23% .09 258); }
 .nav { display: flex; align-items: center; gap: 1.75rem; }

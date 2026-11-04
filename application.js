@@ -10,6 +10,8 @@ try {
   if (descriptor.namespace !== 'dreilandfinanzen' || descriptor.mode !== 'prepare' || !/^[a-z0-9-]+-[a-f0-9]{10}$/.test(descriptor.assetVersion)) throw new Error('Runtime configuration mismatch');
   const { loadRuntime, mountCreditRequest } = await import(new URL(`js/runtime.js?v=${descriptor.assetVersion}`, base));
   const runtime = await loadRuntime(base.href);
+  if (runtime.namespace !== 'dreilandfinanzen' || runtime.mode !== 'prepare'
+      || runtime.assetVersion !== descriptor.assetVersion || runtime.revision !== descriptor.revision) throw new Error('Runtime changed during initialization');
   const { queryCredit } = await import(runtime.entrypoints.query);
   const credit = queryCredit(location.search);
   const sheet = document.createElement('link');

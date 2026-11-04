@@ -168,15 +168,24 @@ Consumer-Konfiguration, API und Dev-Tools. Das Paket benennt ausdrücklich den l
 ein Paket aus uncommittierten Quellen wird nicht als saubere Commit-Ausgabe ausgegeben.
 Zusätzlich wurde `python credit-core/tools/check.py` am unveränderten Release ausgeführt.
 
-**Veröffentlichungsvoraussetzung:** Der bisherige Hostinger-Ablauf liefert `main` direkt aus. Die neue
-Antragsseite benötigt jedoch generierte, ignorierte Dateien. Vor einem Merge muss der Hostinger-Build
-mit privatem Submodulzugriff eingerichtet sein oder das geprüfte Paket aus `dist/releases/` über einen
-separat freigegebenen Veröffentlichungsweg bereitgestellt werden. Ein reiner Git-Push erzeugt diese
-Assets nicht. Kein Build, Paket oder Test installiert Zugangsdaten oder veröffentlicht die Seite.
+**Veröffentlichungsweg:** Der Git-only-Ablauf erzeugt die ignorierten Runtime-Dateien nicht.
+Für diese Integration wird deshalb nach dem Merge das mit `tools/package_site.py` gebaute und
+geprüfte öffentliche Paket über Hostingers Static-Archive-Deployment an `dreilandfinanzen.ch`
+veröffentlicht. Der verbundene Hostinger-Zugang wurde für genau diese Website geprüft; das
+öffentliche Ziel enthält statische Projektdateien. Vor der ersten Veröffentlichung wurde ein
+Rollback-Archiv des bisherigen öffentlichen Stands aufbewahrt. Der bestehende Inhalt darf nur
+durch das vollständige geprüfte Paket ersetzt werden, niemals durch den privaten Core-Checkout.
+
+Jeder spätere Release dieses Branches braucht ebenfalls ein frisches Paket und dessen Veröffentlichung,
+solange kein privater Build in Hosting/CI eingerichtet ist. Ein Git-Push allein reicht für den Antrag
+nicht aus. Die Paketerstellung installiert keine Zugangsdaten und veröffentlicht nichts von selbst.
+Die Freigabe zum Merge umfasst hier die Veröffentlichung des geprüften Standes; Zustellung bleibt
+in Vorbereitung gesperrt und ist davon getrennt.
 
 ## Veröffentlichen
 
-Hostinger liefert den Branch `main` direkt aus (Git-Deployment). Jeder Push auf `main` ist sofort live.
+Hostinger liefert den Branch `main` direkt aus (Git-Deployment). Jeder Push auf `main` verändert die Live-Dateien.
+Für den vollständigen Antrag ist zusätzlich der oben beschriebene öffentliche Paket-Release erforderlich.
 `.htaccess` sperrt Repo-Interna (`tools/`, `.github/`, Markdown/Python-Dateien) und setzt `noindex`, solange Platzhalter
 (Kontaktdaten, Firmenangaben, Fotos) enthalten sind.
 

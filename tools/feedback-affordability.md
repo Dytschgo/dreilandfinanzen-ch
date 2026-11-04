@@ -906,3 +906,44 @@ vorhandene Git-only-Deploymentweg die ignorierten Laufzeitdateien noch nicht erz
 konkrete Veröffentlichungsvoraussetzung wird im PR ausdrücklich genannt. Keine zusätzliche
 Freigabe wird aus der bestätigten Betreiberwahl abgeleitet; Merge, Hosting-Umstellung, Deployment
 und echte Zustellung bleiben ausserhalb dieses Push-Auftrags.
+
+
+### Merge-Freigabe für PR #6, Reviewkorrekturen und Paketveröffentlichung
+
+Stand: 4. November 2026. Nach dem Push hat der Nutzer ausdrücklich «merge» angefordert. Das
+umfasst den Merge nach `main` und die Veröffentlichung des geprüften Dreiland-Standes. Die
+Vorbereitung wird nicht zur echten Zustellung umgeschaltet.
+
+Unabhängige Standards- und Anforderungsreviews prüften die 21-Dateien-Implementierung auf
+`d7300d56f6a4ff3c377abfd3ef2a67e2397f8616` gegen `723ef6fb188d51def132c023783159ba0ceeff54`.
+Standards: ein P2-Befund zur zweiten Runtime-Descriptor-Abfrage (Prepare-/Namespace-Wechsel konnte
+vor dem Mount übersehen werden), ein P3-Befund zum fehlenden Abstand zwischen «Beratung» und
+«anfragen». Anforderungen: ein P2-Befund, weil ein gültiger Antrag über CHF 350'000 beim Rückweg
+zum begrenzten Rechner stillschweigend auf CHF 20'000 zurückfiel.
+
+Alle drei Befunde wurden vor dem Merge korrigiert und gezielt nachgeprüft: Der tatsächlich gemountete
+Runtime muss weiterhin zum Namespace, Prepare-Modus, Asset-Version und Revision der ersten Abfrage
+passen. Prepare→Live- und Namespace-Wechsel zeigen einen Fehler ohne gemountetes Formular.
+Der Desktop-Button erhält einen echten Wortabstand. Ein Antrag über der Rechnergrenze bleibt beim
+Rückweg sichtbar und löst die vorhandene Höchstbetragsvalidierung ohne Rechenergebnis aus;
+die Grenze selbst bleibt CHF 300'000. Regressionen prüfen diese Fälle ausdrücklich. Das öffentliche
+Paket enthält ausserdem die bestehende MIT-Lizenzdatei.
+
+Die Korrekturen wurden vom Hauptagenten geprüft; sie sind keine behauptete erneute unabhängige
+Abnahme eines späteren Heads. Die vollständige lokale Rechner-/Header- und konfigurierte
+Antragsregression bestand nach den Korrekturen. Vor dem Merge werden Paket und Tests nochmals
+am committeten Stand geprüft. Keine offenen Reviewbefunde bleiben aus diesen Reproduktionen.
+
+Der verbundene Hostinger-Zugang bietet einen vollständigen Static-Archive-Release für genau
+`dreilandfinanzen.ch`. Die Zielinventur zeigte ausschliesslich die erwarteten statischen Projektdateien
+und Verzeichnisse; keine Antrags-API oder Kundendatenablage wird ersetzt. Ein Rollback-ZIP des
+bisherigen öffentlichen Git-Stands wurde unter `dist/qa/evidence/application-release/` erstellt.
+Nach dem regulären PR-Merge wird das vollständige geprüfte öffentliche Paket veröffentlicht.
+Es enthält Runtime-Assets, aber weder Core-Checkout noch API, Dev-Tools oder private Konfiguration.
+Dieser Paketweg löst die konkret dokumentierte Voraussetzung für diese Veröffentlichung; spätere
+Releases müssen denselben Weg verwenden, bis ein Hosting-/CI-Build eingerichtet ist.
+
+GitHub meldete vor den Änderungen keine Branchschutzregeln, keine anwendbaren Branch-Regeln,
+keine CI-Checks und keine offenen Review-Kommentare. Der bisherige PR war lediglich wegen der
+Runtime-Veröffentlichung ein Entwurf. Merge und tatsächliche Live-Auslieferung werden nach der
+Ausführung separat bestätigt; diese Notiz allein behauptet keinen Veröffentlichungserfolg.

@@ -20,7 +20,7 @@ def main():
     from datetime import datetime, timezone
     destination = ROOT / 'dist/releases' / datetime.now(timezone.utc).strftime('%Y%m%d-%H%M%S-%f')
     destination.mkdir(parents=True)
-    for name in ['index.html', 'antrag.html', 'app.js', 'header.js', 'application.js', 'application.css', 'style.css', '.htaccess', 'robots.txt']:
+    for name in ['index.html', 'antrag.html', 'app.js', 'header.js', 'application.js', 'application.css', 'style.css', '.htaccess', 'robots.txt', 'LICENSE']:
         copy2(ROOT / name, destination / name)
     for name in ['assets', 'img', 'brand-kit']:
         copytree(ROOT / name, destination / name)

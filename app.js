@@ -284,9 +284,10 @@
   const query = new URLSearchParams(location.search);
   const amount = Number(query.get('amount')), months = Number(query.get('months'));
   if (['amount', 'months'].every(key => query.getAll(key).length === 1 && /^\d+$/.test(query.get(key)))
-      && Number.isSafeInteger(amount) && amount >= RULES.minAmount && amount <= RULES.sliderMaxAmount
+      && Number.isSafeInteger(amount) && amount >= RULES.minAmount
       && RULES.terms.includes(months) && months <= maxTermFor(amount)) {
     state.amount = amount; state.months = months;
+    amountIn.value = group(amount);
   }
   show(0);
   render();

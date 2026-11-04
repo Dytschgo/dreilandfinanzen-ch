@@ -57,6 +57,10 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applic
     page.on('pageerror',e=>errors.push(e.message));
     page.on('request',r=>{if(r.method()!=='GET' || !r.url().startsWith(origin)) requests.push({method:r.method(),url:r.url()});});
     await page.goto(origin);
+    await page.setViewportSize({width:1440,height:1000});
+    const wordGap = await page.locator('.header__consult').evaluate(el => el.children[1].getBoundingClientRect().left - el.children[0].getBoundingClientRect().right);
+    assert.ok(wordGap >= 2,'Desktop consultation words have visible spacing');
+    await page.setViewportSize({width:390,height:1000});
     await page.locator('[data-go="1"]').first().click();
     await page.locator('#ink').fill('6000'); await page.locator('#miete').fill('1500');
     await page.locator('#married').selectOption('no'); await page.locator('#children').fill('0');
@@ -135,6 +139,26 @@ const types = { '.html': 'text/html', '.js': 'text/javascript', '.json': 'applic
     assert.match(await page.locator('#application-status').textContent(),/ungültig/);
     assert.equal((await page.locator('#request-amount').inputValue()).replace(/[^\d]/g,''),'20000');
     checks.push('Warm draft retains applicant fields; deliberate credit handoff wins, arbitrary rates ignored, invalid credit resets safely');
+    await page.goto(origin+'/antrag.html?amount=350000&months=84');
+    await page.waitForFunction(()=>document.querySelector('#application-form')?.getAttribute('aria-busy')==='false');
+    await page.locator('#application-back').click();
+    await page.waitForSelector('#rechner');
+    assert.equal((await page.locator('#betrag').inputValue()).replace(/[^\d]/g,''),'350000');
+    assert.equal(await page.locator('#betrag').getAttribute('aria-invalid'),'true');
+    assert.match(await page.locator('#betrag-err').textContent(),/300'000/);
+    assert.equal(await page.locator('#rate').textContent(),'–');
+    assert.equal(await page.locator('#credit-apply').getAttribute('href'),null);
+    checks.push('Application amount above calculator ceiling stays visible with existing range validation instead of silently resetting');
+    for (const changed of [{mode:'live'}, {namespace:'another-site'}]) {
+      let reads=0;
+      await page.route('**/credit-runtime/shared/runtime.json',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(++reads === 1 ? descriptor : {...descriptor,...changed})}));
+      await page.goto(origin+'/antrag.html');
+      await page.waitForFunction(()=>document.querySelector('#application-form').getAttribute('aria-busy')==='false');
+      assert.match(await page.locator('#application-status').textContent(),/nicht verfügbar/);
+      assert.equal(await page.locator('#request-form').count(),0);
+      await page.unroute('**/credit-runtime/shared/runtime.json');
+    }
+    checks.push('Descriptor changes from prepare to live or another namespace fail before mounting the form');
     await page.route('**/credit-runtime/shared/runtime.json', route=>route.fulfill({status:404,body:''}));
     await page.goto(origin+'/antrag.html');
     await page.waitForFunction(()=>document.querySelector('#application-form').getAttribute('aria-busy')==='false');
