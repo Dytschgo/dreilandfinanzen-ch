@@ -7,7 +7,8 @@ Website und Brand Kit für **Dreiland Finanzen** – Kreditberatung in Basel.
 | Pfad | Inhalt |
 |---|---|
 | `index.html`, `style.css`, `app.js`, `header.js` | Website und Budgetcheck |
-| `antrag.html`, `application.js`, `application.css` | Dreiland-Antragsseite mit vorbereitetem credit-core-Anschluss |
+| `ueber-uns.html`, `karriere.html` | Eigene Unternehmens- und Karriereseiten mit ausdrücklich gekennzeichneten Platzhaltern |
+| `antrag.html`, `application.js`, `application-layout.js`, `application.css` | Dreiland-Antragsseite mit vorbereitetem credit-core-Anschluss und kompakter Schrittnavigation |
 | `credit-core/` | Privates Submodul, unverändert auf Release v0.2.0 gepinnt |
 | `assets/` | Schriften (Montserrat, Inter – SIL OFL) und Logo-Dateien der Website |
 | `img/` | Bilder der Website (derzeit ein gekennzeichnetes KI-Symbolbild) |
@@ -102,9 +103,17 @@ Protokoll und Screenshots liegen unter `dist/qa/evidence/single-consultation/`. 
 blenden nur für die Aufnahme den haftenden Seitenkopf und den Sprunglink aus.
 Es werden keine produktiven Anfragen gestellt.
 
-Die [Feedback-Auswertung](tools/feedback-affordability.md#ein-beratungseinstieg-und-eigene-antragsseite) dokumentiert
+Die [Feedback-Auswertung](tools/feedback-affordability.md#eigene-inhaltsseiten-und-kompakter-antrag) dokumentiert
 Befund, Umsetzung, Annahmen und offene Freigabepunkte. Frühere Abschnitte sind historischer Kontext;
 ihre Veröffentlichungsfreigabe gilt nicht für diese neue Änderung.
+
+## Inhaltsseiten im Entwicklungsstand
+
+«Über uns» und «Karriere» sind eigene Seiten, erreichbar über die Hauptnavigation und die bestehenden
+Bildkacheln auf der Startseite. Unternehmensgeschichte, Arbeitsweise, Teamprofile und Stellenprofil
+sind ausdrücklich als Platzhalter gekennzeichnet. Es werden keine realen Personen, Qualifikationen
+oder offenen Stellen behauptet. Das Stellenbeispiel lässt sich per Tastatur aufklappen; es gibt noch
+keinen Bewerbungsversand. Die bestehende Beratung bleibt in der Kopfzeile erreichbar.
 
 ## Kreditantrag mit credit-core
 
@@ -143,6 +152,11 @@ sperrt `.htaccess` den gesamten API-Pfad; das Release-Paket enthält keine PHP-A
 seine Datenschutzhinweise und Zustellung müssen separat geprüft werden, bevor echte Einsendungen
 freigeschaltet werden. Das ist keine fertige Bankanbindung oder rechtliche Gesamtfreigabe.
 
+Die Einleitung ist verkürzt. Der Fortschritt «Schritt … von …» bleibt sichtbar; die Schrittliste liegt
+in einem nativen, anfangs geschlossenen «Schritte wechseln»-Element. Erfolgreiche Schrittwechsel
+schliessen es wieder, Validierungsfehler lassen es offen. `application-layout.js` ergänzt nur diese
+Consumer-Darstellung; Core-Schrittregeln, Inhalte und Pflichtfelder bleiben unverändert.
+
 ### Antragsseite prüfen
 
 ```powershell
@@ -159,6 +173,9 @@ Rückweg, Pflichtfeldfehler, vollständige synthetische Eingaben bis zum Überbl
 warme Entwürfe, ignorierte Zinsparameter, ungültige Links und die Rückfallebene bei fehlendem Runtime.
 Alle Formularschritte werden bei 320 Pixeln und 200 % Textgrösse geprüft; die erste Ansicht zusätzlich
 bei 1440/900/390 Pixeln. Protokoll und Screenshots: `dist/qa/evidence/application/`.
+Zusätzlich geprüft: erstes Betragsfeld vollständig im anfänglichen 390×844-Viewport, Tastaturbedienung
+der kompakten Schrittliste, Seitenwechsel über Navigation und Bildkacheln, aktive Seitenmarkierung,
+Platzhalter und die neuen Seiten bei 1440/900/390/320 Pixeln sowie 320 Pixeln mit 200 % Textgrösse.
 Mit `--configured` wird derselbe Ablauf gegen den tatsächlich gebauten Best-Finance-/AA-Runtime
 geprüft. Nur die Antragstellerdaten und die lokalen Ausfüllhilfen bleiben synthetisch. Der Test vergleicht
 die Betreiberkontakte mit dem gepinnten Original, prüft die sichtbare Betreiberangabe und bestätigt,

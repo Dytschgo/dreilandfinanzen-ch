@@ -1,4 +1,5 @@
 /* Dreiland consumer bootstrap; only the credit wish crosses from the calculator. */
+import { compactStepNavigation } from './application-layout.js?v=2026-11-04-compact';
 const root = document.querySelector('#application-form');
 const status = document.querySelector('#application-status');
 const base = new URL('credit-runtime/', location.href);
@@ -30,6 +31,7 @@ try {
   document.querySelector('#application-attribution').innerHTML = await attribution.text();
   // A deliberate calculator handoff takes precedence over an older local draft's credit wish.
   if (credit.enteredFields.length || credit.invalid) api.setCredit(credit);
+  compactStepNavigation(root);
   backLink.href = returnURL(api.getCredit());
   backLink.addEventListener('click', () => { backLink.href = returnURL(api.getCredit()); });
   root.setAttribute('aria-busy', 'false');

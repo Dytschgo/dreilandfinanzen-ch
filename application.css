@@ -1,4 +1,4 @@
-.application { max-inline-size: 54rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; padding-block: clamp(24px, 4vw, 48px); overflow-wrap: anywhere; }
+.application { max-inline-size: 54rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(.75rem, 2vw, 1.25rem); padding-block: clamp(24px, 4vw, 48px); overflow-wrap: anywhere; }
 .application h1 { font-size: clamp(1.8rem, 1.3rem + 2vw, 2.6rem); }
 .application__notice { padding: 1rem; background: var(--mist); border-inline-start: 3px solid var(--blue); color: var(--navy); }
 .application .request-card { padding: clamp(16px, 3vw, 32px); background: oklch(100% 0 none); border: 1px solid var(--line); border-radius: var(--r); }
@@ -11,6 +11,10 @@
 @media (hover: hover) and (pointer: fine) { .application button:hover { border-color: var(--navy); } }
 .application .rq-steps button { inline-size: 100%; text-align: start; }
 .application .rq-steps button[aria-current="step"], .application #request-next { background: var(--navy); color: oklch(100% 0 none); }
+.application__steps { margin-block-start: .4rem; }
+.application__steps summary { min-block-size: 44px; padding-block: .5rem; color: var(--navy); cursor: pointer; }
+.application__steps summary:active { color: var(--blue); }
+.application__steps summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 3px; }
 .application .field-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); gap: 1rem; }
 .application .field, .application fieldset { min-inline-size: 0; }
 .application input, .application select, .application textarea { font: inherit; }
